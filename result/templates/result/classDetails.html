@@ -10,32 +10,52 @@
        <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900"> {{all_class.classNmame}} </h1>
        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Subjects in this class</p>
      </div>
-     <div >
-       <table class="table-auto w-full text-left whitespace-no-wrap">
-         <thead>
-           <tr  >
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">Subjects</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">Students</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">1st CA Entries</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">2nd CA Entries</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">Exam Entries</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tr rounded-br">Subject Teacher</th>
-           </tr>
-         </thead>
-         <tbody>
-           {% for subject in all_class.subjectclass.all %}
-           <tr>
-             <td class="px-4 py-3 border-2 border-green-300 hover:bg-yellow-300"> <a href="{% url 'subjectDetails' subject.id %}"> {{ subject.subjectName }} </a> </td>
-             <td class="px-4 py-3 border-2 border-green-300">0 </td>
-             <td class="px-4 py-3 border-2 border-green-300">0 </td>
-             <td class="px-4 py-3 border-2 border-green-300">0 </td>
-             <td class="px-4 py-3 border-2 border-green-300">0 </td>
-             <td class="px-4 py-3 border-2 border-green-300">0 </td>
-           </tr>
-           {% endfor %}
-             
-         </tbody>
-       </table>
+     <div class = "grid grid-cols-3 gap-2" >
+       <div>
+        <table class="table-auto w-full text-left whitespace-no-wrap">
+          <thead>
+            <tr  >
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">Students in {{all_class.classNmame}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in all_class.studentclass.all %}
+            <tr>
+              <td class="px-4 py-3 border-2 border-green-300 hover:bg-yellow-300"> {{ student.fullname }} </td>
+            </tr>
+            {% endfor %}
+              
+          </tbody>
+        </table>
+       </div>
+
+       <div class = "col-span-2">
+        <table class="table-auto w-full text-left whitespace-no-wrap ">
+          <thead>
+            <tr  >
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">Subjects</th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">Students</th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">1st CA Entries</th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">2nd CA Entries</th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">Exam Entries</th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tr rounded-br">Subject Teacher</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subject in all_class.subjectclass.all %}
+            <tr>
+              <td class="px-4 py-3 border-2 border-green-300 hover:bg-yellow-300"> <a href="{% url 'subjectDetails' subject.id %}"> {{ subject.subjectName }} </a> </td>
+              <td class="px-4 py-3 border-2 border-green-300">0 </td>
+              <td class="px-4 py-3 border-2 border-green-300">0 </td>
+              <td class="px-4 py-3 border-2 border-green-300">0 </td>
+              <td class="px-4 py-3 border-2 border-green-300">0 </td>
+              <td class="px-4 py-3 border-2 border-green-300">0 </td>
+            </tr>
+            {% endfor %}
+              
+          </tbody>
+        </table>
+       </div>
      </div>
      
    </div>
