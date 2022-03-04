@@ -1,0 +1,45 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- ====== Table Section Start -->
+
+<section class="text-gray-600 body-font">
+   <div class="container px-5 py-24 mx-auto">
+     <div class="flex flex-col text-center w-full mb-20">
+       <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Result Computation Sytem</h1>
+       <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Click a class name to view deatails</p>
+     </div>
+     <div class="lg:w-2/3 w-full mx-auto overflow-auto  border-2 border-blue-300 ">
+       <table class="table-auto w-full text-left whitespace-no-wrap">
+         <thead>
+           <tr>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tl rounded-bl">Classes</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">Students</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">1st CA Entries</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">2nd CA Entries</th>
+               <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">Exam Entries</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Class Teacher</th>
+           </tr>
+         </thead>
+         <tbody>
+            {% for class in all_class %}
+           <tr>
+             <td class="px-4 py-3 hover:bg-green-300"><a href="{% url 'classDetails' class.id %}"> {{ class.classNmame }} </a></td>
+             <td class="px-4 py-3">0 students</td>
+             <td class="px-4 py-3">0 1st ca</td>
+             <td class="px-4 py-3">0 2nd ca</td>
+             <td class="px-4 py-3">0 exam</td>
+             <td class="px-4 py-3">0 </td>
+           </tr>
+           {% empty %}
+             <h1 class="text-gray-900">No Results</h1>
+             {% endfor %}
+         </tbody>
+       </table>
+     </div>
+    
+   </div>
+ </section>
+ 
+<!-- ====== Table Section End -->

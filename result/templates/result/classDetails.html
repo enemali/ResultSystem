@@ -1,0 +1,44 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- ====== Table Section Start -->
+
+<section class="text-gray-600 body-font">
+   <div class="container px-5 py-24 mx-auto">
+     <div class="flex flex-col text-center w-full mb-20">
+       <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900"> {{all_class.classNmame}} </h1>
+       <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Subjects in this class</p>
+     </div>
+     <div >
+       <table class="table-auto w-full text-left whitespace-no-wrap">
+         <thead>
+           <tr  >
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">Subjects</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">Students</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">1st CA Entries</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">2nd CA Entries</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300">Exam Entries</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tr rounded-br">Subject Teacher</th>
+           </tr>
+         </thead>
+         <tbody>
+           {% for subject in all_class.subjectclass.all %}
+           <tr>
+             <td class="px-4 py-3 border-2 border-green-300 hover:bg-yellow-300"> <a href="{% url 'subjectDetails' subject.id %}"> {{ subject.subjectName }} </a> </td>
+             <td class="px-4 py-3 border-2 border-green-300">0 </td>
+             <td class="px-4 py-3 border-2 border-green-300">0 </td>
+             <td class="px-4 py-3 border-2 border-green-300">0 </td>
+             <td class="px-4 py-3 border-2 border-green-300">0 </td>
+             <td class="px-4 py-3 border-2 border-green-300">0 </td>
+           </tr>
+           {% endfor %}
+             
+         </tbody>
+       </table>
+     </div>
+     
+   </div>
+ </section>
+ 
+<!-- ====== Table Section End -->
