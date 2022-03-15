@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result System</title>
+    {% comment %} <link href="{% static 'css/styles.css' %}" rel="stylesheet"> {% endcomment %}
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+
+</head>
+<body class="bg-indigo-100 overflow-auto">
+    <div class="max-w-7xl mx-auto">
+        {% comment %} {% include 'navbar.html' %} {% endcomment %}
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+    {% comment %} {% include "scripts.html" %} {% endcomment %}
+
+</body>
+</html>

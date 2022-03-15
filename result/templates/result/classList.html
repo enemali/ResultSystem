@@ -25,7 +25,7 @@
          <tbody>
             {% for class in all_class %}
            <tr>
-             <td class="px-4 py-3 hover:bg-green-300"><a href="{% url 'classDetails' class.id %}"> {{ class.classNmame }} </a></td>
+             <td class="px-4 py-3 hover:bg-green-300"><a href="{% url 'result:classDetails' class.id %}"> {{ class.className }} </a></td>
              <td class="px-4 py-3">0 students</td>
              <td class="px-4 py-3">0 1st ca</td>
              <td class="px-4 py-3">0 2nd ca</td>

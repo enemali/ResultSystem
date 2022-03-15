@@ -30,23 +30,29 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 
+class NamesOfClasses(models.Model):
+    className = models.CharField(max_length=100,null=True)
+    
+class section(models.Model):
+    sectionName = models.CharField(max_length=100)
+    
 class all_class(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    classNmame = models.CharField(max_length=1000, choices=allclass_choices)
-    section = models.CharField(max_length=1000, choices=section_choices)
+    className = models.CharField(max_length=100)
+    section = models.CharField(max_length=100)
     complete = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.classNmame
+        return self.className
     
     class Meta:
-        ordering = ['classNmame']
+        ordering = ['className']
         
         
 class subject(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    classNmame = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
-    subjectName = models.CharField(max_length=1000)
+    className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
+    subjectName = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.subject
@@ -56,8 +62,8 @@ class subject(models.Model):
         
 class students(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    classNmame = models.ForeignKey(all_class, related_name = 'studentclass', on_delete=models.SET_NULL, null=True)
-    fullname = models.CharField(max_length=1000)
+    className = models.ForeignKey(all_class, related_name = 'studentclass', on_delete=models.SET_NULL, null=True)
+    fullname = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.fullname
@@ -66,18 +72,18 @@ class students(models.Model):
         ordering = ['fullname']
 
 class assessment(models.Model):
-    classNmame = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(students, on_delete=models.SET_NULL, null=True)
     subject = models.ForeignKey(subject, on_delete=models.SET_NULL, null=True)
     firstCa = models.IntegerField(default=0)
     secondCa = models.IntegerField(default=0)
     exam = models.IntegerField(default=0)
-    section = models.CharField(max_length=1000, choices=section_choices)
-    term = models.CharField(max_length=1000 , choices=term_choices)
+    section = models.CharField(max_length=100, choices=section_choices)
+    term = models.CharField(max_length=100 , choices=term_choices)
     session = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.assessment
     
     class Meta:
-        ordering = ['classNmame']
+        ordering = ['className']

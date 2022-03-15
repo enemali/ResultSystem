@@ -1,0 +1,62 @@
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<div 
+class="max-w-lg mx-auto" >
+    <a class="hover:text-blue-500" href="#">Go back</a>
+    <div class="py-5 border-t border-gray-200">
+        <h1 class="text-4xl text-gray-800">Add Student</h1>
+    </div>
+
+ <form 
+ hx-post= "/studentList/"
+ hx-swap="afterend" 
+ hx-target="#mali">
+        {% csrf_token %}
+
+       <div class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+            {{ form.fullname }} 
+        </div>
+
+        {% comment %} {{ form }} {% endcomment %}
+
+        <div class="flex justify-center">
+            <div class="mb-3 xl:w-96">
+              <select class="form-select appearance-none
+                block
+                w-full
+                px-3
+                py-1.5
+                text-base
+                font-normal
+                text-gray-700
+                bg-white bg-clip-padding bg-no-repeat
+                border border-solid border-gray-300
+                rounded
+                transition
+                ease-in-out
+                m-0
+                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
+                  <option selected>Open this select menu</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+              </select>
+            </div>
+          </div>
+
+        <button type='submit' class="w-full text-white bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md">
+            Submit
+        </button>
+
+ </form>
+
+</div>
+
+
+<div id="mali"> book </div> 
+
+<script src="https://unpkg.com/htmx.org@1.7.0"></script>
+{% endblock content %}
