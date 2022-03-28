@@ -6,11 +6,11 @@
 
 <section class="text-gray-600 body-font">
    <div class="container px-5 py-24 mx-auto">
-     <div class="flex flex-col text-center w-full mb-20">
-       <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Result Computation Sytem</h1>
-       <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Click a class name to view deatails</p>
+     <div class="flex flex-col text-center w-full">
+       <h1 class="sm:text-4xl text-3xl font-medium title-font text-gray-900">Result Computation Sytem</h1>
+       <p class=" mx-auto leading-relaxed text-base">Click a class name to view deatails</p>
      </div>
-     <div class="lg:w-2/3 w-full mx-auto overflow-auto  border-2 border-blue-300 ">
+     <div class="w-full mx-auto">
        <table class="table-auto w-full text-left whitespace-no-wrap">
          <thead>
            <tr>
@@ -25,12 +25,15 @@
          <tbody>
             {% for class in all_class %}
            <tr>
-             <td class="px-4  hover:bg-green-300"><a href="{% url 'result:classDetails' class.id %}"> {{ class.className }} </a></td>
-             <td class="px-4 ">0 students</td>
-             <td class="px-4 ">0 1st ca</td>
-             <td class="px-4 ">0 2nd ca</td>
-             <td class="px-4 ">0 exam</td>
-             <td class="px-4 ">0 </td>
+             <td class="hover:bg-green-300 px-4 border-2 border-blue-300">
+               <a href="{% url 'result:classDetails' class.id %}"> 
+                {{ class.className }} 
+              </a></td>
+             <td class="px-4 border-2 border-blue-300">0 students</td>
+             <td class="px-4 border-2 border-blue-300">0 1st ca</td>
+             <td class="px-4 border-2 border-blue-300">0 2nd ca</td>
+             <td class="px-4 border-2 border-blue-300">0 exam</td>
+             <td class="px-4 border-2 border-blue-300">0 </td>
            </tr>
            {% empty %}
              <h1 class="text-gray-900">No Results</h1>
