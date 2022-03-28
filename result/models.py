@@ -34,12 +34,14 @@ class NamesOfClasses(models.Model):
     className = models.CharField(max_length=100,null=True)
     
 class section(models.Model):
-    sectionName = models.CharField(max_length=100)
+    sectionName = models.CharField(max_length=100 , unique=True)
+    def __str__(self):
+        return self.sectionName
     
 class all_class(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    className = models.CharField(max_length=100)
-    section = models.CharField(max_length=100)
+    className = models.CharField(max_length=100 , unique=True)
+    section = models.ForeignKey(section, on_delete=models.SET_NULL, null=True)
     complete = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -55,7 +57,7 @@ class subject(models.Model):
     subjectName = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.subject
+        return self.subjectName
     
     class Meta:
         ordering = ['subjectName']

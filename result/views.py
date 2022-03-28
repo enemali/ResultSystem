@@ -19,9 +19,22 @@ class classList(ListView):
 class classDetails(DetailView):
     model = all_class
     context_object_name = 'all_class'
-    template_name = 'result/classDetails.html'
-    
-    
+    subjectform = subjectForm
+
+    def get(self, request,pk, *args, **kwargs):
+        # subjectform = subjectForm(initial={'className': pk})
+        return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
+                          
+    def post(self, request,pk, *args, **kwargs):
+            classSubject = subject()
+            if request.POST.get('subjectName'):
+                classSubject.subjectName = request.POST.get('subjectName')
+                classSubject.className = all_class.objects.get(id=pk)
+                classSubject.save()
+                return redirect('result:classDetails', pk=pk)
+            else:
+                return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
+
 class subjectDetails(DetailView):
     model = subject
     context_object_name = 'subject'
@@ -49,31 +62,26 @@ def studentCreate(request):
         return render(request, 'result/studentCreate.html',{'form': form})
     
 class settings(TemplateView):
-    form1 = SettingsForm()
+    form1 = allClassForm()
     form2 = sectionForm()
-    model = NamesOfClasses
-    model2 = section
+    classmodel = all_class.objects.all()
+    sectionmodel = section.objects.all()
     def get(self, request):
         return render(request,'result/settings.html',{'classform': self.form1 , 
                                                       'sectionForm': self.form2,
-                                                      'allclass': self.model.objects.all(),
-                                                      'sections': self.model2.objects.all()
+                                                      'allclass': self.classmodel,
+                                                      'sections': self.sectionmodel
                                                       })
     def post(self, request):
-        classform = SettingsForm(request.POST)
+        classform = allClassForm(request.POST)
         sectionform = sectionForm(request.POST)
         if classform.is_valid():
             classform.save()
-            return redirect('result:settings')
         elif sectionform.is_valid():
             sectionform.save()
-            return redirect('result:settings')
-        else:
-            return render(request,'result/settings.html',{'classform': classform , 
-                                                      'sectionForm': sectionform,
-                                                      'allclass': self.model.objects.all(),
-                                                      'sections': self.model2.objects.all()
-                                                      })
+        return render(request,'result/settings.html',{'classform':classform,
+                                                      'sectionForm':sectionform
+                                                      })    
         
 
     # template_name = 'result/settings.html'

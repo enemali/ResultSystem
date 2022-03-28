@@ -3,18 +3,24 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
-from .models import students , NamesOfClasses , section
+from .models import students , all_class , section , subject
 
 
+class subjectForm(forms.ModelForm):
+    class Meta:
+        model = subject
+        fields = ['subjectName', 'className']
+        
+        
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
         fields = ['fullname', 'className']
         
-class SettingsForm(forms.ModelForm):
+class allClassForm(forms.ModelForm):
     class Meta:
-        model = NamesOfClasses
-        fields = ['className']
+        model = all_class
+        fields = ['className','section']
         
 class sectionForm(forms.ModelForm):
     class Meta:
