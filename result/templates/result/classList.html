@@ -14,23 +14,23 @@
        <table class="table-auto w-full text-left whitespace-no-wrap">
          <thead>
            <tr>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tl rounded-bl">Classes</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">Students</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">1st CA Entries</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">2nd CA Entries</th>
-               <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">Exam Entries</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Class Teacher</th>
+             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tl rounded-bl">Classes</th>
+             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">Students</th>
+             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">1st CA Entries</th>
+             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">2nd CA Entries</th>
+               <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300">Exam Entries</th>
+             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Class Teacher</th>
            </tr>
          </thead>
          <tbody>
             {% for class in all_class %}
            <tr>
-             <td class="px-4 py-3 hover:bg-green-300"><a href="{% url 'result:classDetails' class.id %}"> {{ class.className }} </a></td>
-             <td class="px-4 py-3">0 students</td>
-             <td class="px-4 py-3">0 1st ca</td>
-             <td class="px-4 py-3">0 2nd ca</td>
-             <td class="px-4 py-3">0 exam</td>
-             <td class="px-4 py-3">0 </td>
+             <td class="px-4  hover:bg-green-300"><a href="{% url 'result:classDetails' class.id %}"> {{ class.className }} </a></td>
+             <td class="px-4 ">0 students</td>
+             <td class="px-4 ">0 1st ca</td>
+             <td class="px-4 ">0 2nd ca</td>
+             <td class="px-4 ">0 exam</td>
+             <td class="px-4 ">0 </td>
            </tr>
            {% empty %}
              <h1 class="text-gray-900">No Results</h1>
