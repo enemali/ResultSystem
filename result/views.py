@@ -27,10 +27,17 @@ class classDetails(DetailView):
                           
     def post(self, request,pk, *args, **kwargs):
             classSubject = subject()
+            classStudent = students()
             if request.POST.get('subjectName'):
                 classSubject.subjectName = request.POST.get('subjectName')
                 classSubject.className = all_class.objects.get(id=pk)
                 classSubject.save()
+                return redirect('result:classDetails', pk=pk)
+            elif request.POST.get('studentName'):
+                classStudent.fullname = request.POST.get('studentName')
+                classStudent.className = all_class.objects.get(id=pk)
+                classStudent.save()
+                student_id = students.objects.latest('id')
                 return redirect('result:classDetails', pk=pk)
             else:
                 return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
