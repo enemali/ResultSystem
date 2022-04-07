@@ -30,9 +30,23 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 
+class setting(models.Model):
+    announcement = models.CharField(max_length=100,null=True)
+    announcement_date = models.DateTimeField(auto_now_add=False,null=True)
+    news = models.CharField(max_length=100,null=True)
+    
+    
 class NamesOfClasses(models.Model):
     className = models.CharField(max_length=100,null=True)
     
+class Images(models.Model):
+    image = models.ImageField(null=True,blank=True)
+    caption = models.CharField(max_length=100,null=True)
+    description = models.CharField(max_length=100,null=True)
+    
+    class Meta:
+        ordering = ['-id']
+
 class section(models.Model):
     sectionName = models.CharField(max_length=100 , unique=True)
     def __str__(self):
@@ -49,8 +63,7 @@ class all_class(models.Model):
     
     class Meta:
         ordering = ['className']
-        
-        
+              
 class subject(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
