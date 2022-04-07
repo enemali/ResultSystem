@@ -39,7 +39,7 @@ class settingForm(forms.ModelForm):
                     'news'
                     ]
         widgets = {
-            'announcement_date': DateInput(attrs={'type': 'date'}),
+            'announcement_date': DateInput(attrs={'type': 'date'}, format='%m-%d-%Y %H:%M:%S'),
         }
                   
                   

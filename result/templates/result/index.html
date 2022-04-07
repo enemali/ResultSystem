@@ -75,7 +75,9 @@
       <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <!--Left Col-->
         <div class="flex flex-col w-full md:w-2/6 justify-center items-start text-center md:text-left">
-          <p class="text-2xl font-bold leading-tight w-full">1st CA Test</p>
+          <p class="text-2xl font-bold leading-tight w-full">{{setting.announcement}}</p>
+          <div id = "dateInput" >{{setting.announcement_date}}</div>
+
           <h1 id="demo" class=" my-4 text-5xl font-bold leading-tight"> </h1>
 
           <p class="leading-normal text-2xl mb-8">
@@ -809,7 +811,8 @@ $('.slider').slick();
 
 // countDown timer
       // Set the date we're counting down to
-var countDownDate = new Date(document.getElementById("theInput").innerHTML).getTime();
+var countDownDate = new Date(Number(document.getElementById("dateInput").innerHTML)).getTime();
+// new Date("Dec 5, 2022 15:37:25").getTime();
 
 // Update the count down every 1 second
 var x = setInterval(function() {
