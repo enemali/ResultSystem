@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
 from .models import students , all_class , section , subject , Images , setting
+from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class subjectForm(forms.ModelForm):
     class Meta:
@@ -39,8 +40,9 @@ class settingForm(forms.ModelForm):
                     'news'
                     ]
         widgets = {
-            'announcement_date': DateInput(attrs={'type': 'date'}, format='%m-%d-%Y %H:%M:%S'),
+            'announcement_date' : DatePickerInput(),
         }
+        
                   
                   
                   
