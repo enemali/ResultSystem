@@ -128,8 +128,10 @@ class subjectDetails(DetailView):
         Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className.className)]
         Form.fields['student'].choices = [(student.id, student.fullname) for student in students_query]
+        assessmentForm = AssessmentForm()
         return render(request, 'result/subjectDetails.html',{'subject': singleSubject,
                                                              'Form': Form,
+                                                            'assessmentForm': assessmentForm,
                                                             'assessment': assessment_query,
                                                              })
     

@@ -70,15 +70,16 @@
          </thead>
          <tbody>
           {% comment %} students in assessment {% endcomment %}
+
            {% for StudentAssessment in assessment %}
-           
+          
            <tr>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.className }} </td>
-             <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
-             <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
-             <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
-             <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.firstCa }} </td>
+             <td class="px-4 py-3 border-2 border-yellow-300">{{ StudentAssessment.secondCa }}  </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }} </td>
            </tr>
            {% endfor %}
              
@@ -86,6 +87,43 @@
        </table>
      </div>
      
+{% comment %} assessmentForm {% endcomment %}
+     <div >
+      <form action="" method="POST">
+        {% csrf_token %}
+
+        {{ formset.non_form_errors.as_ul }}
+<table id="formset" class="form">
+{% for form in assessmentForm.forms %}
+  {% if forloop.first %}
+  <thead><tr>
+    {% for field in form.visible_fields %}
+    <th>{{ field.label|capfirst }}</th>
+    {% endfor %}
+  </tr></thead>
+  {% endif %}
+  <tr class=" ">
+  {% for field in form.visible_fields %}
+    <td>
+    {# Include the hidden fields in the form #}
+    {% if forloop.first %}
+      {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+      {% endfor %}
+    {% endif %}
+      {{ field.errors.as_ul }}
+      {{ field }}
+    </td>
+  {% endfor %}
+  </tr>
+{% endfor %}
+</table>
+
+      </form>
+
+      
+    </div>
+
    </div>
  </section>
  

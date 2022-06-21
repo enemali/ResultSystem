@@ -1,5 +1,6 @@
 from dataclasses import field
 from django import forms
+from django.forms import modelformset_factory
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
@@ -47,6 +48,13 @@ class SubjectstudentForm(forms.ModelForm):
     class Meta:
         model = assessment
         fields = ['className','student','subjectName']
-                  
         
-    
+class AssessmentForm(forms.modelformset_factory(assessment, 
+                                                fields=('className',
+                                                        'student',
+                                                        'subjectName',
+                                                        'firstCa'
+                                                        ))):
+    class Meta:
+        model = assessment
+        
