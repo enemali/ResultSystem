@@ -5,11 +5,57 @@
 <!-- ====== Table Section Start -->
 
 <section class="text-gray-600 body-font">
-   <div class="container px-5 py-24 mx-auto">
-     <div class="flex flex-col text-center w-full mb-20">
-       <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900"> {{subject.subjectName}} </h1>
+   <div class="container px-5 py-5 mx-auto">
+     <div class="flex flex-col text-center w-full">
+       <h1 class="sm:text-4xl text-3xl font-medium title-font text-gray-900"> {{subject.subjectName}} </h1>
        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Students in this subject</p>
      </div>
+
+      <!-- student Form -->
+      <form action="" method="POST">
+        {% csrf_token %}
+        {{ Form.as_p }}
+        <div class="mb-2">
+          <button
+            type="submit"
+            class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
+            Add Student to Subject
+          </button>
+        </div>
+      </form>
+
+    {% comment %} <div class="grid-cols-8 gap-4">
+      <div class="border-2 border-green-300  col-start-4 col-span-2">
+        <div class="text-center">
+          <h1 class=" font-semibold text-gray-700">Add new Student</h1>
+        </div>
+        <form action="" method="POST">
+          {% csrf_token %}
+          <div class="mb-2">
+            <label for="studentName" 
+            class="block mb-2 text-sm text-gray-600"> 
+            Student Full Name </label>
+            <input
+              type="text"
+              name="studentName"
+              placeholder="New Student"
+              required
+              class="w-full px-3 placeholder-gray-300 border border-gray-300 rounded-md  focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
+            />
+          </div>
+          <div class="mb-2">
+            <button
+              type="submit"
+              class="w-full px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none"
+            >
+              Save New Student
+            </button>
+          </div>
+        </form>
+       </div>
+      </div>
+    </div> {% endcomment %}
+  <!-- end of student Form -->
      <div >
        <table class="table-auto w-full text-left whitespace-no-wrap">
          <thead>
@@ -23,10 +69,12 @@
            </tr>
          </thead>
          <tbody>
-           {% for student in subject.studentclass.all %}
+          {% comment %} students in assessment {% endcomment %}
+           {% for StudentAssessment in assessment %}
+           
            <tr>
-             <td class="px-4 py-3 border-2 border-yellow-300"> ghh </td>
-             <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student }} </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.className }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
              <td class="px-4 py-3 border-2 border-yellow-300">0 </td>
              <td class="px-4 py-3 border-2 border-yellow-300">0 </td>

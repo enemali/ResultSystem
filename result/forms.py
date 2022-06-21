@@ -4,12 +4,12 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
-from .models import students , all_class , section , subject , Images , setting
+from .models import students , all_class , section , allsubject , Images , setting , assessment
 from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class subjectForm(forms.ModelForm):
     class Meta:
-        model = subject
+        model = allsubject
         fields = ['subjectName', 'className']
         
 class StudentForm(forms.ModelForm):
@@ -43,8 +43,10 @@ class settingForm(forms.ModelForm):
             'announcement_date' : DatePickerInput(),
         }
         
-                  
-                  
+class SubjectstudentForm(forms.ModelForm):
+    class Meta:
+        model = assessment
+        fields = ['className','student','subjectName']
                   
         
     

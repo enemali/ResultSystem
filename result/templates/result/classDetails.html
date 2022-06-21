@@ -11,14 +11,15 @@
        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Student and Subjects in this class</p>
        <br/>
      </div>
-          <!-- student form -->     
+          <!-- subject form -->     
           <div class="container">
             <div class="max-w-xl p-5 mx-auto bg-white rounded-md shadow-sm">
-              <div class="text-center">
-                <h1 class=" font-semibold text-gray-700">Add new Subject</h1>
-              </div>
+              
               <div class=" grid grid-cols-2 gap-4">
                <div class="mx-2 border-2 border-green-300">
+                <div class="text-center">
+                  <h1 class=" font-semibold text-gray-700">Add new Subject</h1>
+                </div>
                 <form action="" method="POST">
                   {% csrf_token %}
                   <div class="mb-2">
@@ -43,8 +44,11 @@
                   </div>
                 </form>
                </div>
-
-               <div class="mx-2 border-2 border-green-300">
+            <!-- student form --> 
+              <div class="mx-2 border-2 border-green-300">
+                <div class="text-center">
+                  <h1 class=" font-semibold text-gray-700">Add new Student</h1>
+                </div>
                 <form action="" method="POST">
                   {% csrf_token %}
                   <div class="mb-2">

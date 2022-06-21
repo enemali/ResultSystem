@@ -3,6 +3,7 @@ from multiprocessing import context
 from pyexpat import model
 from re import template
 from types import new_class
+from django.forms import Form
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
@@ -90,20 +91,20 @@ class classList(ListView):
 class classDetails(DetailView):
     model = all_class
     context_object_name = 'all_class'
-    subjectform = subjectForm
-
+    
     def get(self, request,pk, *args, **kwargs):
-        # subjectform = subjectForm(initial={'className': pk})
         return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
-                          
+                        
     def post(self, request,pk, *args, **kwargs):
-            classSubject = subject()
+            classSubject = allsubject()
             classStudent = students()
+            
             if request.POST.get('subjectName'):
                 classSubject.subjectName = request.POST.get('subjectName')
                 classSubject.className = all_class.objects.get(id=pk)
                 classSubject.save()
                 return redirect('result:classDetails', pk=pk)
+            
             elif request.POST.get('studentName'):
                 classStudent.fullname = request.POST.get('studentName')
                 classStudent.className = all_class.objects.get(id=pk)
@@ -114,9 +115,32 @@ class classDetails(DetailView):
                 return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
 
 class subjectDetails(DetailView):
-    model = subject
-    context_object_name = 'subject'
+    model = allsubject
     template_name = 'result/subjectDetails.html'
+    
+    def get(self, request,pk, *args, **kwargs):
+        singleSubject = allsubject.objects.get(id=pk)
+        assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
+        # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
+        # student_query not in assessment_query
+        students_query = students.objects.filter(className=singleSubject.className.id).exclude(id__in=assessment_query.values('student_id'))
+        Form = SubjectstudentForm()
+        Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
+        Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className.className)]
+        Form.fields['student'].choices = [(student.id, student.fullname) for student in students_query]
+        return render(request, 'result/subjectDetails.html',{'subject': singleSubject,
+                                                             'Form': Form,
+                                                            'assessment': assessment_query,
+                                                             })
+    
+    def post(self, request,pk, *args, **kwargs):
+        Form = SubjectstudentForm(request.POST)
+        if Form.is_valid():
+            Form.save()
+            return redirect('result:subjectDetails', pk=pk)
+        else:
+            return render(request, 'result/subjectDetails.html',{'subject': self.get_object(), 'Form': Form()})
+            
 
 class studentDelete(DeleteView):
     model = students

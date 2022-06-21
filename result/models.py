@@ -64,7 +64,7 @@ class all_class(models.Model):
     class Meta:
         ordering = ['className']
               
-class subject(models.Model):
+class allsubject(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
     subjectName = models.CharField(max_length=100)
@@ -89,7 +89,7 @@ class students(models.Model):
 class assessment(models.Model):
     className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(students, on_delete=models.SET_NULL, null=True)
-    subject = models.ForeignKey(subject, on_delete=models.SET_NULL, null=True)
+    subjectName = models.ForeignKey(allsubject, on_delete=models.SET_NULL, null=True)
     firstCa = models.IntegerField(default=0)
     secondCa = models.IntegerField(default=0)
     exam = models.IntegerField(default=0)
@@ -98,7 +98,7 @@ class assessment(models.Model):
     session = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.assessment
+        return str(self.className)
     
     class Meta:
         ordering = ['className']
