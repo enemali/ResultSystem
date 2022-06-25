@@ -64,8 +64,9 @@
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">class</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">1st CA</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">2nd CA</th>
-               <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Exam</th>
-             <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tr rounded-br">Term</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Exam</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Term</th>
+             <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tr rounded-br">Entry</th>
            </tr>
          </thead>
          <tbody>
@@ -80,6 +81,10 @@
              <td class="px-4 py-3 border-2 border-yellow-300">{{ StudentAssessment.secondCa }}  </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }} </td>
+             <td class="px-4 py-3 border-2 border-yellow-300">
+               <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
+              Edit
+            </a>
            </tr>
            {% endfor %}
              
@@ -88,43 +93,56 @@
      </div>
      
 {% comment %} assessmentForm {% endcomment %}
-     <div >
+  {% comment %} <div >
       <form action="" method="POST">
         {% csrf_token %}
-
+        {{ formset.management_data }}
         {{ formset.non_form_errors.as_ul }}
-<table id="formset" class="form">
-{% for form in assessmentForm.forms %}
-  {% if forloop.first %}
-  <thead><tr>
-    {% for field in form.visible_fields %}
-    <th>{{ field.label|capfirst }}</th>
-    {% endfor %}
-  </tr></thead>
-  {% endif %}
-  <tr class=" ">
-  {% for field in form.visible_fields %}
-    <td>
-    {# Include the hidden fields in the form #}
-    {% if forloop.first %}
-      {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-      {% endfor %}
-    {% endif %}
-      {{ field.errors.as_ul }}
-      {{ field }}
-    </td>
-  {% endfor %}
-  </tr>
-{% endfor %}
-</table>
+
+        <table id="formset" class="table-auto w-full text-left whitespace-no-wrap">
+        {% for form in assessmentForm.forms %}
+          {% if forloop.first %}
+          <thead class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">
+            <tr>
+            {% for field in form.visible_fields %}
+            <th>{{ field.label|capfirst }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+          {% endif %}
+          <tr class=" ">
+          {% for field in form.visible_fields %}
+            <td class="px-4 py-3 border-2 border-yellow-300">
+            {# Include the hidden fields in the form #}
+            {% if forloop.first %}
+              {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+              {% endfor %}
+            {% endif %}
+              {{ field.errors.as_ul }}
+              {{ field }}
+            </td>
+          {% endfor %}
+          </tr>
+        {% endfor %}
+        </table>
+
+        <div class="mb-2">
+          <button
+            type="submit"
+            class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
+            Save Scores
+          </button>
+        </div>
 
       </form>
 
       
-    </div>
+    </div> {% endcomment %}
 
    </div>
- </section>
+ 
+ 
+  </section>
  
 <!-- ====== Table Section End -->

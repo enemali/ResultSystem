@@ -8,5 +8,4 @@ admin.site.register(assessment)
 admin.site.register(NamesOfClasses)
 admin.site.register(section)
 admin.site.register(Images)
-admin.site.register(setting)
 

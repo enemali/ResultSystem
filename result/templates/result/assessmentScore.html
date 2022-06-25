@@ -1,0 +1,35 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- ====== Table Section Start -->
+
+<section class="text-gray-600 body-font">
+   <div class="container px-5 py-5 mx-auto">
+     <div class="flex flex-col text-center w-full">
+       <h1 class="sm:text-4xl text-3xl font-medium title-font text-gray-900"> 
+        {{assessment.subjectName}} 
+      </h1>
+      <h1 class="sm:text-4xl text-3xl font-medium title-font text-gray-900"> 
+        {{assessment.student}} 
+      </h1>
+       <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Test and Exam Score</p>
+     </div>
+   
+     <div >
+        <form method="POST">
+          {% csrf_token %}
+            {{ form.as_p }}
+            <button
+              type="submit"
+              class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
+              Save Scores
+            </button>
+          </form>
+       </div>
+        
+    </div>
+
+  </section>
+ 
+<!-- ====== Table Section End -->

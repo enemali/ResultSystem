@@ -11,8 +11,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.files.storage import FileSystemStorage
 from .models import *
 from .forms import *
-
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
+from funky_sheets.formsets import HotView
+from django.forms import modelformset_factory , formset_factory,inlineformset_factory
 
 # Create your views here.
 class index(TemplateView):
@@ -114,8 +116,8 @@ class classDetails(DetailView):
             else:
                 return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
 
-class subjectDetails(DetailView):
-    model = allsubject
+class subjectDetails(CreateView):
+    model = assessment
     template_name = 'result/subjectDetails.html'
     
     def get(self, request,pk, *args, **kwargs):
@@ -128,20 +130,38 @@ class subjectDetails(DetailView):
         Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className.className)]
         Form.fields['student'].choices = [(student.id, student.fullname) for student in students_query]
-        assessmentForm = AssessmentForm()
+        # assessmentForm = AssessmentForm(queryset=assessment_query)
+        
         return render(request, 'result/subjectDetails.html',{'subject': singleSubject,
-                                                             'Form': Form,
-                                                            'assessmentForm': assessmentForm,
+                                                            'Form': Form,
+                                                            # 'assessmentForm': assessmentForm,
                                                             'assessment': assessment_query,
                                                              })
     
     def post(self, request,pk, *args, **kwargs):
         Form = SubjectstudentForm(request.POST)
+        assessmentForm = AssessmentForm(request.POST)
         if Form.is_valid():
             Form.save()
             return redirect('result:subjectDetails', pk=pk)
+        if assessmentForm.is_valid():
+            instance = assessmentForm.save(commit=False)
+            for assessmentForm in instance:
+                assessmentForm.save()
+            # assessmentForm.save()
+            return redirect('result:subjectDetails', pk=pk)
         else:
-            return render(request, 'result/subjectDetails.html',{'subject': self.get_object(), 'Form': Form()})
+            return redirect('result:subjectDetails', pk=pk)
+        
+
+class assessmentEntry(UpdateView):
+    model = assessment
+    fields = '__all__'
+    Form_class = AssessmentForm
+    template_name = 'result/assessmentScore.html'
+    success_url = reverse_lazy('result:index')
+    
+            
             
 
 class studentDelete(DeleteView):
@@ -166,4 +186,3 @@ def uploadimage(request):
         uploaded_file = request.FILES['document']
         print(uploaded_file.name)
     return render(request, 'result/uploadimage.html')
-    
