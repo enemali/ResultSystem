@@ -146,6 +146,13 @@ class subjectDetails(CreateView):
             return redirect('result:subjectDetails', pk=pk)
         else:
             return redirect('result:subjectDetails', pk=pk)
+
+# delete subject
+class deleteSubject(DeleteView):
+    model = allsubject
+    context_object_name = 'allsubject'
+    template_name = 'result/deleteSubject.html'
+    success_url = reverse_lazy('result:settings')
         
 class assessmentEntry(UpdateView):
     model = assessment
