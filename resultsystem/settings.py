@@ -22,7 +22,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'result',
-    'funky_sheets',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

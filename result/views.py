@@ -13,7 +13,6 @@ from .models import *
 from .forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
-from funky_sheets.formsets import HotView
 from django.forms import modelformset_factory , formset_factory,inlineformset_factory
 
 # Create your views here.
@@ -71,7 +70,6 @@ class deleteClass(DeleteView):
     template_name = 'result/deleteClass.html'
     success_url = reverse_lazy('result:settings')
     
-    
             # return render(request, 'result/index.html',{'imageForm': imageForm, 'obj': obj})            
             # context = {}
             # uploaded_file = request.FILES['document']
@@ -80,11 +78,7 @@ class deleteClass(DeleteView):
             # url = fs.url(name)
             # context['url'] = fs.url(name)
             
-            
-        
-  
 
-    
 class classList(ListView):
     model = all_class
     context_object_name = 'all_class'
@@ -153,7 +147,6 @@ class subjectDetails(CreateView):
         else:
             return redirect('result:subjectDetails', pk=pk)
         
-
 class assessmentEntry(UpdateView):
     model = assessment
     fields = '__all__'
@@ -161,18 +154,12 @@ class assessmentEntry(UpdateView):
     template_name = 'result/assessmentScore.html'
     success_url = reverse_lazy('result:index')
     
-            
-            
-
 class studentDelete(DeleteView):
     model = students
     template_name = 'result/studentDelete.html'
     def get_success_url(self):
-        className = self.object.className
-        return render('result:classDetails', kwargs={'pk': className.id})
-    
-    
-    
+        return reverse_lazy('result:classDetails', 
+                            kwargs={'pk': self.object.className.id})
         
 class studentList(ListView):
     def post(self, request):
