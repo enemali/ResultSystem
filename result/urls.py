@@ -11,6 +11,7 @@ from .views import (classDetails,
                     deleteClass,
                     signUpPage,
                     loginPage,
+                    logoutPage,
                     )
    
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     path('assessmentScores/<int:pk>/', assessmentEntry.as_view(), name='assessmentScores'),
     path('signUp/', signUpPage.as_view(), name='signUp'),
     path('login/', loginPage.as_view(), name='login'),
+    path('logout/', logoutPage.as_view(), name='logout'),
 
     
 ]

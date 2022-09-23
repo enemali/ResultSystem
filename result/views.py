@@ -9,10 +9,11 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect 
 from django.core.files.storage import FileSystemStorage
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import View
 from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
 from django.forms import modelformset_factory , formset_factory,inlineformset_factory
 
@@ -51,6 +52,11 @@ class loginPage(TemplateView):
                 return redirect('result:index')
             else:
                 return redirect('result:login')
+
+class logoutPage(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('result:index')
 
 
 class settings(ListView):
