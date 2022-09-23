@@ -22,6 +22,7 @@ from django.forms import modelformset_factory , formset_factory,inlineformset_fa
 
 
 class index(TemplateView):
+    user = get_user_model()
     queryset = setting.objects.first()
     template_name = 'result/index.html'
     
