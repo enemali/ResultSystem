@@ -10,6 +10,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect 
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from .forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
@@ -59,7 +60,7 @@ class logoutPage(View):
         return redirect('result:index')
 
 
-class settings(ListView):
+class settings(LoginRequiredMixin,ListView):
     template_name = 'result/settings.html'
     queryset = all_class.objects.all()
     
@@ -111,12 +112,12 @@ class deleteClass(DeleteView):
             # url = fs.url(name)
             # context['url'] = fs.url(name)
 
-class classList(ListView):
+class classList(LoginRequiredMixin,ListView):
     model = all_class
     context_object_name = 'all_class'
     template_name = 'result/classList.html'
     
-class classDetails(DetailView):
+class classDetails(LoginRequiredMixin,DetailView):
     model = all_class
     context_object_name = 'all_class'
     
@@ -142,7 +143,7 @@ class classDetails(DetailView):
             else:
                 return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
 
-class subjectDetails(CreateView):
+class subjectDetails(LoginRequiredMixin,CreateView):
     model = assessment
     template_name = 'result/subjectDetails.html'
     
