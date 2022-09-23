@@ -30,12 +30,22 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 
+
+
+class loginUser(models.Model):
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+
+    def __str__(self):
+        return self.username
+
 class setting(models.Model):
     announcement = models.CharField(max_length=100,null=True)
     announcement_date = models.DateField(auto_now_add=False,null=True)
     news = models.CharField(max_length=100,null=True)
-    
-    
+
+  
 class NamesOfClasses(models.Model):
     className = models.CharField(max_length=100,null=True)
     

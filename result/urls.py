@@ -8,7 +8,9 @@ from .views import (classDetails,
                     studentDelete,
                     index,
                     assessmentEntry,
-                    deleteClass
+                    deleteClass,
+                    signUpPage,
+                    loginPage,
                     )
    
 urlpatterns = [
@@ -22,6 +24,8 @@ urlpatterns = [
     path('uploadimage/', views.uploadimage, name='uploadimage'),
     path('deleteClass/<int:pk>/', deleteClass.as_view(), name='deleteClass'),
     path('assessmentScores/<int:pk>/', assessmentEntry.as_view(), name='assessmentScores'),
+    path('signUp/', signUpPage.as_view(), name='signUp'),
+    path('login/', loginPage.as_view(), name='login'),
 
     
 ]

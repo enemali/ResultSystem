@@ -5,8 +5,18 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
-from .models import students , all_class , section , allsubject , Images , setting , assessment
+from .models import students , all_class , section , allsubject , Images , setting , assessment,loginUser
 from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
+
+class signUpForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "email", "password1", "password2")
+        field_classes = {'username': UsernameField}
+
+class loginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
 class subjectForm(forms.ModelForm):
     class Meta:

@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect 
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth import authenticate
 from .models import *
 from .forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
@@ -16,6 +17,8 @@ from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
 from django.forms import modelformset_factory , formset_factory,inlineformset_factory
 
 # Create your views here.
+
+
 class index(TemplateView):
     queryset = setting.objects.first()
     template_name = 'result/index.html'
@@ -26,6 +29,30 @@ class index(TemplateView):
         context['setting'] = setting.objects.first()
         return context
     
+class signUpPage(CreateView):
+    model = loginUser
+    form_class = signUpForm
+    template_name = 'result/signUp.html'
+    success_url = reverse_lazy('result:index')
+
+class loginPage(TemplateView):
+    template_name = 'result/login.html'
+    form_class = loginForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+        
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            if user is not None:
+                return redirect('result:index')
+            else:
+                return redirect('result:login')
+
+
 class settings(ListView):
     template_name = 'result/settings.html'
     queryset = all_class.objects.all()
@@ -77,7 +104,6 @@ class deleteClass(DeleteView):
             # name = fs.save(uploaded_file.name, uploaded_file)
             # url = fs.url(name)
             # context['url'] = fs.url(name)
-            
 
 class classList(ListView):
     model = all_class
