@@ -15,7 +15,7 @@ from .views import (classDetails,
                     )
    
 urlpatterns = [
-    path('', index.as_view(), name='index'),
+    path('', index, name='index'),
     path('classList/', classList.as_view(), name='classList'),
     path('classDetails/<int:pk>/', classDetails.as_view(), name='classDetails'),
     path('subjectDetails/<int:pk>/', subjectDetails.as_view(), name='subjectDetails'),

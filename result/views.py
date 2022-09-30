@@ -17,12 +17,12 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic import View
 from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
 from django.forms import modelformset_factory , formset_factory,inlineformset_factory
-
+# import django messages
+from django.contrib import messages
 # Create your views here.
 
 
 class index(TemplateView):
-    user = get_user_model()
     queryset = setting.objects.first()
     template_name = 'result/index.html'
     
@@ -31,6 +31,15 @@ class index(TemplateView):
         context['img'] = Images.objects.all()
         context['setting'] = setting.objects.first()
         return context
+
+def index(request):
+    user = request.user
+    img = Images.objects.all()
+    settings = setting.objects.first()
+    return render(request, 'result/index.html', {'img':img,
+                                                    'setting':settings,
+                                                    'user':user})
+
     
 class signUpPage(CreateView):
     model = loginUser
@@ -51,9 +60,11 @@ class loginPage(TemplateView):
         if form.is_valid():
             user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
-                return redirect('result:index')
+                return redirect('result:classList')
             else:
                 return redirect('result:login')
+                # show error message
+                
 
 class logoutPage(View):
     def get(self, request, *args, **kwargs):
