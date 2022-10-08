@@ -41,11 +41,15 @@ def index(request):
                                                     'user':user})
 
     
-class signUpPage(CreateView):
-    model = loginUser
-    form_class = signUpForm
+class Registration(CreateView):
+    form_class = RegistrationForm
     template_name = 'result/signUp.html'
     success_url = reverse_lazy('result:index')
+
+class RegisterStudent(CreateView):
+    form_class = RegisterStudentForm
+    template_name = 'result/registerStudent.html'
+    success_url = reverse_lazy('result:settings')
 
 class loginPage(TemplateView):
     template_name = 'result/login.html'
@@ -60,7 +64,7 @@ class loginPage(TemplateView):
         if form.is_valid():
             user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
-                return redirect('result:classList')
+                return redirect('result:settings')
             else:
                 return redirect('result:login')
                 # show error message
@@ -72,7 +76,7 @@ class logoutPage(View):
         return redirect('result:index')
 
 
-class settings(LoginRequiredMixin,ListView):
+class settings(ListView):
     template_name = 'result/settings.html'
     queryset = all_class.objects.all()
     
@@ -124,12 +128,12 @@ class deleteClass(DeleteView):
             # url = fs.url(name)
             # context['url'] = fs.url(name)
 
-class classList(LoginRequiredMixin,ListView):
+class classList(ListView):
     model = all_class
     context_object_name = 'all_class'
     template_name = 'result/classList.html'
     
-class classDetails(LoginRequiredMixin,DetailView):
+class classDetails(DetailView):
     model = all_class
     context_object_name = 'all_class'
     
@@ -155,7 +159,7 @@ class classDetails(LoginRequiredMixin,DetailView):
             else:
                 return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
 
-class subjectDetails(LoginRequiredMixin,CreateView):
+class subjectDetails(CreateView):
     model = assessment
     template_name = 'result/subjectDetails.html'
     

@@ -9,9 +9,10 @@ from .views import (classDetails,
                     index,
                     assessmentEntry,
                     deleteClass,
-                    signUpPage,
+                    Registration,
                     loginPage,
                     logoutPage,
+                    RegisterStudent,
                     )
    
 urlpatterns = [
@@ -25,9 +26,10 @@ urlpatterns = [
     path('uploadimage/', views.uploadimage, name='uploadimage'),
     path('deleteClass/<int:pk>/', deleteClass.as_view(), name='deleteClass'),
     path('assessmentScores/<int:pk>/', assessmentEntry.as_view(), name='assessmentScores'),
-    path('signUp/', signUpPage.as_view(), name='signUp'),
+    path('registration', Registration.as_view(), name='registration'),
     path('login/', loginPage.as_view(), name='login'),
     path('logout/', logoutPage.as_view(), name='logout'),
+    path('registerStudent/', RegisterStudent.as_view(), name='registerStudent'),
 
     
 ]

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 section_choices = (
@@ -30,15 +31,20 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 
+class users(AbstractUser):
+    class Role(models.TextChoices):
+        ADMIN = 'admin'
+        TEACHER = 'teacher'
+        STUDENT = 'student'
 
+    base_role = Role.ADMIN
+    role = models.CharField(max_length=10, choices= Role.choices)
 
-class loginUser(models.Model):
-    username = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
+    def save (self , *args , **kwargs):
+        if not self.id:
+            self.role = self.base_role
+        return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.username
 
 class setting(models.Model):
     announcement = models.CharField(max_length=100,null=True)
@@ -63,7 +69,7 @@ class section(models.Model):
         return self.sectionName
     
 class all_class(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    # user = models.ForeignKey(users, on_delete=models.SET_NULL, null=True)
     className = models.CharField(max_length=100 , unique=True)
     section = models.ForeignKey(section, on_delete=models.SET_NULL, null=True)
     complete = models.BooleanField(default=False)
@@ -75,7 +81,7 @@ class all_class(models.Model):
         ordering = ['className']
               
 class allsubject(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    # user = models.ForeignKey(users, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
     subjectName = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
@@ -85,16 +91,12 @@ class allsubject(models.Model):
     class Meta:
         ordering = ['subjectName']
         
-class students(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    className = models.ForeignKey(all_class, related_name = 'studentclass', on_delete=models.SET_NULL, null=True)
-    fullname = models.CharField(max_length=100)
-    date = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.fullname
-    
+class students(users):
+    base_role = users.Role.STUDENT
+
     class Meta:
-        ordering = ['fullname']
+        proxy = True
+
 
 class assessment(models.Model):
     className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)

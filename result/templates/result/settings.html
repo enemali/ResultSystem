@@ -21,6 +21,13 @@
       type="submit">
         Add
      </button>
+
+     <button 
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+      type="#">
+      <a href="{% url 'result:registerStudent' %}">Add Student</a>
+     </button>
+
       <input type="hidden" name="form_type" value="classform">
   </div>
   </form>
@@ -104,7 +111,7 @@
 
   {% comment %} settings {% endcomment %}
   <div  >
-    <h1 class=" text-2xl text-gray-800 "> Announcements and News</h1>
+    <h1 class=" text-2xl text-gray-800 "> Announcements</h1>
     <form method="post" 
           name="settingForm"
           class="border-solid border-2 border-indigo-600 
@@ -119,7 +126,7 @@
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
         type="submit"
         name= "uploadIMG">
-          Save Announcements/News
+          Save 
        </button>
         <input type="hidden" name="form_type" value="imageForm">
     </div>
