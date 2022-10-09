@@ -9,6 +9,6 @@ admin.site.register(NamesOfClasses)
 admin.site.register(section)
 admin.site.register(Images)
 admin.site.register(setting)
-admin.site.register(users)
+# admin.site.register(users)
 
 

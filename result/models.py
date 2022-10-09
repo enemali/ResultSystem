@@ -30,20 +30,21 @@ term_choices = (
                     ('2nd-Term', '2nd-Term'),
                     ('3rd-Term', '3rd-Term'),
                    )
+gender_choise = ( ('Male', 'male') , ('Female', 'female'))
+    
+# class users(models.Model):
+#     class Role(models.TextChoices):
+#         ADMIN = 'admin'
+#         TEACHER = 'teacher'
+#         STUDENT = 'student'
+#     base_role = Role.ADMIN
+#     role = models.CharField(max_length=10, choices= Role.choices)
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-class users(AbstractUser):
-    class Role(models.TextChoices):
-        ADMIN = 'admin'
-        TEACHER = 'teacher'
-        STUDENT = 'student'
-
-    base_role = Role.ADMIN
-    role = models.CharField(max_length=10, choices= Role.choices)
-
-    def save (self , *args , **kwargs):
-        if not self.id:
-            self.role = self.base_role
-        return super().save(*args, **kwargs)
+#     def save (self , *args , **kwargs):
+#         if not self.id:
+#             self.role = self.base_role
+#         return super().save(*args, **kwargs)
 
 
 class setting(models.Model):
@@ -91,11 +92,18 @@ class allsubject(models.Model):
     class Meta:
         ordering = ['subjectName']
         
-class students(users):
-    base_role = users.Role.STUDENT
-
+class students(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100 , choices= gender_choise)
+    # className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
+    date = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return self.first_name
+    
     class Meta:
-        proxy = True
+        ordering = ['first_name']
 
 
 class assessment(models.Model):

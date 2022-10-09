@@ -17,9 +17,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic import View
 from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
 from django.forms import modelformset_factory , formset_factory,inlineformset_factory
-# import django messages
 from django.contrib import messages
-# Create your views here.
+from django.contrib.auth.decorators import user_passes_test
+from .decorators import unauthenticated_user
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class index(TemplateView):
@@ -39,7 +40,6 @@ def index(request):
     return render(request, 'result/index.html', {'img':img,
                                                     'setting':settings,
                                                     'user':user})
-
     
 class Registration(CreateView):
     form_class = RegistrationForm
@@ -47,36 +47,42 @@ class Registration(CreateView):
     success_url = reverse_lazy('result:index')
 
 class RegisterStudent(CreateView):
-    form_class = RegisterStudentForm
-    template_name = 'result/registerStudent.html'
+    form_class = StudentForm
+    template_name = 'result/add.html'
     success_url = reverse_lazy('result:settings')
 
-class loginPage(TemplateView):
-    template_name = 'result/login.html'
-    form_class = loginForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["studentForm"] = StudentForm()
+        context["teachersForm"] = RegistrationForm()
+        return context
+    
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
-        
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+def loginPage(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
             if user is not None:
-                return redirect('result:settings')
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("result:index")
             else:
-                return redirect('result:login')
-                # show error message
-                
+                messages.error(request,"Invalid username or password.")
+        else:
+            messages.error(request,"Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="result/login.html", context={"login_form":form})
 
-class logoutPage(View):
+class logout(View):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('result:index')
 
-
-class settings(ListView):
+class settings(LoginRequiredMixin, TemplateView):
+    login_url = 'result:login'
     template_name = 'result/settings.html'
     queryset = all_class.objects.all()
     
@@ -90,6 +96,7 @@ class settings(ListView):
         context['sections'] = section.objects.all()
         context['img'] = Images.objects.all()
         context['setting'] = setting.objects.all()
+        context['studentCount'] = students.objects.all().count()
         return context
      
     def post(self, request, *args, **kwargs):
@@ -113,20 +120,12 @@ class settings(ListView):
                                                         'imageForm': imageForm,
                                                         'settingForm': AllsettingForm
                                                         })
-       
+
 class deleteClass(DeleteView):
     model = all_class
     context_object_name = 'all_class'
     template_name = 'result/deleteClass.html'
     success_url = reverse_lazy('result:settings')
-    
-            # return render(request, 'result/index.html',{'imageForm': imageForm, 'obj': obj})            
-            # context = {}
-            # uploaded_file = request.FILES['document']
-            # fs = FileSystemStorage()
-            # name = fs.save(uploaded_file.name, uploaded_file)
-            # url = fs.url(name)
-            # context['url'] = fs.url(name)
 
 class classList(ListView):
     model = all_class
@@ -196,7 +195,6 @@ class subjectDetails(CreateView):
         else:
             return redirect('result:subjectDetails', pk=pk)
 
-# delete subject
 class deleteSubject(DeleteView):
     model = allsubject
     context_object_name = 'allsubject'
