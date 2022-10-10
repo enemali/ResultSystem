@@ -49,12 +49,13 @@ class Registration(CreateView):
 class RegisterStudent(CreateView):
     form_class = StudentForm
     template_name = 'result/add.html'
-    success_url = reverse_lazy('result:settings')
+    success_url = reverse_lazy('result:registerStudent')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["studentForm"] = StudentForm()
         context["teachersForm"] = RegistrationForm()
+        context["allStudents"] = students.objects.all()
         return context
     
 
@@ -88,8 +89,8 @@ class settings(LoginRequiredMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super(settings, self).get_context_data(**kwargs)
-        context['form1'] = allClassForm()
-        context['form2'] = sectionForm()
+        context['classForm'] = allClassForm()
+        context['sectionForm'] = sectionForm()
         context['imageForm'] = ImageForm()
         context['settingForm'] = settingForm()
         context['allclass'] = all_class.objects.all()
@@ -100,23 +101,23 @@ class settings(LoginRequiredMixin, TemplateView):
         return context
      
     def post(self, request, *args, **kwargs):
-        form1 = allClassForm(request.POST)
-        form2 = sectionForm(request.POST)
+        classForm = allClassForm(request.POST)
+        SectionForm = sectionForm(request.POST)
         imageForm = ImageForm(request.POST, request.FILES)
         AllsettingForm = settingForm(request.POST)
-        if form1.is_valid():
-            form1.save()
+        if classForm.is_valid():
+            classForm.save()
             return redirect('result:settings')
-        if form2.is_valid():
-            form2.save()
+        if SectionForm.is_valid():
+            SectionForm.save()
             return redirect('result:settings')
         if imageForm.is_valid():
             imageForm.save()
         if AllsettingForm.is_valid():
             AllsettingForm.save()
             return redirect('result:settings')
-        return render(request, 'result/settings.html', {'form1': form1, 
-                                                        'form2': form2, 
+        return render(request, 'result/settings.html', {'classForm': classForm, 
+                                                        'sectionForm': sectionForm, 
                                                         'imageForm': imageForm,
                                                         'settingForm': AllsettingForm
                                                         })
@@ -152,8 +153,8 @@ class classDetails(DetailView):
             elif request.POST.get('studentName'):
                 classStudent.fullname = request.POST.get('studentName')
                 classStudent.className = all_class.objects.get(id=pk)
-                classStudent.save()
                 student_id = students.objects.latest('id')
+                classStudent.save()
                 return redirect('result:classDetails', pk=pk)
             else:
                 return render(request, 'result/classDetails.html',{'all_class': self.get_object()})

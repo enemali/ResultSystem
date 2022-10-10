@@ -97,7 +97,7 @@ class students(models.Model):
     last_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=100 , choices= gender_choise)
-    # className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.first_name
