@@ -171,13 +171,13 @@
                                                     {{ student.gender }}
                                                 </td>
                                                 <td class="py-4 px-6">
-                                                    {{ student.className }}
+                                                    {{ student.className }} {{ student.classArm }}
                                                 </td>
                                                 <td class="py-4 px-6">
                                                     Active
                                                 </td>
                                                 <td class="py-4 px-6 text-right">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                                    <a href="{% url 'result:studentDelete' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
                                                 </td>
                                             </tr>
                                             {% endfor %}

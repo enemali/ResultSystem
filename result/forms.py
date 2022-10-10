@@ -74,7 +74,7 @@ class subjectForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
-        fields = ['first_name', 'last_name', 'middle_name','gender', 'className']
+        fields = ['first_name', 'last_name', 'middle_name','gender', 'className', 'classArm']
         
 class allClassForm(forms.ModelForm):
     class Meta:

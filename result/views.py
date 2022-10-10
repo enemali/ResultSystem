@@ -213,8 +213,8 @@ class studentDelete(DeleteView):
     model = students
     template_name = 'result/studentDelete.html'
     def get_success_url(self):
-        return reverse_lazy('result:classDetails', 
-                            kwargs={'pk': self.object.className.id})
+        return reverse_lazy('result:registerStudent')
+        # return reverse_lazy('result:classDetails', kwargs={'pk': self.object.id})
         
 class studentList(ListView):
     def post(self, request):

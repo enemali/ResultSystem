@@ -87,7 +87,10 @@
                         {% elif user.is_authenticated %}
                         <div class="text-white"> welcome {{ user.username }} </div>
                         <a class="nav-link  page-scroll" href=" {% url 'result:classList' %} " id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Go To Class</a>
+                        {% else %}
+                        <a class="nav-link  page-scroll" href=" {% url 'result:settings' %} " id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">Login</a>
                         {% endif %}
+
                     </li>
                 <!-- end of dropdown menu -->
                 
