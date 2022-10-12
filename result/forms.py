@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
-from .models import students , all_class , section , allsubject , Images , setting , assessment  #users
+from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm
 from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -74,12 +74,24 @@ class subjectForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
-        fields = ['first_name', 'last_name', 'middle_name','gender', 'className', 'classArm']
+        classArmChoice = [(classArm.id, classArm.armName) for classArm in classArm.objects.all()]
+        fields = "__all__"
+
+        widgets = {
+      'classArm': forms.Select(choices=classArmChoice),
+      }
+ 
+
         
 class allClassForm(forms.ModelForm):
     class Meta:
         model = all_class
-        fields = ['className','section']
+        fields = ['section', 'className']
+
+class classArmForm(forms.ModelForm):
+    class Meta:
+        model = classArm
+        fields = ['armName']
         
 class sectionForm(forms.ModelForm):
     class Meta:

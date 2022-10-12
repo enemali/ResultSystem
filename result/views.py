@@ -90,10 +90,12 @@ class settings(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(settings, self).get_context_data(**kwargs)
         context['classForm'] = allClassForm()
+        context['armForm'] = classArmForm()
         context['sectionForm'] = sectionForm()
         context['imageForm'] = ImageForm()
         context['settingForm'] = settingForm()
         context['allclass'] = all_class.objects.all()
+        context['classArm'] = classArm.objects.all()
         context['sections'] = section.objects.all()
         context['img'] = Images.objects.all()
         context['setting'] = setting.objects.all()
@@ -101,12 +103,18 @@ class settings(LoginRequiredMixin, TemplateView):
         return context
      
     def post(self, request, *args, **kwargs):
+
         classForm = allClassForm(request.POST)
+        armForm = classArmForm(request.POST)
         SectionForm = sectionForm(request.POST)
         imageForm = ImageForm(request.POST, request.FILES)
         AllsettingForm = settingForm(request.POST)
+
         if classForm.is_valid():
             classForm.save()
+            return redirect('result:settings')
+        if armForm.is_valid():
+            armForm.save()
             return redirect('result:settings')
         if SectionForm.is_valid():
             SectionForm.save()
@@ -116,11 +124,13 @@ class settings(LoginRequiredMixin, TemplateView):
         if AllsettingForm.is_valid():
             AllsettingForm.save()
             return redirect('result:settings')
+
         return render(request, 'result/settings.html', {'classForm': classForm, 
                                                         'sectionForm': sectionForm, 
                                                         'imageForm': imageForm,
-                                                        'settingForm': AllsettingForm
-                                                        })
+                                                        'settingForm': AllsettingForm,
+                                                        'armForm': armForm})
+                                                        
 
 class deleteClass(DeleteView):
     model = all_class

@@ -48,16 +48,11 @@ classArm_choices = ( ('A', 'A') , ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E')
 #             self.role = self.base_role
 #         return super().save(*args, **kwargs)
 
-
 class setting(models.Model):
     announcement = models.CharField(max_length=100,null=True)
     announcement_date = models.DateField(auto_now_add=False,null=True)
     news = models.CharField(max_length=100,null=True)
-
-  
-class NamesOfClasses(models.Model):
-    className = models.CharField(max_length=100,null=True)
-    
+ 
 class Images(models.Model):
     image = models.ImageField(null=True,blank=True)
     caption = models.CharField(max_length=100,null=True)
@@ -82,7 +77,15 @@ class all_class(models.Model):
     
     class Meta:
         ordering = ['className']
-              
+
+class classArm(models.Model):
+    armName = models.CharField(max_length=100 , unique=True)
+    def __str__(self):
+        return self.armName
+    
+    class Meta:
+        ordering = ['armName']
+    
 class allsubject(models.Model):
     # user = models.ForeignKey(users, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
@@ -100,14 +103,13 @@ class students(models.Model):
     middle_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=100 , choices= gender_choise)
     className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
-    classArm = models.CharField(max_length=100 , choices= classArm_choices)
+    classArm = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.first_name
     
     class Meta:
         ordering = ['first_name']
-
 
 class assessment(models.Model):
     className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)

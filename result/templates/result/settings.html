@@ -25,7 +25,7 @@
 
         <div class="flex flex-wrap items-center">
             <div class="flex flex-shrink md:w-1/3 justify-center md:justify-start text-white">
-                <a href="#" aria-label="Home">
+                <a href="{% url 'result:index' %}" aria-label="Home">
                     <h1> Hasiyanda College</h1>
                 </a>
             </div>
@@ -78,14 +78,10 @@
                     <ul class="list-reset flex flex-row md:flex-col pt-3 md:py-3 px-1 md:px-2 text-center md:text-left">
                         
                 
-                        <li class="mr-3 flex-1">
-                            <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-blue-600">
-                                <i class="fas fa-chart-area pr-0 md:pr-3 text-blue-600"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-white md:text-white block md:inline-block">Student Analysis</span>
-                            </a>
-                        </li>
-                        <li class="mr-3 flex-1">
+                        
+                        <li class="mr-3 flex-1 ">
                             <a href="#" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-red-500">
-                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Settings</span>
+                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block ">Settings</span>
                             </a>
                         </li>
                         <li class="mr-3 flex-1">
@@ -112,22 +108,21 @@
 
                 <div class="bg-gray-800 pt-3">
                     <div class="rounded-tl-3xl bg-gradient-to-r from-blue-900 to-gray-800 p-4 shadow text-2xl text-white">
-                        <h1 class="font-bold pl-2">Summary</h1>
+                        <h1 class="font-bold pl-2">General Settings</h1>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap">
                     <div class="w-full md:w-1/2 xl:w-1/3 p-6">
-                        <!--Metric Card-->
-                        <div class="bg-gradient-to-b from-green-200 to-green-100 border-b-4 border-green-600 rounded-lg shadow-xl p-5">
+                        <!--top Metric Card-->
+                        <div class="bg-gradient-to-b from-green-200 to-green-100 border-b-4 border-green-600 rounded-lg shadow-xl p-2">
                             <h2 class="font-bold uppercase text-gray-600">Add Class</h2>
                             <div class="flex flex-row items-center">
-                                <div class="flex-shrink pr-4">
+                                <div class="flex-shrink pr-2">
                                     <div class="rounded-full p-5 bg-green-600"><i class="fa fa-wallet fa-2x fa-inverse"></i></div>
                                 </div>
                                 <form method="post"  class="">
                                       {% csrf_token %}
-                                
                                       {{ classForm.as_p }}
                                       <button 
                                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
@@ -138,8 +133,64 @@
 
                             </div>
                         </div>
-                        <!--/Metric Card-->
+                        <!--/top Metric Card-->
+                         <!--buttom Metric Card-->
+                            <div class="bg-gradient-to-b from-blue-200 to-blue-100 border-b-4 border-blue-500 rounded-lg shadow-xl p-5">
+                                <div class="flex flex-row items-center">
+                                    
+                                    <ul class=" font-bold">
+                                        {% for class in allclass%}
+                                          <li  >
+                                             {{class.className}} - {{ class.section}} - 
+                                             <a href="{% url 'result:deleteClass' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
+                                              Delete
+                                            </a>
+                                          </li>
+                                        {% endfor %}
+                                      </ul>
+                                </div>
+                            </div>
+                            <!--/buttom Metric Card-->
                     </div>
+
+                    <div class="w-full md:w-1/2 xl:w-1/3 p-6">
+                        <!--Metric Card-->
+                        <div class="bg-gradient-to-b from-green-200 to-green-100 border-b-4 border-green-600 rounded-lg shadow-xl p-2">
+                            <h2 class="font-bold uppercase text-gray-600">Class Arm</h2>
+                            <div class="flex flex-row items-center">
+                                <div class="flex-shrink pr-2">
+                                    <div class="rounded-full p-5 bg-green-600"><i class="fa fa-wallet fa-2x fa-inverse"></i></div>
+                                </div>
+                                <form method="post"  class="">
+                                      {% csrf_token %}
+                                      {{ armForm.as_p }}
+                                      <button 
+                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                                        type="submit"> Add</button>
+                                        <input type="hidden" name="form_type" value="armform">
+                                </form>
+                            </div>
+                        </div>
+                        <!--/Metric Card-->
+                        <!--buttom Metric Card-->
+                        <div class="bg-gradient-to-b from-blue-200 to-blue-100 border-b-4 border-blue-500 rounded-lg shadow-xl p-5">
+                            <div class="flex flex-row items-center">
+                                
+                                <ul class=" font-bold">
+                                    {% for classArm in classArm%}
+                                      <li  >
+                                         {{ classArm.armName}} - 
+                                         <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
+                                          Delete
+                                        </a>
+                                      </li>
+                                    {% endfor %}
+                                  </ul>
+                            </div>
+                        </div>
+                        <!--/buttom Metric Card-->
+                    </div>
+
                     <div class="w-full md:w-1/2 xl:w-1/3 p-6">
                         <!--Metric Card-->
                         <div class="bg-gradient-to-b from-pink-200 to-pink-100 border-b-4 border-pink-500 rounded-lg shadow-xl p-5">
@@ -150,84 +201,32 @@
                                 </div>
                                 <form method="post"  class="">
                                     {% csrf_token %}
-                              
                                     {{ sectionForm.as_p }}
                                     <button 
                                       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
                                       type="submit"> Add</button>
                                       <input type="hidden" name="form_type" value="sectionform">
-                              
                               </form>
                             </div>
                         </div>
                         <!--/Metric Card-->
-                    </div>
-                    <div class="w-full md:w-1/2 xl:w-1/3 p-6">
-                        <!--Metric Card-->
-                        <div class="bg-gradient-to-b from-yellow-200 to-yellow-100 border-b-4 border-yellow-600 rounded-lg shadow-xl p-5">
-                            <div class="flex flex-row items-center">
-                                <div class="flex-shrink pr-4">
-                                    <div class="rounded-full p-5 bg-yellow-600"><i class="fas fa-user-plus fa-2x fa-inverse"></i></div>
-                                </div>
-                                <div class="flex-1 text-right md:text-center">
-                                    <h2 class="font-bold uppercase text-gray-600">Announcement</h2>
-                                    <p class="font-bold text-3xl"> none <span class="text-yellow-600"><i class="fas fa-caret-up"></i></span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/Metric Card-->
-                    </div>
-                    <div class="w-full md:w-1/2 xl:w-1/3 p-6">
-                        <!--Metric Card-->
+                        <!--buttom Metric Card-->
                         <div class="bg-gradient-to-b from-blue-200 to-blue-100 border-b-4 border-blue-500 rounded-lg shadow-xl p-5">
                             <div class="flex flex-row items-center">
-                                <div class="flex-shrink pr-4">
-                                    <div class="rounded-full p-5 bg-blue-600"><i class="fas fa-server fa-2x fa-inverse"></i></div>
-                                </div>
+                                
                                 <ul class=" font-bold">
-                                    {% for class in allclass%}
-                                    
-                                      <li class = " inline ">{{class.className}} - {{ class.section}} -<a href="{% url 'result:deleteClass' class.id %}">
+                                    {% for section in sections %}
+                                      <li  >
+                                        {{ section.sectionName }} - 
+                                         <a href=" " class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
                                           Delete
                                         </a>
                                       </li>
-                                
                                     {% endfor %}
                                   </ul>
                             </div>
                         </div>
-                        <!--/Metric Card-->
-                    </div>
-                    <div class="w-full md:w-1/2 xl:w-1/3 p-6">
-                        <!--Metric Card-->
-                        <div class="bg-gradient-to-b from-indigo-200 to-indigo-100 border-b-4 border-indigo-500 rounded-lg shadow-xl p-5">
-                            <div class="flex flex-row items-center">
-                                <div class="flex-shrink pr-4">
-                                    <div class="rounded-full p-5 bg-indigo-600"><i class="fas fa-tasks fa-2x fa-inverse"></i></div>
-                                </div>
-                                <ul class=" font-bold">
-                                    {% for section in sections %}
-                                      <li>{{ section.sectionName }}</li>
-                                    {% endfor %}
-                                  </ul>
-                            </div>
-                        </div>
-                        <!--/Metric Card-->
-                    </div>
-                    <div class="w-full md:w-1/2 xl:w-1/3 p-6">
-                        <!--Metric Card-->
-                        <div class="bg-gradient-to-b from-red-200 to-red-100 border-b-4 border-red-500 rounded-lg shadow-xl p-5">
-                            <div class="flex flex-row items-center">
-                                <div class="flex-shrink pr-4">
-                                    <div class="rounded-full p-5 bg-red-600"><i class="fas fa-inbox fa-2x fa-inverse"></i></div>
-                                </div>
-                                <div class="flex-1 text-right md:text-center">
-                                    <h2 class="font-bold uppercase text-gray-600"> abc </h2>
-                                    <p class="font-bold text-3xl">efg <span class="text-red-500"><i class="fas fa-caret-up"></i></span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/Metric Card-->
+                        <!--/buttom Metric Card-->
                     </div>
                 </div>
 
