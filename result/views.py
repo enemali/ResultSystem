@@ -221,10 +221,9 @@ class assessmentEntry(UpdateView):
     
 class studentDelete(DeleteView):
     model = students
-    template_name = 'result/studentDelete.html'
+    template_name = 'result/Deletestudent.html'
     def get_success_url(self):
         return reverse_lazy('result:registerStudent')
-        # return reverse_lazy('result:classDetails', kwargs={'pk': self.object.id})
         
 class studentList(ListView):
     def post(self, request):
@@ -238,3 +237,9 @@ def uploadimage(request):
         uploaded_file = request.FILES['document']
         print(uploaded_file.name)
     return render(request, 'result/uploadimage.html')
+
+class DeleteArm(DeleteView):
+    model = classArm
+    template_name = 'result/DeleteArm.html'
+    success_url = reverse_lazy('result:settings')
+  

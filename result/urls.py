@@ -13,6 +13,7 @@ from .views import (classDetails,
                     loginPage,
                     logout,
                     RegisterStudent,
+                    DeleteArm,
                     )
    
 urlpatterns = [
@@ -30,6 +31,7 @@ urlpatterns = [
     path('login/', loginPage, name='login'),
     path('logout/', logout.as_view(), name='logout'),
     path('registerStudent/', RegisterStudent.as_view(), name='registerStudent'),
+    path('deleteArm/<int:pk>/', DeleteArm.as_view(), name='deleteArm'),
 
     
 ]
