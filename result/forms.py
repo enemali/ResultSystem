@@ -74,7 +74,7 @@ class subjectForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
-        classArmChoice = [(classArm.armName, classArm.id) for classArm in classArm.objects.all()]
+        classArmChoice = [(classArm.armName, classArm.armName) for classArm in classArm.objects.all()]
         fields = "__all__"
 
         widgets = {
