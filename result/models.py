@@ -1,3 +1,4 @@
+from secrets import choice
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
@@ -31,8 +32,6 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
-
-classArm_choices = ( ('A', 'A') , ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'), ('G', 'G'), ('H', 'H'), ('I', 'I'), ('J', 'J'), ('K', 'K'), ('L', 'L'), ('M', 'M'), ('N', 'N'), ('O', 'O'), ('P', 'P'), ('Q', 'Q'), ('R', 'R'), ('S', 'S'), ('T', 'T'), ('U', 'U'), ('V', 'V'), ('W', 'W'), ('X', 'X'), ('Y', 'Y'), ('Z', 'Z'))
     
 # class users(models.Model):
 #     class Role(models.TextChoices):
@@ -103,7 +102,7 @@ class students(models.Model):
     middle_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=100 , choices= gender_choise)
     className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
-    classArm = models.CharField(max_length=100)
+    classArm = models.ForeignKey(classArm, related_name="studentclassArm", on_delete=models.SET_NULL, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.first_name
