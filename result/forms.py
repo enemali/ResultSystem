@@ -76,7 +76,7 @@ class subjectForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
-        fields = [ 'last_name','first_name', 'middle_name', 'className']
+        fields = [ 'last_name','first_name', 'middle_name', 'className', 'classArm']
         labels = {  'last_name': 'Surname Name', 
                      'first_name': 'First Name',  
                     'middle_name': 'Other Name'}
