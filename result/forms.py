@@ -1,4 +1,6 @@
+from cProfile import label
 from dataclasses import field
+from tkinter import Widget
 from django import forms
 from django.forms import modelformset_factory , formset_factory
 from django.core.exceptions import ValidationError
@@ -74,8 +76,12 @@ class subjectForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
-        fields = "__all__"
- 
+        fields = [ 'last_name','first_name', 'middle_name', 'className']
+        labels = {  'last_name': 'Surname Name', 
+                     'first_name': 'First Name',  
+                    'middle_name': 'Other Name'}
+
+
 
         
 class allClassForm(forms.ModelForm):
