@@ -81,6 +81,8 @@ class StudentForm(forms.ModelForm):
                      'first_name': 'First Name',  
                     'middle_name': 'Other Name'}
 
+                    
+
 
 
         

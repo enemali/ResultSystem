@@ -99,7 +99,7 @@ class allsubject(models.Model):
 class students(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    middle_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank = True)
     gender = models.CharField(max_length=100 , choices= gender_choise)
     className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
     classArm = models.ForeignKey(classArm, related_name="studentclassArm", on_delete=models.SET_NULL, null=True)
@@ -108,7 +108,7 @@ class students(models.Model):
         return self.first_name
     
     class Meta:
-        ordering = ['first_name']
+        ordering = ['last_name']
 
 class assessment(models.Model):
     className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
