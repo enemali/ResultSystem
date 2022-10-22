@@ -67,7 +67,6 @@ class loginForm(forms.ModelForm):
         fields = ('username', 'password')
         field_classes = {'username': UsernameField}
 
-
 class subjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
@@ -80,16 +79,11 @@ class StudentForm(forms.ModelForm):
         labels = {  'last_name': 'Surname Name', 
                      'first_name': 'First Name',  
                     'middle_name': 'Other Name'}
-
-                    
-
-
-
-        
+      
 class allClassForm(forms.ModelForm):
     class Meta:
         model = all_class
-        fields = ['section', 'className']
+        fields = ['section', 'className' , 'classTeacher']
 
 class classArmForm(forms.ModelForm):
     class Meta:
@@ -127,5 +121,9 @@ class AssessmentForm(forms.ModelForm):
         model = assessment
         fields = ['className','student','subjectName','firstCa','secondCa','exam']
 
-
+class subjectForm(forms.ModelForm):
+    class Meta:
+        model = allsubject
+        fields = ['subjectName', 'className', 'subjectTeacher']
+        
         

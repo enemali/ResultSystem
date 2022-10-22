@@ -9,11 +9,15 @@ from .views import (classDetails,
                     index,
                     assessmentEntry,
                     deleteClass,
-                    Registration,
+                    RegisterTeachers,
                     loginPage,
                     logout,
                     RegisterStudent,
                     DeleteArm,
+                    EditClass,
+                    EditStudent,
+                    EditTeacher,
+                    deleteTeacher,
                     )
    
 urlpatterns = [
@@ -27,11 +31,15 @@ urlpatterns = [
     path('uploadimage/', views.uploadimage, name='uploadimage'),
     path('deleteClass/<int:pk>/', deleteClass.as_view(), name='deleteClass'),
     path('assessmentScores/<int:pk>/', assessmentEntry.as_view(), name='assessmentScores'),
-    path('registration', Registration.as_view(), name='registration'),
+    path('RegisterTeachers', RegisterTeachers.as_view(), name='RegisterTeachers'),
     path('login/', loginPage, name='login'),
     path('logout/', logout.as_view(), name='logout'),
     path('registerStudent/', RegisterStudent.as_view(), name='registerStudent'),
     path('deleteArm/<int:pk>/', DeleteArm.as_view(), name='deleteArm'),
+    path('EditClass/<int:pk>/', EditClass.as_view(), name='EditClass'),
+    path('editStudent/<int:pk>/', EditStudent.as_view(), name='editStudent'),
+    path('editTeacher/<int:pk>/', EditTeacher.as_view(), name='editTeacher'),
+    path('deleteTeacher/<int:pk>/', deleteTeacher.as_view(), name='deleteTeacher'),
 
     
 ]

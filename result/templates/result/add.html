@@ -89,13 +89,13 @@
                         </li>
 
                         <li class="mr-3 flex-1">
-                            <a href="#" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-yellow-500">
+                            <a href="{% url 'result:registerStudent' %}" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-yellow-500">
                                 <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Add Students</span>
                             </a>
                         </li>
 
                         <li class="mr-3 flex-1">
-                            <a href="#" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-green-500">
+                            <a href="{% url 'result:RegisterTeachers' %}" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-green-500">
                                 <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Add Teachers</span>
                             </a>
                         </li>
@@ -166,6 +166,7 @@
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                 <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                    {{ student.last_name.upper }}  {{ student.first_name.upper }} {{ student.middle_name.upper }}
+                                                   <a href="{% url 'result:editStudent' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                                 </th>
                                                 <td class="py-4 px-6">
                                                     {{ student.gender }}

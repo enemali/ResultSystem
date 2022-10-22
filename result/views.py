@@ -1,7 +1,8 @@
 from email.mime import image
 from multiprocessing import context
 from pyexpat import model
-from re import template
+from re import sub, template
+from tkinter import Button
 from types import new_class
 from django.forms import Form
 from django.shortcuts import render, redirect
@@ -41,10 +42,15 @@ def index(request):
                                                     'setting':settings,
                                                     'user':user})
     
-class Registration(CreateView):
+class RegisterTeachers(CreateView):
     form_class = RegistrationForm
-    template_name = 'result/signUp.html'
-    success_url = reverse_lazy('result:index')
+    template_name = 'result/addTeachers.html'
+    success_url = reverse_lazy('result:registration')
+
+    def get_context_data(self, **kwargs):
+        context = super(RegisterTeachers, self).get_context_data(**kwargs)
+        context['teachers'] = User.objects.all()
+        return context
 
 class RegisterStudent(CreateView):
     form_class = StudentForm
@@ -131,7 +137,6 @@ class settings(LoginRequiredMixin, TemplateView):
                                                         'settingForm': AllsettingForm,
                                                         'armForm': armForm})
                                                         
-
 class deleteClass(DeleteView):
     model = all_class
     context_object_name = 'all_class'
@@ -146,28 +151,24 @@ class classList(ListView):
 class classDetails(DetailView):
     model = all_class
     context_object_name = 'all_class'
-    
+
     def get(self, request,pk, *args, **kwargs):
-        return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
+        Form = subjectForm()
+        Form.fields['className'].choices = [(self.kwargs['pk'], self.get_object().className)]
+        return render(request, 'result/classDetails.html',
+                        {'all_class': self.get_object(),'form': Form})
                         
     def post(self, request,pk, *args, **kwargs):
-            classSubject = allsubject()
-            classStudent = students()
-            
-            if request.POST.get('subjectName'):
-                classSubject.subjectName = request.POST.get('subjectName')
-                classSubject.className = all_class.objects.get(id=pk)
-                classSubject.save()
-                return redirect('result:classDetails', pk=pk)
-            
-            elif request.POST.get('studentName'):
-                classStudent.fullname = request.POST.get('studentName')
-                classStudent.className = all_class.objects.get(id=pk)
-                student_id = students.objects.latest('id')
-                classStudent.save()
-                return redirect('result:classDetails', pk=pk)
-            else:
-                return render(request, 'result/classDetails.html',{'all_class': self.get_object()})
+        form = subjectForm(request.POST)
+        if form.is_valid():
+            subject = form.save(commit=False)
+            subject.class_name = self.get_object()
+            subject.save()
+            return redirect('result:classDetails', pk=pk)
+        return render(request, 'result/classDetails.html',
+                        {'all_class': self.get_object(),
+                         'form': self.form_class()}
+                         )
 
 class subjectDetails(CreateView):
     model = assessment
@@ -182,7 +183,7 @@ class subjectDetails(CreateView):
         Form = SubjectstudentForm()
         Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className.className)]
-        Form.fields['student'].choices = [(student.id, student.fullname) for student in students_query]
+        Form.fields['student'].choices = [(student.id, student.last_name + ' ' + student.first_name + ' ' + student.middle_name) for student in students_query]
         # assessmentForm = AssessmentForm(queryset=assessment_query)
         
         return render(request, 'result/subjectDetails.html',{'subject': singleSubject,
@@ -221,7 +222,7 @@ class assessmentEntry(UpdateView):
     
 class studentDelete(DeleteView):
     model = students
-    template_name = 'result/Deletestudent.html'
+    template_name = 'result/Delete.html'
     def get_success_url(self):
         return reverse_lazy('result:registerStudent')
         
@@ -243,3 +244,47 @@ class DeleteArm(DeleteView):
     template_name = 'result/DeleteArm.html'
     success_url = reverse_lazy('result:settings')
   
+class EditClass(UpdateView):
+    model = all_class
+    form_class = allClassForm
+    success_url = reverse_lazy('result:settings')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        id = self.object.id
+        form = allClassForm(instance=self.object)
+        Button = 'Update Class'
+        return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button})
+
+class EditStudent(UpdateView):
+    model = students
+    form_class = StudentForm
+    success_url = reverse_lazy('result:registerStudent')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        id = self.object.id
+        form = StudentForm(instance=self.object)
+        Button = 'Update Student'
+        return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button})
+
+class EditTeacher(UpdateView):
+    model = User
+    form_class = RegistrationForm
+    # exclude password from form fields
+    form_class.base_fields.pop('password')
+     
+    success_url = reverse_lazy('result:registerTeacher')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        id = self.object.id
+        form = RegistrationForm(instance=self.object)
+        Button = 'Update Teacher'
+        return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button})
+
+class deleteTeacher(DeleteView):
+    model = User
+    template_name = 'result/delete.html'
+    def get_success_url(self):
+        return reverse_lazy('result:RegisterTeachers')

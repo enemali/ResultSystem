@@ -66,10 +66,10 @@ class section(models.Model):
         return self.sectionName
     
 class all_class(models.Model):
-    # user = models.ForeignKey(users, on_delete=models.SET_NULL, null=True)
     className = models.CharField(max_length=100 , unique=True)
     section = models.ForeignKey(section, on_delete=models.SET_NULL, null=True)
     complete = models.BooleanField(default=False)
+    classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.className
@@ -87,6 +87,7 @@ class classArm(models.Model):
     
 class allsubject(models.Model):
     # user = models.ForeignKey(users, on_delete=models.SET_NULL, null=True)
+    subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
     subjectName = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
