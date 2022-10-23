@@ -147,19 +147,32 @@
                             <div class="bg-gradient-to-b from-blue-200 to-blue-100 border-b-4 border-blue-500 rounded-lg shadow-xl p-5">
                                 <div class="flex flex-row items-center">
                                     
-                                    <ul class=" font-bold">
-                                        {% for class in allclass%}
-                                          <li  >
-                                             {{class.className}} - {{ class.section}} - 
-                                             <a href="{% url 'result:deleteClass' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
-                                              Delete
-                                            </a>
-                                            <a href="{% url 'result:EditClass' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
-                                                Edit
-                                              </a>
-                                          </li>
-                                          
-                                        {% endfor %}
+                                        <table class="table-auto">
+                                            <thead>
+                                              <tr>
+                                                <th class="px-4 py-2">Class</th>
+                                                <th class="px-4 py-2">Section</th>
+                                                <th class="px-4 py-2">Action</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {% for class in allclass%}
+                                              <tr>
+                                                <td class="border px-4 py-2">{{class.className}}</td>
+                                                <td class="border px-4 py-2">{{class.section}}</td>
+                                                <td class="border px-4 py-2">
+                                                    <a href="{% url 'result:deleteClass' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
+                                                        Delete
+                                                      </a>
+                                                      <a href="{% url 'result:EditClass' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
+                                                          Edit
+                                                        </a>
+                                                </td>
+                                              </tr>
+                                              {% endfor %}
+                                            </tbody>
+                                          </table>
+
                                       </ul>
                                 </div>
                             </div>
@@ -199,6 +212,7 @@
                                       </li>
                                     {% endfor %}
                                   </ul>
+                                  
                             </div>
                         </div>
                         <!--/buttom Metric Card-->

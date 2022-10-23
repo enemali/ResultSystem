@@ -83,7 +83,10 @@
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300">
                <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
-              Edit
+                  <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </button>
             </a>
            </tr>
            {% endfor %}
