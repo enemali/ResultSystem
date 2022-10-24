@@ -153,6 +153,7 @@
                                                 <th class="px-4 py-2">Class</th>
                                                 <th class="px-4 py-2">Section</th>
                                                 <th class="px-4 py-2">Action</th>
+                                                <th class="px-4 py-2">Print / View Students</th>
                                               </tr>
                                             </thead>
                                             <tbody>
@@ -167,6 +168,11 @@
                                                       <a href="{% url 'result:EditClass' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
                                                           Edit
                                                         </a>
+                                                </td>
+                                                <td class="border px-4 py-2">
+                                                    <a href="{% url 'result:studentList' class.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" >
+                                                        Print
+                                                      </a>
                                                 </td>
                                               </tr>
                                               {% endfor %}
