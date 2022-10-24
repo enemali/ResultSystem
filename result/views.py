@@ -288,3 +288,14 @@ class deleteTeacher(DeleteView):
     template_name = 'result/delete.html'
     def get_success_url(self):
         return reverse_lazy('result:RegisterTeachers')
+
+class studentList(DetailView):
+    model = all_class
+    context_object_name = 'all_class'
+    template_name = 'result/studentList.html'
+        # queryset = students filtrate by class
+    def get(self, request, pk, *args, **kwargs):
+        all_class = self.get_object()
+        student = students.objects.filter(className=all_class.id)
+        return render(request, 'result/studentList.html', {'students': student, 'all_class': all_class})
+
