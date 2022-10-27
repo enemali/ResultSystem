@@ -22,6 +22,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import AuthenticationForm
+#  import session django
+from .filters import studentFilter
+
+
 
 
 class index(TemplateView):
@@ -293,9 +297,16 @@ class studentList(DetailView):
     model = all_class
     context_object_name = 'all_class'
     template_name = 'result/studentList.html'
-        # queryset = students filtrate by class
+
+    
     def get(self, request, pk, *args, **kwargs):
         all_class = self.get_object()
         student = students.objects.filter(className=all_class.id)
-        return render(request, 'result/studentList.html', {'students': student, 'all_class': all_class})
+        studentFilters = studentFilter(request.GET, queryset=student)
+        student = studentFilters.qs
+
+        return render(request, 'result/studentList.html', {'students': student, 
+                                                            'all_class': all_class,
+                                                            'studentFilters': studentFilters
+                                                            })
 
