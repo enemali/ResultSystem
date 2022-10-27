@@ -32,6 +32,7 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
+
     
 # class users(models.Model):
 #     class Role(models.TextChoices):
