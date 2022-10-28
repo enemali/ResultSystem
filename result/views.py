@@ -1,5 +1,6 @@
 from email.mime import image
 from multiprocessing import context
+from pydoc import classname
 from pyexpat import model
 from re import sub, template
 from types import new_class
@@ -274,10 +275,8 @@ class EditStudent(UpdateView):
 class EditTeacher(UpdateView):
     model = User
     form_class = RegistrationForm
-    # exclude password from form fields
     form_class.base_fields.pop('password')
-     
-    success_url = reverse_lazy('result:registerTeacher')
+    success_url = reverse_lazy('result:settings')
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -304,8 +303,19 @@ class studentList(ListView):
 
         studentFilters = studentFilter(request.GET, queryset=student)
         student = studentFilters.qs
+        classname = student.first()
+        if classname:
+            arm = classname.classArm
+            classname = classname.className
+        else:
+            classname = ''
+            arm = ''
+
+        
 
         return render(request, 'result/studentList.html', {'students': student, 
-                                                            'studentFilters': studentFilters
+                                                            'studentFilters': studentFilters,
+                                                            'classname': classname,
+                                                            'classarm': arm,
                                                             })
 
