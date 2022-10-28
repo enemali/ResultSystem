@@ -24,7 +24,11 @@
 	<form  method="get" class="form-control bg-gray-200">
 		{{studentFilters.form}}
 		<input type="submit" name="submit" value="Search">
+
+		<p id="date"></p>
 	</form>
+
+	
 
 <div class = " mx-2">
 <table align="left" cellspacing="0" border="0">
@@ -62,7 +66,7 @@
 			</tr>
 		<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 height="24" align="left" valign=middle><b><font face="Arial" size=4 color="#000000">Suject: -</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Arial" size=4 color="#000000"> {{student.count}}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Arial" size=4 color="#000000"> {{students.count}} students</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=7 align="left" valign=middle><b><font face="Arial" size=4 color="#000000">Subject Teacher -</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" valign=middle><b><font face="Arial" size=4 color="#000000">Term  1st Term</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 align="left" valign=middle><b><font face="Arial" size=4 color="#000000">Session 2022/2023</font></b></td>
@@ -146,6 +150,16 @@
 
 <br clear=left>
 <!-- ************************************************************************** -->
+
+{% comment %} javascript {% endcomment %}
+<script type="text/javascript">
+	const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+	n =  new Date();
+	y = n.getFullYear();
+	m = month[n.getMonth()];
+	d = n.getDate();
+	document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+</script>
 </body>
 
 </html>
