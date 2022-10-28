@@ -1,8 +1,11 @@
 from secrets import choice
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
+# import AUTH_USER_MODEL from settings.py
+from django.contrib.auth import get_user_model
+from django.conf import settings
 
+# from users.models import User
+User = get_user_model()
 # Create your models here.
 section_choices = (
                     ('Nusery', 'Nusery'),
@@ -32,7 +35,6 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
-
     
 # class users(models.Model):
 #     class Role(models.TextChoices):
@@ -87,7 +89,6 @@ class classArm(models.Model):
         ordering = ['armName']
     
 class allsubject(models.Model):
-    # user = models.ForeignKey(users, on_delete=models.SET_NULL, null=True)
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
     subjectName = models.CharField(max_length=100)

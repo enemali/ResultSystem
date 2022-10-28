@@ -2,7 +2,6 @@ from email.mime import image
 from multiprocessing import context
 from pyexpat import model
 from re import sub, template
-from tkinter import Button
 from types import new_class
 from django.forms import Form
 from django.shortcuts import render, redirect
@@ -16,14 +15,14 @@ from .models import *
 from .forms import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.views.generic import View
-from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
 from django.forms import modelformset_factory , formset_factory,inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import AuthenticationForm
-#  import session django
 from .filters import studentFilter
+from .models import User
+
 
 
 
@@ -47,9 +46,9 @@ def index(request):
                                                     'user':user})
     
 class RegisterTeachers(CreateView):
-    form_class = RegistrationForm
+    form_class = UserCreateForm
     template_name = 'result/addTeachers.html'
-    success_url = reverse_lazy('result:registration')
+    success_url = reverse_lazy('result:RegisterTeachers')
 
     def get_context_data(self, **kwargs):
         context = super(RegisterTeachers, self).get_context_data(**kwargs)

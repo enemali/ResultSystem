@@ -9,8 +9,19 @@ from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
 from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm
 from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from .models import User
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
+
+# User creation form
+class UserCreateForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ("username", "password1", "password2", "first_name", "last_name", 'is_staff')
+        help_texts = { k:"" for k in fields }
+        # cahnge labe for is_staff
+        labels = { 'is_staff': 'Is Admin' }
+        field_classes = {'username': UsernameField}
 
 class RegistrationForm(forms.ModelForm):
 
