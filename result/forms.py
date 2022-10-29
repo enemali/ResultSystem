@@ -12,12 +12,10 @@ from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-
-# User creation form
 class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "password1", "password2", "first_name", "last_name", 'is_staff')
+        fields = ("username", "password1", "password2", "first_name", "last_name", 'role', 'email')
         help_texts = { k:"" for k in fields }
         # cahnge labe for is_staff
         labels = { 'is_staff': 'Is Admin' }
