@@ -28,15 +28,15 @@ from .models import User
 
 
 
-class index(TemplateView):
-    queryset = setting.objects.first()
-    template_name = 'result/index.html'
+# class index(TemplateView):
+#     queryset = setting.objects.first()
+#     template_name = 'result/index.html'
     
-    def get_context_data(self, **kwargs):
-        context = super(index, self).get_context_data(**kwargs)
-        context['img'] = Images.objects.all()
-        context['setting'] = setting.objects.first()
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(index, self).get_context_data(**kwargs)
+#         context['img'] = Images.objects.all()
+#         context['setting'] = setting.objects.first()
+#         return context
 
 def index(request):
     user = request.user
@@ -86,10 +86,11 @@ def loginPage(request):
     form = AuthenticationForm()
     return render(request=request, template_name="result/login.html", context={"login_form":form})
 
-class logout(View):
-    def get(self, request, *args, **kwargs):
+class logoutUser(View):
+    def get(self, request):
         logout(request)
         return redirect('result:index')
+ 
 
 class settings(LoginRequiredMixin, TemplateView):
     login_url = 'result:login'

@@ -15,7 +15,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "password1", "password2", "first_name", "last_name", 'role', 'email')
+        fields = ("username", "password1", "password2", "first_name", "last_name", "email", "is_staff")
         help_texts = { k:"" for k in fields }
         # cahnge labe for is_staff
         labels = { 'is_staff': 'Is Admin' }
@@ -26,13 +26,9 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'first_name', 'last_name')
-          # remove help_text
         help_texts = { k:"" for k in fields }
-
         field_classes = {'username': UsernameField}
       
-
-
 # class RegisterStudentForm(UserCreationForm):
 #     email = forms.EmailField(required=True)
 #     class Meta:
