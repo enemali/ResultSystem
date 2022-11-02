@@ -287,7 +287,7 @@ class EditTeacher(UpdateView):
 
 class deleteTeacher(DeleteView):
     model = User
-    template_name = 'result/delete.html'
+    template_name = 'result/Delete.html'
     def get_success_url(self):
         return reverse_lazy('result:RegisterTeachers')
 
