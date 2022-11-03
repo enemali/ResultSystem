@@ -67,7 +67,6 @@ class RegisterStudent(CreateView):
         context["allStudents"] = students.objects.all()
         return context
     
-
 def loginPage(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -91,7 +90,6 @@ class logoutUser(View):
         logout(request)
         return redirect('result:index')
  
-
 class settings(LoginRequiredMixin, TemplateView):
     login_url = 'result:login'
     template_name = 'result/settings.html'
@@ -296,7 +294,6 @@ class studentList(ListView):
     context_object_name = 'students'
     template_name = 'result/studentList.html'
 
-    
     def get(self, request, *args, **kwargs):
         # student = students.objects.filter(className=all_class.id)
         student = students.objects.all()
@@ -311,11 +308,19 @@ class studentList(ListView):
             classname = ''
             arm = ''
 
-        
-
         return render(request, 'result/studentList.html', {'students': student, 
                                                             'studentFilters': studentFilters,
                                                             'classname': classname,
                                                             'classarm': arm,
                                                             })
 
+class subjectCreate(CreateView):
+    model = allsubject
+    form_class = SubjectForm
+    template_name = 'result/subjectCreate.html'
+    success_url = reverse_lazy('result:settings')
+
+    def get_context_data(self, **kwargs):
+        context = super(subjectCreate, self).get_context_data(**kwargs)
+        context['allsubject'] = allsubject.objects.all()
+        return context
