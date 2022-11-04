@@ -12,7 +12,7 @@
        <br/>
      </div>
           <!-- subject form -->     
-          <div class="container">
+          {% comment %} <div class="container">
             <div class="max-w-xl p-5 mx-auto bg-white rounded-md shadow-sm">
               
               <div class=" grid grid-cols-2 gap-4">
@@ -31,7 +31,7 @@
                     </button>
                   </div>
                 </form>
-               </div>
+               </div> {% endcomment %}
             
           </div>
      </div>
@@ -45,9 +45,9 @@
               <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
                 Students in {{all_class.className}}
               </th>
-              <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
+              {% comment %} <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
                 Delete
-              </th>
+              </th> {% endcomment %}
             </tr>
           </thead>
           <tbody>
@@ -57,9 +57,9 @@
                 {{ student.last_name }} {{ student.first_name }} {{ student.middle_name }}
               </td>
 
-              <td class="px-4 border-2 border-green-300 hover:bg-yellow-300"> 
+              {% comment %} <td class="px-4 border-2 border-green-300 hover:bg-yellow-300"> 
                   <a href="{% url 'result:studentDelete' student.id %}">  Delete   </a>
-              </td>
+              </td> {% endcomment %}
             </tr>
             {% endfor %}
               

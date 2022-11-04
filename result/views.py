@@ -324,3 +324,14 @@ class subjectCreate(CreateView):
         context = super(subjectCreate, self).get_context_data(**kwargs)
         context['allsubject'] = allsubject.objects.all()
         return context
+
+class CreateClassArm(CreateView):
+    model = classArmTeacher
+    form_class = ClassArmTeacherForm
+    template_name = 'result/CreateClassArm.html'
+    success_url = reverse_lazy('result:CreateClassArm')
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateClassArm, self).get_context_data(**kwargs)
+        context['classArms'] = classArmTeacher.objects.all()
+        return context

@@ -128,3 +128,13 @@ class assessment(models.Model):
         return str(self.className)
     class Meta:
         ordering = ['className']
+
+class classArmTeacher(models.Model):
+    className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
+    classArm = models.ForeignKey(classArm, on_delete=models.SET_NULL, null=True)
+    classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return str(self.className)
+    class Meta:
+        ordering = ['className']

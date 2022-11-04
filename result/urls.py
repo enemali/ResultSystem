@@ -1,26 +1,6 @@
 from django.urls import path
 from . import views
-from .views import (classDetails, 
-                    classList,
-                    subjectDetails,
-                    studentList,
-                    settings,
-                    studentDelete,
-                    index,
-                    assessmentEntry,
-                    deleteClass,
-                    RegisterTeachers,
-                    loginPage,
-                    logoutUser,
-                    RegisterStudent,
-                    DeleteArm,
-                    EditClass,
-                    EditStudent,
-                    EditTeacher,
-                    deleteTeacher,
-                    studentList,
-                    subjectCreate,
-                    )
+from .views import *
    
 urlpatterns = [
     path('', index, name='index'),
@@ -43,5 +23,6 @@ urlpatterns = [
     path('editTeacher/<int:pk>/', EditTeacher.as_view(), name='editTeacher'),
     path('deleteTeacher/<int:pk>/', deleteTeacher.as_view(), name='deleteTeacher'),
     path('studentList/', studentList.as_view(), name='studentList'),   
-    path('subjectCreate/', subjectCreate.as_view(), name='subjectCreate'), 
+    path('subjectCreate/', subjectCreate.as_view(), name='subjectCreate'),
+    path('CreateClassArm/', CreateClassArm.as_view(), name='CreateClassArm'),
 ]
