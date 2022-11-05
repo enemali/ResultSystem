@@ -97,7 +97,7 @@
 
                         <li class="mr-3 flex-1">
                             <a href="{% url 'result:CreateClassArm' %}" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-green-500">
-                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Class Arm & Teacher</span>
+                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Add Arm To class</span>
                             </a>
                         </li>
                         
@@ -110,7 +110,7 @@
 
                         <li class="mr-3 flex-1">
                             <a href="{% url 'result:studentList' %}" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-green-500">
-                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Print Asseessment Sheet</span>
+                                <i class="fa fa-wallet pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Score Sheet</span>
                             </a>
 
                     </ul>
@@ -121,20 +121,16 @@
         </nav>
         <section>
             <div id="main" class="main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5">
-
                 <div class="bg-gray-800 pt-3">
                     <div class="rounded-tl-3xl bg-gradient-to-r from-blue-900 to-gray-800 p-4 shadow text-2xl text-white">
                         <h1 class="font-bold pl-2"> Settings </h1> 
                     </div>
-
                     {% block content %}
                     {% endblock content %}
-
                 </div>
             </div>
         </section>
     </div>
-
     <script>
         /*Toggle dropdown list*/
         function toggleDD(myDropMenu) {
