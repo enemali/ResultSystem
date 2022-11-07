@@ -15,7 +15,15 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "password1", "password2", "first_name", "last_name", "email", "is_staff")
+        fields = ("username", 
+                  "password1", 
+                  "password2", 
+                  "first_name", 
+                  "last_name", 
+                  "email", 
+                  "is_staff",
+                  'section',
+                  )
         help_texts = { k:"" for k in fields }
         # cahnge labe for is_staff
         labels = { 'is_staff': 'Is Admin' }
@@ -25,46 +33,9 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'first_name', 'last_name')
+        fields = ('username', 'email', 'password', 'first_name', 'last_name', 'section')
         help_texts = { k:"" for k in fields }
         field_classes = {'username': UsernameField}
-      
-# class RegisterStudentForm(UserCreationForm):
-#     email = forms.EmailField(required=True)
-#     class Meta:
-#         model = students
-#         fields = ('username', 
-#                 'first_name',
-#                 'last_name',
-#                   'password1', 
-#                   'password2',
-#                   )
-#         # remove help text
-#         help_texts = {
-#             'username': None,
-#             'password1': None,
-#             'password2': None,
-#         }
-#         def save(self, commit=True):
-#             user = super(RegisterStudentForm, self).save(commit=False)
-#             user.email = self.cleaned_data['email']
-#             if commit:
-#                 user.save()
-#             return user
-
-
-#         def save(self, commit=True):
-#             user = super(RegisterStudent, self).save(commit=False)
-#             user.email = self.cleaned_data['email']
-#             if commit:
-#                 user.save()
-#             return user
-
-# class signUpForm(UserCreationForm):
-#     class Meta:
-#         model = get_user_model()
-#         fields = ("username", "email", "password1", "password2")
-#         field_classes = {'username': UsernameField}
 
 class loginForm(forms.ModelForm):
     class Meta:
@@ -125,6 +96,8 @@ class AssessmentForm(forms.ModelForm):
     class Meta:
         model = assessment
         fields = ['className','student','subjectName','firstCa','secondCa','exam']
+
+
 
 class subjectForm(forms.ModelForm):
     class Meta:

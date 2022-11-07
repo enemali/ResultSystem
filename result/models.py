@@ -35,20 +35,6 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
-    
-# class users(models.Model):
-#     class Role(models.TextChoices):
-#         ADMIN = 'admin'
-#         TEACHER = 'teacher'
-#         STUDENT = 'student'
-#     base_role = Role.ADMIN
-#     role = models.CharField(max_length=10, choices= Role.choices)
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-#     def save (self , *args , **kwargs):
-#         if not self.id:
-#             self.role = self.base_role
-#         return super().save(*args, **kwargs)
 
 class setting(models.Model):
     announcement = models.CharField(max_length=100,null=True)

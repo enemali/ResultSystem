@@ -149,16 +149,24 @@ class classList(ListView):
     model = all_class
     context_object_name = 'all_class'
     template_name = 'result/classList.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(classList, self).get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context['all_class'] = all_class.objects.filter(section = self.request.user.section)
+        return context
     
 class classDetails(DetailView):
     model = all_class
     context_object_name = 'all_class'
+    
 
     def get(self, request,pk, *args, **kwargs):
         Form = subjectForm()
         Form.fields['className'].choices = [(self.kwargs['pk'], self.get_object().className)]
+        subjects = allsubject.objects.filter(subjectTeacher = self.request.user)
         return render(request, 'result/classDetails.html',
-                        {'all_class': self.get_object(),'form': Form})
+                        {'all_class': self.get_object(),'form': Form, 'subjects': subjects})
                         
     def post(self, request,pk, *args, **kwargs):
         form = subjectForm(request.POST)
@@ -217,10 +225,12 @@ class deleteSubject(DeleteView):
         
 class assessmentEntry(UpdateView):
     model = assessment
-    fields = '__all__'
+    fields = 'firstCa','secondCa','exam'
     Form_class = AssessmentForm
     template_name = 'result/assessmentScore.html'
-    success_url = reverse_lazy('result:index')
+    def get_success_url(self):
+        return reverse_lazy('result:subjectDetails', kwargs={'pk': self.object.subjectName.id})
+
     
 class studentDelete(DeleteView):
     model = students

@@ -80,7 +80,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for subject in all_class.subjectclass.all %}
+            {% for subject in subjects %}
             <tr>
               <td class="px-4 border-2 border-green-300 hover:bg-yellow-300"> <a href="{% url 'result:subjectDetails' subject.id %}"> 
                 {{ subject.subjectName }} 
