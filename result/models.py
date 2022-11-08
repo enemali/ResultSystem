@@ -3,6 +3,7 @@ from django.db import models
 # import AUTH_USER_MODEL from settings.py
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from multiselectfield import MultiSelectField
 
 # from users.models import User
 User = get_user_model()
@@ -123,3 +124,7 @@ class assessment(models.Model):
         return str(self.className)
     class Meta:
         ordering = ['className']
+
+class subjectList(models.Model):
+    subjectName = models.CharField(max_length=100,null=True)
+    subjectSection = models.ForeignKey('section',on_delete=models.CASCADE,null=True)
