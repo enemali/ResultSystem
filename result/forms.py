@@ -11,6 +11,7 @@ from .models import students , all_class , section , allsubject , Images , setti
 from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.forms import ModelChoiceField
 
 class UserCreateForm(UserCreationForm):
     class Meta:
@@ -42,12 +43,7 @@ class loginForm(forms.ModelForm):
         model = User
         fields = ('username', 'password')
         field_classes = {'username': UsernameField}
-
-class subjectForm(forms.ModelForm):
-    class Meta:
-        model = allsubject
-        fields = ['subjectName', 'className']
-        
+     
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
@@ -59,7 +55,7 @@ class StudentForm(forms.ModelForm):
 class allClassForm(forms.ModelForm):
     class Meta:
         model = all_class
-        fields = ['section', 'className' , 'classTeacher']
+        fields = ['section', 'className' ]
 
 class classArmForm(forms.ModelForm):
     class Meta:
@@ -97,8 +93,6 @@ class AssessmentForm(forms.ModelForm):
         model = assessment
         fields = ['className','student','subjectName','firstCa','secondCa','exam']
 
-
-
 class subjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
@@ -108,8 +102,13 @@ class SubjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
         fields = ['subjectName', 'className', 'subjectTeacher']
-
+      
 class ClassArmTeacherForm(forms.ModelForm):
     class Meta:
         model = classArmTeacher
         fields = ['className', 'classArm', 'classTeacher']
+
+class subjectForm(forms.ModelForm):
+    class Meta:
+        model = allsubject
+        fields = ['subjectName', 'className']

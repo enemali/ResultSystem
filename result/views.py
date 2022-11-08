@@ -146,39 +146,48 @@ class deleteClass(DeleteView):
     success_url = reverse_lazy('result:settings')
 
 class classList(ListView):
-    model = all_class
+    model = classArmTeacher
     context_object_name = 'all_class'
     template_name = 'result/classList.html'
 
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
         context['user'] = self.request.user
-        context['all_class'] = all_class.objects.filter(section = self.request.user.section)
+        context['all_class'] = classArmTeacher.objects.filter(classTeacher_id = self.request.user.id)
         return context
     
 class classDetails(DetailView):
-    model = all_class
+    model = classArmTeacher
     context_object_name = 'all_class'
+    template_name = 'result/classDetails.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(classDetails, self).get_context_data(**kwargs)
+        context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user)
+        context['students'] = students.objects.filter(classArm = self.get_object().classArm)
+        return context
     
 
-    def get(self, request,pk, *args, **kwargs):
-        Form = subjectForm()
-        Form.fields['className'].choices = [(self.kwargs['pk'], self.get_object().className)]
-        subjects = allsubject.objects.filter(subjectTeacher = self.request.user)
-        return render(request, 'result/classDetails.html',
-                        {'all_class': self.get_object(),'form': Form, 'subjects': subjects})
+
+
+    # def get(self, request,pk, *args, **kwargs):
+    #     Form = subjectForm()
+    #     Form.fields['className'].choices = [(self.kwargs['pk'], self.get_object().className)]
+    #     subjects = allsubject.objects.filter(subjectTeacher = self.request.user)
+    #     return render(request, 'result/classDetails.html',
+    #                     {'all_class': self.get_object(),'form': Form, 'subjects': subjects})
                         
-    def post(self, request,pk, *args, **kwargs):
-        form = subjectForm(request.POST)
-        if form.is_valid():
-            subject = form.save(commit=False)
-            subject.class_name = self.get_object()
-            subject.save()
-            return redirect('result:classDetails', pk=pk)
-        return render(request, 'result/classDetails.html',
-                        {'all_class': self.get_object(),
-                         'form': self.form_class()}
-                         )
+    # def post(self, request,pk, *args, **kwargs):
+    #     form = subjectForm(request.POST)
+    #     if form.is_valid():
+    #         subject = form.save(commit=False)
+    #         subject.class_name = self.get_object()
+    #         subject.save()
+    #         return redirect('result:classDetails', pk=pk)
+    #     return render(request, 'result/classDetails.html',
+    #                     {'all_class': self.get_object(),
+    #                      'form': self.form_class()}
+    #                      )
 
 class subjectDetails(CreateView):
     model = assessment
@@ -328,7 +337,7 @@ class subjectCreate(CreateView):
     model = allsubject
     form_class = SubjectForm
     template_name = 'result/subjectCreate.html'
-    success_url = reverse_lazy('result:settings')
+    success_url = reverse_lazy('result:subjectCreate')
 
     def get_context_data(self, **kwargs):
         context = super(subjectCreate, self).get_context_data(**kwargs)

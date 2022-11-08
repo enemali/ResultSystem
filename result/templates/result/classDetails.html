@@ -7,7 +7,7 @@
 <section class="text-gray-600 body-font px-5">
    <div class="container px-1 mx-auto">
      <div class="flex flex-col text-center w-full">
-       <h1 class="sm:text-4xl font-medium title-font text-gray-900"> {{all_class.className}} </h1>
+       <h1 class="sm:text-4xl font-medium title-font text-gray-900"> {{all_class.className}} {{all_class.classArm}}</h1>
        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Student and Subjects in this class</p>
        <br/>
      </div>
@@ -43,7 +43,7 @@
           <thead>
             <tr  >
               <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
-                Students in {{all_class.className}}
+                Students in {{all_class.className}} {{all_class.classArm}}
               </th>
               {% comment %} <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
                 Delete
@@ -51,7 +51,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for student in all_class.studentclass.all %}
+            {% for student in students %}
             <tr>
               <td class="px-4 border-2 border-green-300 hover:bg-yellow-300"> 
                 {{ student.last_name }} {{ student.first_name }} {{ student.middle_name }}

@@ -58,7 +58,6 @@ class all_class(models.Model):
     className = models.CharField(max_length=100 , unique=True)
     section = models.ForeignKey(section, on_delete=models.SET_NULL, null=True)
     complete = models.BooleanField(default=False)
-    classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.className
@@ -73,10 +72,20 @@ class classArm(models.Model):
     
     class Meta:
         ordering = ['armName']
-    
+
+class classArmTeacher(models.Model):
+    className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
+    classArm = models.ForeignKey(classArm, on_delete=models.SET_NULL, null=True)
+    classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return str(self.className) + ' ' + str(self.classArm) 
+    class Meta:
+        ordering = ['className']
+
 class allsubject(models.Model):
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    className = models.ForeignKey(all_class, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
     subjectName = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
@@ -109,16 +118,6 @@ class assessment(models.Model):
     section = models.CharField(max_length=100, choices=section_choices)
     term = models.CharField(max_length=100 , choices=term_choices)
     session = models.CharField(max_length=1000)
-    date = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return str(self.className)
-    class Meta:
-        ordering = ['className']
-
-class classArmTeacher(models.Model):
-    className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
-    classArm = models.ForeignKey(classArm, on_delete=models.SET_NULL, null=True)
-    classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return str(self.className)
