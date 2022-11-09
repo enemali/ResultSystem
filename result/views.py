@@ -139,12 +139,6 @@ class settings(LoginRequiredMixin, TemplateView):
                                                         'settingForm': AllsettingForm,
                                                         'armForm': armForm})
                                                         
-class deleteClass(DeleteView):
-    model = all_class
-    context_object_name = 'all_class'
-    template_name = 'result/deleteClass.html'
-    success_url = reverse_lazy('result:settings')
-
 class classList(ListView):
     model = classArmTeacher
     context_object_name = 'all_class'
@@ -169,9 +163,6 @@ class classDetails(DetailView):
                                                       )
         return context
     
-
-
-
     # def get(self, request,pk, *args, **kwargs):
     #     Form = subjectForm()
     #     Form.fields['className'].choices = [(self.kwargs['pk'], self.get_object().className)]
@@ -230,13 +221,7 @@ class subjectDetails(CreateView):
         else:
             print(Form.errors)
             return redirect('result:subjectDetails', pk=pk)
-
-class deleteSubject(DeleteView):
-    model = allsubject
-    context_object_name = 'allsubject'
-    template_name = 'result/deleteSubject.html'
-    success_url = reverse_lazy('result:settings')
-        
+     
 class assessmentEntry(UpdateView):
     model = assessment
     context_object_name = 'assessment'
@@ -245,8 +230,7 @@ class assessmentEntry(UpdateView):
     template_name = 'result/assessmentScore.html'
     def get_success_url(self):
         return reverse_lazy('result:subjectDetails', kwargs={'pk': self.object.subjectName.id})
-
-    
+  
 class studentDelete(DeleteView):
     model = students
     template_name = 'result/Delete.html'
@@ -265,11 +249,6 @@ def uploadimage(request):
         uploaded_file = request.FILES['document']
         print(uploaded_file.name)
     return render(request, 'result/uploadimage.html')
-
-class DeleteArm(DeleteView):
-    model = classArm
-    template_name = 'result/DeleteArm.html'
-    success_url = reverse_lazy('result:settings')
   
 class EditClass(UpdateView):
     model = all_class
@@ -307,12 +286,6 @@ class EditTeacher(UpdateView):
         form = RegistrationForm(instance=self.object)
         Button = 'Update Teacher'
         return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button})
-
-class deleteTeacher(DeleteView):
-    model = User
-    template_name = 'result/Delete.html'
-    def get_success_url(self):
-        return reverse_lazy('result:RegisterTeachers')
 
 class studentList(ListView):
     model = students
@@ -363,7 +336,6 @@ class subjectCreate(TemplateView):
                                                             'subjectForm': subjectFrm,
                                                             })
 
-
 class CreateClassArm(CreateView):
     model = classArmTeacher
     form_class = ClassArmTeacherForm
@@ -374,3 +346,33 @@ class CreateClassArm(CreateView):
         context = super(CreateClassArm, self).get_context_data(**kwargs)
         context['classArms'] = classArmTeacher.objects.all()
         return context
+
+
+class deleteSubject(DeleteView):
+    model = allsubject
+    context_object_name = 'allsubject'
+    template_name = 'result/Delete.html'
+    success_url = reverse_lazy('result:subjectCreate')
+
+class deleteTeacher(DeleteView):
+    model = User
+    template_name = 'result/Delete.html'
+    success_url = reverse_lazy('result:RegisterTeachers')
+
+class DeleteArm(DeleteView):
+    model = classArm
+    template_name = 'result/DeleteArm.html'
+    success_url = reverse_lazy('result:settings')
+
+class deleteClass(DeleteView):
+    model = all_class
+    context_object_name = 'all_class'
+    template_name = 'result/Delete.html'
+    success_url = reverse_lazy('result:settings')
+
+class deleteClassArm(DeleteView):
+    model = classArmTeacher
+    context_object_name = 'classArmTeacher'
+    template_name = 'result/Delete.html'
+    success_url = reverse_lazy('result:CreateClassArm')
+

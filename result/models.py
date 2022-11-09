@@ -63,7 +63,7 @@ class subjectList(models.Model):
 
 class all_class(models.Model):
     className = models.CharField(max_length=100 , unique=True)
-    section = models.ForeignKey(section, on_delete=models.SET_NULL, null=True)
+    section = models.ForeignKey(section, on_delete=models.CASCADE, null=True)
     complete = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -81,8 +81,8 @@ class classArm(models.Model):
         ordering = ['armName']
 
 class classArmTeacher(models.Model):
-    className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
-    classArm = models.ForeignKey(classArm, related_name='classArm', on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(all_class, on_delete=models.CASCADE, null=True)
+    classArm = models.ForeignKey(classArm, related_name='classArm', on_delete=models.CASCADE, null=True)
     classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -92,8 +92,8 @@ class classArmTeacher(models.Model):
 
 class allsubject(models.Model):
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
-    subjectName = models.ForeignKey(subjectList, on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.CASCADE, null=True)
+    subjectName = models.ForeignKey(subjectList, on_delete=models.CASCADE, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.subjectName
@@ -106,8 +106,8 @@ class students(models.Model):
     last_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, blank = True)
     gender = models.CharField(max_length=100 , choices= gender_choise)
-    className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.SET_NULL, null=True)
-    classArm = models.ForeignKey(classArm, related_name="studentclassArm", on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(all_class, related_name="studentclass", on_delete=models.CASCADE, null=True)
+    classArm = models.ForeignKey(classArm, related_name="studentclassArm", on_delete=models.CASCADE, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.last_name + ' ' + self.first_name + ' ' + self.middle_name
@@ -116,9 +116,9 @@ class students(models.Model):
         ordering = ['last_name']
 
 class assessment(models.Model):
-    className = models.ForeignKey(classArmTeacher, on_delete=models.SET_NULL, null=True)
-    student = models.ForeignKey(students, on_delete=models.SET_NULL, null=True)
-    subjectName = models.ForeignKey(allsubject, on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(classArmTeacher, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(students, on_delete=models.CASCADE, null=True)
+    subjectName = models.ForeignKey(allsubject, on_delete=models.CASCADE, null=True)
     firstCa = models.IntegerField(default=0)
     secondCa = models.IntegerField(default=0)
     exam = models.IntegerField(default=0)

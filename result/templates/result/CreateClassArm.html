@@ -44,7 +44,7 @@
                                                     Class Teacher
                                                 </th>
                                                 <th scope="col" class="py-3 px-6">
-                                                    Number in Class
+                                                    Delete Arm
                                                 </th>
                                                 <th scope="col" class="py-3 px-6">
                                                     <span class="sr-only">Edit</span>
@@ -68,7 +68,13 @@
                                                     {{ classArm.numberOfStudents }}
                                                 </td>
                                                 <td class="py-4 px-6 text-right">
-                                                   
+                                                    <div class="flex item-center justify-end">
+                                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                                            <a href="{% url 'result:deleteClassArm' classArm.id %}" class="text-red-500 hover:text-red-600">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             {% endfor %}

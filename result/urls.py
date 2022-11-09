@@ -25,4 +25,7 @@ urlpatterns = [
     path('studentList/', studentList.as_view(), name='studentList'),   
     path('subjectCreate/', subjectCreate.as_view(), name='subjectCreate'),
     path('CreateClassArm/', CreateClassArm.as_view(), name='CreateClassArm'),
+    path('deleteClassArm/<int:pk>/', deleteClassArm.as_view(), name='deleteClassArm'),
+    path('deleteSubject/<int:pk>/', deleteSubject.as_view(), name='deleteSubject'),
+    
 ]
