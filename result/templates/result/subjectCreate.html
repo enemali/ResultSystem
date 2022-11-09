@@ -21,13 +21,33 @@
                                 <div class="max-w-lg mx-auto">
                                 <form method="post" class="mt-5">
                                     {% csrf_token %}
-                                    {{ form.as_p }}
+                                    {{ subjectForm.as_p }}
                                     <button type='submit' class="w-full text-white bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md">
-                                        Add Subject
+                                        Add Subject 
                                     </button>
+                                    <input type="hidden" name="form_type" value="subjectform">
                                 </form>
-            </div>
                             </div>
+                            </div>
+                        <!-- subjectList-->
+                            
+                        <h1 class="font-bold">List Subject</h1>
+                            <div class="flex flex-row items-center bg-blue-300">
+                                <div class="flex-shrink pr-4">
+                                    <div class="rounded-full p-5 bg-green-600"><i class="fa fa-wallet fa-2x fa-inverse"></i></div>
+                                </div>
+                                <div class="max-w-lg mx-auto">
+                                <form method="post" class="mt-5">
+                                    {% csrf_token %}
+                                    {{ subjectListForm.as_p }}
+                                    <button type='submit' class="w-full text-white bg-red-500 hover:bg-blue-600 px-3 py-2 rounded-md">
+                                        List Subject
+                                    </button>
+                                    <input type="hidden" name="form_type" value="subjectlistform">
+                                </form>
+                            </div>
+                            </div>
+
                         </div>
                         <!--/Metric Card-->
                     </div>

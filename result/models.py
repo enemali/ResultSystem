@@ -55,6 +55,12 @@ class section(models.Model):
     def __str__(self):
         return self.sectionName
     
+class subjectList(models.Model):
+    subjectName = models.CharField(max_length=100,null=True)
+    subjectSection = models.ForeignKey('section',on_delete=models.CASCADE,null=True)
+    def __str__(self):
+        return self.subjectName
+
 class all_class(models.Model):
     className = models.CharField(max_length=100 , unique=True)
     section = models.ForeignKey(section, on_delete=models.SET_NULL, null=True)
@@ -76,7 +82,7 @@ class classArm(models.Model):
 
 class classArmTeacher(models.Model):
     className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
-    classArm = models.ForeignKey(classArm, on_delete=models.SET_NULL, null=True)
+    classArm = models.ForeignKey(classArm, related_name='classArm', on_delete=models.SET_NULL, null=True)
     classTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -87,7 +93,7 @@ class classArmTeacher(models.Model):
 class allsubject(models.Model):
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.SET_NULL, null=True)
-    subjectName = models.CharField(max_length=100)
+    subjectName = models.ForeignKey(subjectList, on_delete=models.SET_NULL, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.subjectName
@@ -104,13 +110,13 @@ class students(models.Model):
     classArm = models.ForeignKey(classArm, related_name="studentclassArm", on_delete=models.SET_NULL, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
-        return self.first_name
+        return self.last_name + ' ' + self.first_name + ' ' + self.middle_name
     
     class Meta:
         ordering = ['last_name']
 
 class assessment(models.Model):
-    className = models.ForeignKey(all_class, on_delete=models.SET_NULL, null=True)
+    className = models.ForeignKey(classArmTeacher, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(students, on_delete=models.SET_NULL, null=True)
     subjectName = models.ForeignKey(allsubject, on_delete=models.SET_NULL, null=True)
     firstCa = models.IntegerField(default=0)
@@ -121,10 +127,8 @@ class assessment(models.Model):
     session = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return str(self.className)
+        return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.subjectName)
     class Meta:
         ordering = ['className']
 
-class subjectList(models.Model):
-    subjectName = models.CharField(max_length=100,null=True)
-    subjectSection = models.ForeignKey('section',on_delete=models.CASCADE,null=True)
+

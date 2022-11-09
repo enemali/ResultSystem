@@ -164,7 +164,9 @@ class classDetails(DetailView):
     def get_context_data(self, **kwargs):
         context = super(classDetails, self).get_context_data(**kwargs)
         context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user)
-        context['students'] = students.objects.filter(classArm = self.get_object().classArm)
+        context['students'] = students.objects.filter(classArm = self.get_object().classArm , 
+                                                      className = self.get_object().className
+                                                      )
         return context
     
 
@@ -198,10 +200,12 @@ class subjectDetails(CreateView):
         assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
         # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
         # student_query not in assessment_query
-        students_query = students.objects.filter(className=singleSubject.className.id).exclude(id__in=assessment_query.values('student_id'))
+        students_query = students.objects.filter(className=singleSubject.className.className,
+                                                classArm=singleSubject.className.classArm
+                                                ).exclude(id__in=assessment_query.values('student_id'))
         Form = SubjectstudentForm()
         Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
-        Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className.className)]
+        Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className)]
         Form.fields['student'].choices = [(student.id, student.last_name + ' ' + student.first_name + ' ' + student.middle_name) for student in students_query]
         # assessmentForm = AssessmentForm(queryset=assessment_query)
         
@@ -213,17 +217,18 @@ class subjectDetails(CreateView):
     
     def post(self, request,pk, *args, **kwargs):
         Form = SubjectstudentForm(request.POST)
-        assessmentForm = AssessmentForm(request.POST)
+        # assessmentForm = AssessmentForm(request.POST)
         if Form.is_valid():
             Form.save()
             return redirect('result:subjectDetails', pk=pk)
-        if assessmentForm.is_valid():
-            instance = assessmentForm.save(commit=False)
-            for assessmentForm in instance:
-                assessmentForm.save()
-            # assessmentForm.save()
-            return redirect('result:subjectDetails', pk=pk)
+        # if assessmentForm.is_valid():
+        #     instance = assessmentForm.save(commit=False)
+        #     for assessmentForm in instance:
+        #         assessmentForm.save()
+
+            # return redirect('result:subjectDetails', pk=pk)
         else:
+            print(Form.errors)
             return redirect('result:subjectDetails', pk=pk)
 
 class deleteSubject(DeleteView):
@@ -234,6 +239,7 @@ class deleteSubject(DeleteView):
         
 class assessmentEntry(UpdateView):
     model = assessment
+    context_object_name = 'assessment'
     fields = 'firstCa','secondCa','exam'
     Form_class = AssessmentForm
     template_name = 'result/assessmentScore.html'
@@ -333,16 +339,30 @@ class studentList(ListView):
                                                             'classarm': arm,
                                                             })
 
-class subjectCreate(CreateView):
-    model = allsubject
-    form_class = SubjectForm
+class subjectCreate(TemplateView):
     template_name = 'result/subjectCreate.html'
-    success_url = reverse_lazy('result:subjectCreate')
 
     def get_context_data(self, **kwargs):
         context = super(subjectCreate, self).get_context_data(**kwargs)
         context['allsubject'] = allsubject.objects.all()
+        context['subjectListForm'] = subjectListForm()
+        context['subjectForm'] = SubjectForm()
         return context
+
+    def post(self, request, *args, **kwargs):
+        subjectListFrm = subjectListForm(request.POST)
+        subjectFrm = SubjectForm(request.POST)
+        if subjectListFrm.is_valid():
+            subjectListFrm.save()
+            return redirect('result:subjectCreate')
+        if subjectFrm.is_valid():
+            subjectFrm.save()
+            return redirect('result:subjectCreate')
+
+        return render(request, 'result/subjectCreate.html', {'subjectListForm': subjectListFrm,
+                                                            'subjectForm': subjectFrm,
+                                                            })
+
 
 class CreateClassArm(CreateView):
     model = classArmTeacher

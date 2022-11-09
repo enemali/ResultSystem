@@ -45,9 +45,9 @@
               <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
                 Students in {{all_class.className}} {{all_class.classArm}}
               </th>
-              {% comment %} <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
+              <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-green-300 rounded-tl rounded-bl">
                 Delete
-              </th> {% endcomment %}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -57,9 +57,10 @@
                 {{ student.last_name }} {{ student.first_name }} {{ student.middle_name }}
               </td>
 
-              {% comment %} <td class="px-4 border-2 border-green-300 hover:bg-yellow-300"> 
-                  <a href="{% url 'result:studentDelete' student.id %}">  Delete   </a>
-              </td> {% endcomment %}
+              <td class="px-4 border-2 border-green-300 hover:bg-yellow-300"> 
+                {{ student.className}} {{ student.classArm }}
+                {% comment %} <a href="{% url 'result:studentDelete' student.id %}">  Delete   </a> {% endcomment %}
+              </td> 
             </tr>
             {% endfor %}
               

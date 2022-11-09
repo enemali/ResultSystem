@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
-from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm,classArmTeacher
-from .widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
+from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm,classArmTeacher,subjectList
+from .widgets import DatePickerInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelChoiceField
@@ -112,3 +112,8 @@ class subjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
         fields = ['subjectName', 'className']
+
+class subjectListForm(forms.ModelForm):
+    class Meta:
+        model = subjectList
+        fields = ['subjectName', 'subjectSection']
