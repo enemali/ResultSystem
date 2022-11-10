@@ -16,9 +16,17 @@
                                 <div class="max-w-lg mx-auto">
                                 <form method="post" class="mt-5">
                                     {% csrf_token %}
-                                    {{ form.as_p }}
+                                    
+                                    {% for field in form %}
+                                        <div class="form-group">
+                                            {{ field.label_tag }}<br>
+                                            {{ field }}
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endfor %}
+                                   
                                     <button type='submit' class="w-full text-white bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md">
-                                        signUp
+                                        Add Teacher
                                     </button>
                                 </form>
     </div>
