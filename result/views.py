@@ -147,7 +147,10 @@ class classList(ListView):
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
         context['user'] = self.request.user
-        context['all_class'] = classArmTeacher.objects.filter(classTeacher_id = self.request.user.id)
+        if User.is_staff:
+            context['all_class'] = classArmTeacher.objects.all()
+        else:
+            context['all_class'] = classArmTeacher.objects.filter(classTeacher_id = self.request.user.id)
         return context
     
 class classDetails(DetailView):
@@ -157,10 +160,12 @@ class classDetails(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(classDetails, self).get_context_data(**kwargs)
-        context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user)
-        context['students'] = students.objects.filter(classArm = self.get_object().classArm , 
-                                                      className = self.get_object().className
-                                                      )
+        context['user'] = self.request.user
+        if User.is_staff:
+            context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
+        else:
+            context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
+        context['students'] = students.objects.filter(classArm = self.get_object().classArm ,className = self.get_object().className)
         return context
     
     # def get(self, request,pk, *args, **kwargs):
