@@ -352,7 +352,6 @@ class CreateClassArm(CreateView):
         context['classArms'] = classArmTeacher.objects.all()
         return context
 
-
 class deleteSubject(DeleteView):
     model = allsubject
     context_object_name = 'allsubject'
