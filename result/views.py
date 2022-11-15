@@ -161,31 +161,12 @@ class classDetails(DetailView):
     def get_context_data(self, **kwargs):
         context = super(classDetails, self).get_context_data(**kwargs)
         context['user'] = self.request.user
-        if User.is_staff:
+        if self.request.user.is_staff:
             context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
         else:
             context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
         context['students'] = students.objects.filter(classArm = self.get_object().classArm ,className = self.get_object().className)
         return context
-    
-    # def get(self, request,pk, *args, **kwargs):
-    #     Form = subjectForm()
-    #     Form.fields['className'].choices = [(self.kwargs['pk'], self.get_object().className)]
-    #     subjects = allsubject.objects.filter(subjectTeacher = self.request.user)
-    #     return render(request, 'result/classDetails.html',
-    #                     {'all_class': self.get_object(),'form': Form, 'subjects': subjects})
-                        
-    # def post(self, request,pk, *args, **kwargs):
-    #     form = subjectForm(request.POST)
-    #     if form.is_valid():
-    #         subject = form.save(commit=False)
-    #         subject.class_name = self.get_object()
-    #         subject.save()
-    #         return redirect('result:classDetails', pk=pk)
-    #     return render(request, 'result/classDetails.html',
-    #                     {'all_class': self.get_object(),
-    #                      'form': self.form_class()}
-    #                      )
 
 class subjectDetails(CreateView):
     model = assessment
