@@ -180,6 +180,13 @@ class subjectDetails(CreateView):
         students_query = students.objects.filter(className=singleSubject.className.className,
                                                 classArm=singleSubject.className.classArm
                                                 ).exclude(id__in=assessment_query.values('student_id'))
+        if students_query.count() > 0:
+            assessmentBulk = []
+            for student in students_query:
+                assessmentBulk.append(assessment(student=student, subjectName=singleSubject,className = singleSubject.className))
+            assessment.objects.bulk_create(assessmentBulk)
+
+
         Form = SubjectstudentForm()
         Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className)]
