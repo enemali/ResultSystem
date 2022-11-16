@@ -116,4 +116,4 @@ class subjectForm(forms.ModelForm):
 class subjectListForm(forms.ModelForm):
     class Meta:
         model = subjectList
-        fields = ['subjectName']
+        fields = ['subjectName', 'subjectSection']

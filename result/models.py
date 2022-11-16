@@ -57,7 +57,7 @@ class section(models.Model):
     
 class subjectList(models.Model):
     subjectName = models.CharField(max_length=100,null=True)
-    # subjectSection = models.ForeignKey('section',on_delete=models.CASCADE,null=True)
+    subjectSection = models.ForeignKey('section',on_delete=models.CASCADE,null=True)
     def __str__(self):
         return self.subjectName 
 
@@ -99,7 +99,7 @@ class allsubject(models.Model):
         return self.subjectName
     
     class Meta:
-        ordering = ['subjectName']
+        ordering = ['className']
         
 class students(models.Model):
     first_name = models.CharField(max_length=100)

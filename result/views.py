@@ -141,13 +141,12 @@ class settings(LoginRequiredMixin, TemplateView):
                                                         
 class classList(ListView):
     model = classArmTeacher
-    context_object_name = 'all_class'
+    # context_object_name = 'all_class'
     template_name = 'result/classList.html'
 
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
-        context['user'] = self.request.user
-        if User.is_staff:
+        if self.request.user.is_staff:
             context['all_class'] = classArmTeacher.objects.all()
         else:
             context['all_class'] = classArmTeacher.objects.filter(classTeacher_id = self.request.user.id)
@@ -321,9 +320,13 @@ class subjectCreate(TemplateView):
         if subjectListFrm.is_valid():
             subjectListFrm.save()
             return redirect('result:subjectCreate')
+        else:
+            print(subjectListFrm.errors)
         if subjectFrm.is_valid():
             subjectFrm.save()
             return redirect('result:subjectCreate')
+        else:
+            print(subjectFrm.errors)
 
         return render(request, 'result/subjectCreate.html', {'subjectListForm': subjectListFrm,
                                                             'subjectForm': subjectFrm,
