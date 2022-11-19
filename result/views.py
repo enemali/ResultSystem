@@ -143,13 +143,15 @@ class classList(ListView):
     model = classArmTeacher
     # context_object_name = 'all_class'
     template_name = 'result/classList.html'
+    
 
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
         if self.request.user.is_staff:
             context['all_class'] = classArmTeacher.objects.all()
         else:
-            context['all_class'] = classArmTeacher.objects.filter(classTeacher_id = self.request.user.id)
+            context['teacherSubject'] = allsubject.objects.filter(subjectTeacher=self.request.user)
+            context['all_class'] = classArmTeacher.objects.filter(id__in=context['teacherSubject'].values_list('className', flat=True))
         return context
     
 class classDetails(DetailView):
