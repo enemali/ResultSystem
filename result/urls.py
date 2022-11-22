@@ -27,5 +27,6 @@ urlpatterns = [
     path('CreateClassArm/', CreateClassArm.as_view(), name='CreateClassArm'),
     path('deleteClassArm/<int:pk>/', deleteClassArm.as_view(), name='deleteClassArm'),
     path('deleteSubject/<int:pk>/', deleteSubject.as_view(), name='deleteSubject'),
-    
+    path('payment/', payment.as_view(), name='payment'),
+    path('deleteSubjectList/<int:pk>/', deleteSubjectList.as_view(), name='deleteSubjectList'),
 ]

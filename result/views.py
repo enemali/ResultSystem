@@ -312,6 +312,7 @@ class subjectCreate(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(subjectCreate, self).get_context_data(**kwargs)
         context['allsubject'] = allsubject.objects.all()
+        context['subjectlist'] = subjectList.objects.all()
         context['subjectListForm'] = subjectListForm()
         context['subjectForm'] = SubjectForm()
         return context
@@ -351,6 +352,12 @@ class deleteSubject(DeleteView):
     template_name = 'result/Delete.html'
     success_url = reverse_lazy('result:subjectCreate')
 
+class deleteSubjectList(DeleteView):
+    model = subjectList
+    context_object_name = 'subjectList'
+    template_name = 'result/Delete.html'
+    success_url = reverse_lazy('result:subjectCreate')
+
 class deleteTeacher(DeleteView):
     model = User
     template_name = 'result/Delete.html'
@@ -373,3 +380,9 @@ class deleteClassArm(DeleteView):
     template_name = 'result/Delete.html'
     success_url = reverse_lazy('result:CreateClassArm')
 
+class payment(TemplateView):
+    template_name = 'result/payment.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(payment, self).get_context_data(**kwargs)
+        return context
