@@ -108,10 +108,10 @@ class ClassArmTeacherForm(forms.ModelForm):
         model = classArmTeacher
         fields = ['className', 'classArm', 'classTeacher']
 
-class subjectForm(forms.ModelForm):
-    class Meta:
-        model = allsubject
-        fields = ['subjectName', 'className']
+# class subjectForm(forms.ModelForm):
+#     class Meta:
+#         model = allsubject
+#         fields = ['subjectName', 'className']
 
 class subjectListForm(forms.ModelForm):
     class Meta:

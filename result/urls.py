@@ -29,4 +29,5 @@ urlpatterns = [
     path('deleteSubject/<int:pk>/', deleteSubject.as_view(), name='deleteSubject'),
     path('payment/', payment.as_view(), name='payment'),
     path('deleteSubjectList/<int:pk>/', deleteSubjectList.as_view(), name='deleteSubjectList'),
+    path('EditSubject/<int:pk>/', EditSubject.as_view(), name='EditSubject'),
 ]

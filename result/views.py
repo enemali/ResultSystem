@@ -311,7 +311,7 @@ class subjectCreate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(subjectCreate, self).get_context_data(**kwargs)
-        context['allsubject'] = allsubject.objects.all()
+        context['allsubjects'] = allsubject.objects.all()
         context['subjectlist'] = subjectList.objects.all()
         context['subjectListForm'] = subjectListForm()
         context['subjectForm'] = SubjectForm()
@@ -344,6 +344,17 @@ class CreateClassArm(CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateClassArm, self).get_context_data(**kwargs)
         context['classArms'] = classArmTeacher.objects.all()
+        return context
+
+class EditSubject(UpdateView):
+    model = allsubject
+    fields = "__all__"
+    template_name = 'result/subjectCreate.html'
+    success_url = reverse_lazy('result:subjectCreate')
+
+    def get_context_data(self, **kwargs):
+        context = super(EditSubject, self).get_context_data(**kwargs)
+        context['subjectForm'] = SubjectForm
         return context
 
 class deleteSubject(DeleteView):
