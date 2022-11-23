@@ -397,3 +397,8 @@ class payment(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(payment, self).get_context_data(**kwargs)
         return context
+
+class print(TemplateView):
+    template_name = 'result/print.html'
+    get_success_url = reverse_lazy('result:print')
+    

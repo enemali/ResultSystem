@@ -1,0 +1,23 @@
+
+{% extends 'settingsbase.html' %}
+{% load static %}
+
+{% block content %}
+                
+<h1 class="text-green-300 text-5xl font-bold">
+    Print
+</h1> 
+
+<div id="main" class="grid grid-cols-3 gap-1 justify-evenly font-bold text-center"> 
+    <div class="bg-green-300 w-26 h-12 ">
+        <a href="{% url 'result:studentList' %}" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle  hover:text-white  hover:bg-red-500">
+                Empty Assesment Sheet
+        </a>
+    </div> 
+    <div class="bg-green-300 w-26 h-12 ">Emtpy Comment Sheet</div> 
+    <div class="bg-green-300 w-26 h-12 ">CA Result</div> 
+    <div class="bg-green-300 w-26 h-12 ">Exam Result</div> 
+    <div class="bg-green-300 w-26 h-12 ">Exam Master Sheet</div> 
+    <div class="bg-green-300 w-26 h-12 ">6</div> 
+</div> 
+{% endblock %}
