@@ -323,17 +323,11 @@ class subjectCreate(TemplateView):
         if subjectListFrm.is_valid():
             subjectListFrm.save()
             return redirect('result:subjectCreate')
-        else:
-            print(subjectListFrm.errors)
         if subjectFrm.is_valid():
             subjectFrm.save()
             return redirect('result:subjectCreate')
-        else:
-            print(subjectFrm.errors)
 
-        return render(request, 'result/subjectCreate.html', {'subjectListForm': subjectListFrm,
-                                                            'subjectForm': subjectFrm,
-                                                            })
+        
 
 class CreateClassArm(CreateView):
     model = classArmTeacher
