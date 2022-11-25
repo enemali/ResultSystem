@@ -8,16 +8,18 @@
     Print
 </h1> 
 
-<div id="main" class="grid grid-cols-3 gap-1 justify-evenly font-bold text-center"> 
-    <div class="bg-green-300 w-26 h-12 ">
+<div id="main" class="grid grid-cols-2 gap-1 justify-evenly font-bold text-center"> 
+    <div class="bg-green-300 ">
         <a href="{% url 'result:studentList' %}" class="block py-1 md:py-3 pl-0 md:pl-1 align-middle  hover:text-white  hover:bg-red-500">
-                Assesment Sheet
+                Assesment Sheet<br>
+                Comment Sheet<br>
+                Student List
+
         </a>
     </div> 
-    <div class="bg-green-300 w-26 h-12 ">Comment Sheet</div> 
-    <div class="bg-green-300 w-26 h-12 ">CA Result</div> 
-    <div class="bg-green-300 w-26 h-12 ">Exam Result</div> 
-    <div class="bg-green-300 w-26 h-12 ">Exam Master Sheet</div> 
-    <div class="bg-green-300 w-26 h-12 ">Exam Summary Report</div> 
+    <div class="bg-green-300 ">CA Result</div> 
+    <div class="bg-green-300 ">Exam Result</div> 
+    <div class="bg-green-300 ">Exam Master Sheet</div> 
+    <div class="bg-green-300 ">Exam Summary Report</div> 
 </div> 
 {% endblock %}
