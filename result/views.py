@@ -172,6 +172,7 @@ class classDetails(DetailView):
 class subjectDetails(CreateView):
     model = assessment
     template_name = 'result/subjectDetails.html'
+    success_url = reverse_lazy('result:subjectDetails')
     
     def get(self, request,pk, *args, **kwargs):
         singleSubject = allsubject.objects.get(id=pk)
@@ -187,18 +188,14 @@ class subjectDetails(CreateView):
                 assessmentBulk.append(assessment(student=student, subjectName=singleSubject,className = singleSubject.className))
             assessment.objects.bulk_create(assessmentBulk)
 
-
         Form = SubjectstudentForm()
         Form.fields['subjectName'].choices = [(singleSubject.id, singleSubject.subjectName)]
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className)]
         Form.fields['student'].choices = [(student.id, student.last_name + ' ' + student.first_name + ' ' + student.middle_name) for student in students_query]
-        # assessmentForm = AssessmentForm(queryset=assessment_query)
         
-        return render(request, 'result/subjectDetails.html',{'subject': singleSubject,
-                                                            'Form': Form,
-                                                            # 'assessmentForm': assessmentForm,
-                                                            'assessment': assessment_query,
-                                                             })
+        entryFormset = modelformset_factory(assessment, fields='__all__', extra=0)
+        context = {'form': Form, 'AssessmentForm': entryFormset, 'singleSubject': singleSubject ,'assessment': assessment_query}
+        return render(request, 'result/subjectDetails.html', context)
     
     def post(self, request,pk, *args, **kwargs):
         Form = SubjectstudentForm(request.POST)
@@ -222,6 +219,11 @@ class assessmentEntry(UpdateView):
     fields = 'firstCa','secondCa','exam'
     Form_class = AssessmentForm
     template_name = 'result/assessmentScore.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(assessmentEntry, self).get_context_data(**kwargs)
+        context['entryFormset'] = modelformset_factory(assessment, fields='__all__', extra=0)
+        return context
     def get_success_url(self):
         return reverse_lazy('result:subjectDetails', kwargs={'pk': self.object.subjectName.id})
   
@@ -327,8 +329,6 @@ class subjectCreate(TemplateView):
             subjectFrm.save()
             return redirect('result:subjectCreate')
 
-        
-
 class CreateClassArm(CreateView):
     model = classArmTeacher
     form_class = ClassArmTeacherForm
@@ -395,4 +395,18 @@ class payment(TemplateView):
 class print(TemplateView):
     template_name = 'result/print.html'
     get_success_url = reverse_lazy('result:print')
+
+def entry(request):
+    entry_formset = entryformset()
+    helper = entryformsetHelper()
+    for form in entry_formset:
+        form.fields['student'].disabled = True
+        form.fields['className'].disabled = True
+        # form.fields['student'].queryset = students.objects.filter(className=1)
+    if request.method == 'POST':
+        entry_formset = entryformset(request.POST)
+        if entry_formset.is_valid():
+            entry_formset.save()
+            return redirect('result:print')
+    return render(request, 'result/entry.html', {'formset': entry_formset, 'helper': helper})
     

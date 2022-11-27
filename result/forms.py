@@ -2,7 +2,7 @@ from cProfile import label
 from dataclasses import field
 from tkinter import Widget
 from django import forms
-from django.forms import modelformset_factory , formset_factory
+from django.forms import modelformset_factory , formset_factory , inlineformset_factory
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
@@ -12,6 +12,7 @@ from .widgets import DatePickerInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelChoiceField
+from crispy_forms.helper import FormHelper, Layout
 
 class UserCreateForm(UserCreationForm):
     class Meta:
@@ -92,6 +93,28 @@ class AssessmentForm(forms.ModelForm):
     class Meta:
         model = assessment
         fields = ['className','student','subjectName','firstCa','secondCa','exam']
+        # disable  dropdown for student, subjectName and className
+        widgets = { 'student': forms.HiddenInput(),
+                    'subjectName': forms.HiddenInput(),
+                    'className': forms.HiddenInput(),
+                    }
+
+entryformset = modelformset_factory(assessment , fields = ['className','student','firstCa','secondCa','exam'])
+ # disable  dropdown for student, subjectName and className
+class entryformsetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(entryformsetHelper, self).__init__(*args, **kwargs)
+        self.form_tag = False
+        self.disable_csrf = True
+        self.layout = Layout(
+            'className',
+            'student',
+            'firstCa',
+            'secondCa',
+            'exam',
+        )
+        self.template = 'bootstrap/table_inline_formset.html'
+
 
 class subjectForm(forms.ModelForm):
     class Meta:

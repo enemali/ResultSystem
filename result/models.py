@@ -59,7 +59,7 @@ class subjectList(models.Model):
     subjectName = models.CharField(max_length=100,null=True)
     subjectSection = models.ForeignKey('section',on_delete=models.CASCADE,null=True)
     def __str__(self):
-        return self.subjectName 
+        return str(self.subjectName)
 
 class all_class(models.Model):
     className = models.CharField(max_length=100 , unique=True)

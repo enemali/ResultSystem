@@ -14,7 +14,17 @@
        First Term 2022/2023 Continuous Assessment and Exam Computation
         </h1>
      </div>
-
+     <form action="" method="POST">
+      {% csrf_token %}
+      {{ management_form.management_form }}
+      <div class="mb-2">
+        <button
+          type="submit"
+          class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
+          Save
+        </button>
+      </div>
+    </form>
       <!-- student Form -->
       {% comment %} <form action="" method="POST">
         {% csrf_token %}
@@ -26,7 +36,7 @@
             Add Student to Subject
           </button>
         </div>
-      </form> {% endcomment %}
+      </form>
 
     {% comment %} <div class="grid-cols-8 gap-4">
       <div class="border-2 border-green-300  col-start-4 col-span-2">
