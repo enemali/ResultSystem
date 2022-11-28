@@ -93,14 +93,10 @@
               <td class="px-0 border-2 border-green-300 "> 
                 <a href="{% url 'result:subjectDetails' subject.id %}"> 
                   <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Single Entry
+                    Start Entry
                   </button>
                 </a> 
-                <a href="{% url 'result:entry' subject.id %}"> 
-                  <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Class Entry
-                  </button>
-                </a> 
+
               </td>
             </tr>
             {% endfor %}
