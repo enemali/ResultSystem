@@ -406,6 +406,19 @@ def entry(request, pk):
         form.fields['secondCa'].widget.attrs['class'] = 'form-control'
         form.fields['exam'].widget.attrs['class'] = 'form-control'
         # form.fields['student'].queryset = students.objects.filter(className=1)
+    singleSubject = allsubject.objects.get(id=pk)
+    assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
+        # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
+        # student_query not in assessment_query
+    students_query = students.objects.filter(className=singleSubject.className.className,
+                                            classArm=singleSubject.className.classArm
+                                            ).exclude(id__in=assessment_query.values('student_id'))
+    if students_query.count() > 0:
+        assessmentBulk = []
+        for student in students_query:
+            assessmentBulk.append(assessment(student=student, subjectName=singleSubject,className = singleSubject.className))
+            assessment.objects.bulk_create(assessmentBulk)
+    
     if request.method == 'POST':
         entry_formset = entryformset(request.POST)
         if entry_formset.is_valid():

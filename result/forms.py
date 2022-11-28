@@ -105,7 +105,7 @@ widgets= {'firstCa': forms.TextInput(attrs={'class':'form-control'}),
           'secondCa': forms.TextInput(attrs={'class':'form-control'}),
             'exam': forms.TextInput(attrs={'class':'form-control'}),
             # 'student': forms.Select(attrs={'disabled':True}),
-          })
+          },extra=0)
  # disable  dropdown for student, subjectName and className
 class entryformsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
