@@ -193,8 +193,7 @@ class subjectDetails(CreateView):
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className)]
         Form.fields['student'].choices = [(student.id, student.last_name + ' ' + student.first_name + ' ' + student.middle_name) for student in students_query]
         
-        entryFormset = modelformset_factory(assessment, fields='__all__', extra=0)
-        context = {'form': Form, 'AssessmentForm': entryFormset, 'singleSubject': singleSubject ,'assessment': assessment_query}
+        context = {'form': Form,'singleSubject': singleSubject ,'assessment': assessment_query}
         return render(request, 'result/subjectDetails.html', context)
     
     def post(self, request,pk, *args, **kwargs):
@@ -396,17 +395,21 @@ class print(TemplateView):
     template_name = 'result/print.html'
     get_success_url = reverse_lazy('result:print')
 
-def entry(request):
-    entry_formset = entryformset()
+def entry(request, pk):
+    entry_formset = entryformset(queryset=assessment.objects.filter(subjectName=pk))
     helper = entryformsetHelper()
+    subject = allsubject.objects.get(id=pk)
     for form in entry_formset:
-        form.fields['student'].disabled = True
-        form.fields['className'].disabled = True
+        form.fields['student'].readonly = True
+        form.fields['className'].readonly = True
+        form.fields['firstCa'].widget.attrs['class'] = 'form-control'
+        form.fields['secondCa'].widget.attrs['class'] = 'form-control'
+        form.fields['exam'].widget.attrs['class'] = 'form-control'
         # form.fields['student'].queryset = students.objects.filter(className=1)
     if request.method == 'POST':
         entry_formset = entryformset(request.POST)
         if entry_formset.is_valid():
             entry_formset.save()
             return redirect('result:print')
-    return render(request, 'result/entry.html', {'formset': entry_formset, 'helper': helper})
+    return render(request, 'result/entry.html', {'formset': entry_formset, 'helper': helper, 'subject': subject})
     

@@ -99,7 +99,13 @@ class AssessmentForm(forms.ModelForm):
                     'className': forms.HiddenInput(),
                     }
 
-entryformset = modelformset_factory(assessment , fields = ['className','student','firstCa','secondCa','exam'])
+entryformset = modelformset_factory(assessment , 
+fields = ['className','student','firstCa','secondCa','exam'],
+widgets= {'firstCa': forms.TextInput(attrs={'class':'form-control'}),
+          'secondCa': forms.TextInput(attrs={'class':'form-control'}),
+            'exam': forms.TextInput(attrs={'class':'form-control'}),
+            # 'student': forms.Select(attrs={'disabled':True}),
+          })
  # disable  dropdown for student, subjectName and className
 class entryformsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
@@ -113,6 +119,7 @@ class entryformsetHelper(FormHelper):
             'secondCa',
             'exam',
         )
+        
         self.template = 'bootstrap/table_inline_formset.html'
 
 

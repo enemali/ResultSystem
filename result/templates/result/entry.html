@@ -9,15 +9,20 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 {% comment %} include navbar {% endcomment %}
 {% include 'navbar.html' %}
-
 {% load crispy_forms_tags %}
+
+<h1 class="text-center text-8xl font-bold text-gray-900">{{ subject.subjectName }}</h1>
+
 <div class="container">
     <div class="row row-centered pos">
         <div class="col-lg-4 col-xs-12 col-centered">
             <form action="" method="post" class="form-horizontal">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Button
+                  </button>
+                  
                 {% csrf_token %}
                 {% crispy formset helper %}
-                <input type="submit" value="Submit" />
             </form>
         </div>
     </div>
