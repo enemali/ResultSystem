@@ -168,7 +168,7 @@ class classDetails(DetailView):
             context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
         context['students'] = students.objects.filter(classArm = self.get_object().classArm ,className = self.get_object().className)
         context['assessment'] = assessment.objects.filter(className_id = self.kwargs['pk'])
-        
+        context['firstEntry'] = context['assessment'].filter(firstCa__gt=0)
         return context
 
 class subjectDetails(CreateView):
@@ -425,6 +425,6 @@ def entry(request, pk):
         entry_formset = entryformset(request.POST)
         if entry_formset.is_valid():
             entry_formset.save()
-            return redirect('result:subjectDetails' , pk=pk)
+            return redirect('result:classDetails', pk=singleSubject.className.id)
     return render(request, 'result/entry.html', {'formset': entry_formset, 'helper': helper, 'subject': subject})
     
