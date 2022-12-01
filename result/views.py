@@ -62,7 +62,7 @@ class RegisterStudent(CreateView):
     success_url = reverse_lazy('result:registerStudent')
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(RegisterStudent, self).get_context_data(**kwargs)
         context["studentForm"] = StudentForm()
         context["allStudents"] = students.objects.all()
         return context
@@ -234,12 +234,12 @@ class studentDelete(DeleteView):
     def get_success_url(self):
         return reverse_lazy('result:registerStudent')
         
-class studentList(ListView):
-    def post(self, request):
-        student = None
-        childname = request.POST.get('fullname','')
-        student = students.objects.create(fullname=childname)
-        return render(request, 'result/studentList.html', {'student': student})
+# class studentList(ListView):
+#     def post(self, request):
+#         student = None
+#         childname = request.POST.get('fullname','')
+#         student = students.objects.create(fullname=childname)
+#         return render(request, 'result/studentList.html', {'student': student})
     
 def uploadimage(request):
     if request.method == 'POST' and request.FILES['document']:
@@ -428,3 +428,10 @@ def entry(request, pk):
             return redirect('result:classDetails', pk=singleSubject.className.id)
     return render(request, 'result/entry.html', {'formset': entry_formset, 'helper': helper, 'subject': subject})
     
+class searchStudent(TemplateView):
+    template_name = 'result/searchStudent.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(searchStudent, self).get_context_data(**kwargs)
+        context["allStudents"] = students.objects.all()
+        return context

@@ -31,5 +31,6 @@ urlpatterns = [
     path('deleteSubjectList/<int:pk>/', deleteSubjectList.as_view(), name='deleteSubjectList'),
     path('EditSubject/<int:pk>/', EditSubject.as_view(), name='EditSubject'),
     path('print/', print.as_view(), name='print'),
-    path('entry/<int:pk>/', views.entry, name='entry')
+    path('entry/<int:pk>/', views.entry, name='entry'),
+    path('searchStudents/', searchStudent.as_view(), name='searchStudents')
 ]

@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hasiyanda</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Search Student</h2>
+  <p>Type something in the search field to search </p>  
+  
+  
+  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+  <br>
+  
+  
+  
+  <table class="table table-bordered table-striped">
+    <thead>
+        
+      <tr>
+        <th>Full Name</th>
+        <th>Class</th>
+        <th>Delete</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+    {% for student in allStudents %}
+      <tr>
+        <td> {{ student.last_name.upper }}  {{ student.first_name.upper }} {{ student.middle_name.upper }}</td>
+        <td>{{ student.className }} {{ student.classArm }}</td>
+        <td><a href="{% url 'result:studentDelete' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td>
+        <td><a href="{% url 'result:editStudent' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+  
+
+
+    </tbody>
+</table>
+</div>
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+</body>
+</html>
+
+
