@@ -176,7 +176,8 @@ class classDetails(DetailView):
         context['firstCAEntry'] = context['subjects'].annotate(
                                  firstCa_Count =Count('assessment', filter=Q(assessment__firstCa__gt=0)),
                                  secondCa_Count =Count('assessment', filter=Q(assessment__secondCa__gt=0)),
-                                 exam_Count =Count('assessment', filter=Q(assessment__exam__gt=0))
+                                 exam_Count =Count('assessment', filter=Q(assessment__exam__gt=0)),
+                                 student_Count =Count('assessment')
                                  )
 
         # context['secondCAEntry'] = context['subjects'].annotate(s_CaCount =Count('assessment', filter=Q(assessment__secondCa__gt=0)))
