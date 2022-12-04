@@ -142,10 +142,8 @@ class settings(LoginRequiredMixin, TemplateView):
                                                         
 class classList(ListView):
     model = classArmTeacher
-    # context_object_name = 'all_class'
     template_name = 'result/classList.html'
     
-
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
         if self.request.user.is_staff:
@@ -174,7 +172,7 @@ class classDetails(DetailView):
         # context['firstEntry'] = context['assessment'].select_related().annotate(f_CaCount =models.Count('subjectName', filter=Q(firstCa__gt=0))).all()
         # User.objects.annotate(page_count=Count('page')).filter(page_count__gte=2).count()
         context['firstCAEntry'] = context['subjects'].annotate(
-                                 firstCa_Count =Count('assessment', filter=Q(assessment__firstCa__gt=0)),
+                                 firstCa_Count =Count('assessment', filter=Q(assessment__firstCa__gt=0, assessment__term__isnull=False)),
                                  secondCa_Count =Count('assessment', filter=Q(assessment__secondCa__gt=0)),
                                  exam_Count =Count('assessment', filter=Q(assessment__exam__gt=0)),
                                  student_Count =Count('assessment')
