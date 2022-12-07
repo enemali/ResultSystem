@@ -149,10 +149,10 @@ class classList(ListView):
         if self.request.user.is_staff:
             context['all_class'] = classArmTeacher.objects.all()
         else:
-            context['teacherSubject'] = allsubject.objects.filter(subjectTeacher=self.request.user)
-            context['all_class'] = classArmTeacher.objects.filter(id__in=context['teacherSubject'].values_list('className', flat=True))
+            context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section)
+            context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
-    
+
 class classDetails(DetailView):
     model = classArmTeacher
     context_object_name = 'all_class'
@@ -161,25 +161,20 @@ class classDetails(DetailView):
     def get_context_data(self, **kwargs):
         context = super(classDetails, self).get_context_data(**kwargs)
         context['user'] = self.request.user
-        if self.request.user.is_staff:
-            context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
-        else:
-            context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
+        # if self.request.user.is_staff:
+        #     context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
+        # else:
+        #     context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
+        context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
+       
         context['students'] = students.objects.filter(classArm = self.get_object().classArm ,className = self.get_object().className)
         context['assessment'] = assessment.objects.filter(className_id = self.kwargs['pk'])
-                # context['firstEntry'] = context['subjects'].select_related('subjectName').annotate(f_CaCount = Count('assessment'))
-        # context['firstEntry'] = context['assessment'].select_related().annotate(f_CaCount =models.Count('subjectName', filter=Q(firstCa__gt=0))).all()
-        # context['firstEntry'] = context['assessment'].select_related().annotate(f_CaCount =models.Count('subjectName', filter=Q(firstCa__gt=0))).all()
-        # User.objects.annotate(page_count=Count('page')).filter(page_count__gte=2).count()
-        context['firstCAEntry'] = context['subjects'].annotate(
+        context['firstCAEntry']= context['subjects'].annotate(
                                  firstCa_Count =Count('assessment', filter=Q(assessment__firstCa__gt=0, assessment__term__isnull=False)),
                                  secondCa_Count =Count('assessment', filter=Q(assessment__secondCa__gt=0)),
                                  exam_Count =Count('assessment', filter=Q(assessment__exam__gt=0)),
                                  student_Count =Count('assessment')
                                  )
-
-        # context['secondCAEntry'] = context['subjects'].annotate(s_CaCount =Count('assessment', filter=Q(assessment__secondCa__gt=0)))
-        # context['examEntry'] = context['subjects'].annotate(examCount =Count('assessment', filter=Q(assessment__exam__gt=0)))
         return context
 
 

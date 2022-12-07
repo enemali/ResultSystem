@@ -13,6 +13,12 @@
        <h3 class="sm:text-2xl text-3xl font-small title-font text-gray-900">
        First Term 2022/2023 Continuous Assessment and Exam Computation
         </h1>
+
+        <h4 class="sm:text-4xl text-3xl font-medium title-font text-gray-900"> {{subject.subjectName}} </h1>
+       <p class="lg:w-2/3 mx-auto leading-relaxed text-base"> {{subject.className}} </p>
+       If ALL students in Class offers your subject use the GREEN CLASS ENTRY button, else use BLUE SINGLE ENTRY button if only few students offers your subject
+        </h4>
+
      </div>
      <div>
       <a href="{% url 'result:entry' singleSubject.id %}"> 

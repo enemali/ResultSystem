@@ -100,12 +100,7 @@ class AssessmentForm(forms.ModelForm):
                     }
 
 entryformset = modelformset_factory(assessment , 
-fields = ['className','student','firstCa','secondCa','exam'],
-widgets= {'firstCa': forms.TextInput(attrs={'class':'form-control'}),
-          'secondCa': forms.TextInput(attrs={'class':'form-control'}),
-            'exam': forms.TextInput(attrs={'class':'form-control'}),
-            # 'student': forms.Select(attrs={'disabled':True}),
-          },extra=0)
+fields = ['className','student','firstCa','secondCa','exam'],extra=0)
  # disable  dropdown for student, subjectName and className
 class entryformsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
@@ -137,11 +132,6 @@ class ClassArmTeacherForm(forms.ModelForm):
     class Meta:
         model = classArmTeacher
         fields = ['className', 'classArm', 'classTeacher']
-
-# class subjectForm(forms.ModelForm):
-#     class Meta:
-#         model = allsubject
-#         fields = ['subjectName', 'className']
 
 class subjectListForm(forms.ModelForm):
     class Meta:

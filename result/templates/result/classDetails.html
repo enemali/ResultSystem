@@ -67,12 +67,14 @@
                   <td class="px-4 border-2 border-green-300">{{ subject.exam_Count }} </td>
               {% endif %}
               <td class="px-4 border-2 border-green-300"> {{ subject.subjectTeacher }} </td>
-              <td class="px-0 border-2 border-green-300 "> 
+              <td class="px-0 border-2 border-green-300 ">
+                {% if subject.subjectTeacher == request.user %}
                 <a href="{% url 'result:subjectDetails' subject.id %}"> 
                   <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Start Entry
                   </button>
-                </a> 
+                </a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}

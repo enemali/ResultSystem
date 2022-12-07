@@ -24,6 +24,14 @@
           </tr>
         </thead>
         <tbody>
+          {% for subject in sectionSubjects %}
+           {{forloop.counter}}
+          {% endfor %}
+          {% for subject in sectionSubjects %}
+           {{subject.className}}
+          {% endfor %}
+
+
            {% for class in all_class %}
           <tr>
             <td class="hover:bg-green-300 px-4 border-2 border-blue-300">
