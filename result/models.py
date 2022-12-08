@@ -126,6 +126,9 @@ class assessment(models.Model):
     term = models.CharField(max_length=100 , choices=term_choices)
     session = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
+    absentfirstCa = models.BooleanField(default=False)
+    absentsecondCa = models.BooleanField(default=False)
+    absentexam = models.BooleanField(default=False)
     def __str__(self):
         return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.subjectName)
     class Meta:

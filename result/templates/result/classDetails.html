@@ -42,7 +42,7 @@
               {% else %}
               <td class="px-4 border-2 border-green-300 bg-purple-300"> {{ subject.student_Count}} </td>
               {% endif %}
-          
+          <!--- first CA count  --> 
               {% if subject.firstCa_Count > 0 and subject.firstCa_Count < students.count %}
                   <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.firstCa_Count }} </td>
               {% elif subject.firstCa_Count == 0 %}
@@ -50,7 +50,7 @@
               {% else %}
                   <td class="px-4 border-2 border-green-300">{{ subject.firstCa_Count }} </td>
               {% endif %}
-
+          <!--- second CA count  -->
               {% if subject.secondCa_Count > 0 and subject.secondCa_Count < students.count %}
                   <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.secondCa_Count }} </td>
               {% elif subject.secondCa_Count == 0 %}
@@ -58,7 +58,7 @@
               {% else %}
                   <td class="px-4 border-2 border-green-300">{{ subject.secondCa_Count }} </td>
               {% endif %}
-
+          <!--- exam count  -->
               {% if subject.exam_Count > 0 and subject.exam_Count < students.count %}
                   <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.exam_Count }} </td>
               {% elif subject.exam_Count == 0 %}
@@ -66,6 +66,7 @@
               {% else %}
                   <td class="px-4 border-2 border-green-300">{{ subject.exam_Count }} </td>
               {% endif %}
+            
               <td class="px-4 border-2 border-green-300"> {{ subject.subjectTeacher }} </td>
               <td class="px-0 border-2 border-green-300 ">
                 {% if subject.subjectTeacher == request.user %}

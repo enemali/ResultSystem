@@ -100,8 +100,10 @@ class AssessmentForm(forms.ModelForm):
                     }
 
 entryformset = modelformset_factory(assessment , 
-fields = ['className','student','firstCa','secondCa','exam'],extra=0)
- # disable  dropdown for student, subjectName and className
+fields = ['className','student','firstCa','secondCa','exam','absentfirstCa','absentsecondCa','absentexam'],
+ extra=0,
+labels = {'absentfirstCa': '1st-CA Absent', 'absentsecondCa': '2nd-CA Absent', 'absentexam': 'Exam Absent' })
+
 class entryformsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super(entryformsetHelper, self).__init__(*args, **kwargs)
@@ -113,6 +115,9 @@ class entryformsetHelper(FormHelper):
             'firstCa',
             'secondCa',
             'exam',
+            'absentfirstCa',
+            'absentsecondCa',
+            'absentexam',
         )
         
         self.template = 'bootstrap/table_inline_formset.html'

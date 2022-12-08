@@ -94,9 +94,23 @@
            <tr>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.className }} </td>
-             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.firstCa }} </td>
-             <td class="px-4 py-3 border-2 border-yellow-300">{{ StudentAssessment.secondCa }}  </td>
-             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
+             {% if StudentAssessment.absentfirstCa %}
+              <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
+              {% else %}
+                <td class="px-4 py-3 border-2 border-yellow-300 "> {{ StudentAssessment.firstCa }} </td>
+              {% endif %}
+
+              {% if StudentAssessment.absentsecondCa %}
+              <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
+              {% else %}
+                <td class="px-4 py-3 border-2 border-yellow-300">{{ StudentAssessment.secondCa }}  </td>
+              {% endif %}
+
+              {% if StudentAssessment.absentexam %}
+              <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
+              {% else %}
+                <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
+              {% endif %}
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300">
                <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
