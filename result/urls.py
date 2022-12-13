@@ -32,5 +32,8 @@ urlpatterns = [
     path('EditSubject/<int:pk>/', EditSubject.as_view(), name='EditSubject'),
     path('print/', print.as_view(), name='print'),
     path('entry/<int:pk>/', views.entry, name='entry'),
-    path('searchStudents/', searchStudent.as_view(), name='searchStudents')
+    path('searchStudents/', searchStudent.as_view(), name='searchStudents'),
+    path('addComment/<int:pk>/', addComment.as_view(), name='addComment'),
+    path('deleteComment/<int:pk>/', deleteComment.as_view(), name='deleteComment'),
+    path('editComment/<int:pk>/', editComment.as_view(), name='editComment'),
 ]

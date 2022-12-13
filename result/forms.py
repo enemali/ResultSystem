@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
-from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm,classArmTeacher,subjectList
+from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm,classArmTeacher,subjectList,comment
 from .widgets import DatePickerInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -142,3 +142,29 @@ class subjectListForm(forms.ModelForm):
     class Meta:
         model = subjectList
         fields = ['subjectName', 'subjectSection']
+
+
+class commentForm(forms.ModelForm):
+    class Meta:
+        model = comment
+        fields = '__all__'
+        widgets = {
+            'firstCacomment': forms.Textarea(attrs={'rows': 3, 'cols': 40 , 'placeholder': 'Enter First CA Comment'}),
+            'secondCacomment': forms.Textarea(attrs={'rows': 3, 'cols': 40 , 'placeholder': 'Enter Second CA Comment'}),
+            'examcomment': forms.Textarea(attrs={'rows': 3, 'cols': 40 , 'placeholder': 'Enter Exam Comment'}),
+        }
+    
+
+commentformset = modelformset_factory(comment , fields= '__all__' , extra=0)
+class commentformsetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(commentformsetHelper, self).__init__(*args, **kwargs)
+        self.form_tag = False
+        self.disable_csrf = True
+        self.layout = Layout(
+            'firstCacomment',
+            'secondCacomment',
+            'examcomment',
+        )
+        
+        self.template = 'bootstrap/table_inline_formset.html'

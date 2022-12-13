@@ -21,15 +21,18 @@
           <tr>
             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tl rounded-bl">Classes</th>
             <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Class Teacher</th>
+            <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Add Comment</th>
           </tr>
         </thead>
         <tbody>
+{% comment %}           
           {% for subject in sectionSubjects %}
            {{forloop.counter}}
           {% endfor %}
+          <br>
           {% for subject in sectionSubjects %}
-           {{subject.className}}
-          {% endfor %}
+           {{subject.className__className}}
+          {% endfor %} {% endcomment %}
 
 
            {% for class in all_class %}
@@ -37,16 +40,24 @@
             <td class="hover:bg-green-300 px-4 border-2 border-blue-300">
               <a href="{% url 'result:classDetails' class.id %}"> 
                {{ class.className }} {{ class.classArm }}
-               
                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
              </a>
            </td>
             <td class="px-4 border-2 border-blue-300"> {{ class.classTeacher }} </td>
+            {%if class.classTeacher == user.username  or request.user.is_staff%}
+            <td class="px-4 border-2 border-blue-300">
+             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <a href="{% url 'result:addComment' class.id %}">
+               Add Comment
+             </a>
+            </button>
+            </td>
+            {% else %}
+            <td class="px-4 border-2 border-blue-300"> </td>
+            {% endif %}
           </tr>
-          {% empty %}
-            <h1 class="text-gray-900">No Results</h1>
-            {% endfor %}
+          {% endfor %}
         </tbody>
       </table>
     </div>

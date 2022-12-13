@@ -177,9 +177,6 @@ class classDetails(DetailView):
                                  )
         return context
 
-
-
-
 class subjectDetails(CreateView):
     model = assessment
     template_name = 'result/subjectDetails.html'
@@ -209,16 +206,10 @@ class subjectDetails(CreateView):
     
     def post(self, request,pk, *args, **kwargs):
         Form = SubjectstudentForm(request.POST)
-        # assessmentForm = AssessmentForm(request.POST)
+
         if Form.is_valid():
             Form.save()
             return redirect('result:subjectDetails', pk=pk)
-        # if assessmentForm.is_valid():
-        #     instance = assessmentForm.save(commit=False)
-        #     for assessmentForm in instance:
-        #         assessmentForm.save()
-
-            # return redirect('result:subjectDetails', pk=pk)
         else:
             print(Form.errors)
             return redirect('result:subjectDetails', pk=pk)
@@ -242,14 +233,7 @@ class studentDelete(DeleteView):
     template_name = 'result/Delete.html'
     def get_success_url(self):
         return reverse_lazy('result:registerStudent')
-        
-# class studentList(ListView):
-#     def post(self, request):
-#         student = None
-#         childname = request.POST.get('fullname','')
-#         student = students.objects.create(fullname=childname)
-#         return render(request, 'result/studentList.html', {'student': student})
-    
+           
 def uploadimage(request):
     if request.method == 'POST' and request.FILES['document']:
         uploaded_file = request.FILES['document']
@@ -299,7 +283,6 @@ class studentList(ListView):
     template_name = 'result/studentList.html'
 
     def get(self, request, *args, **kwargs):
-        # student = students.objects.filter(className=all_class.id)
         student = students.objects.all()
 
         studentFilters = studentFilter(request.GET, queryset=student)
@@ -416,7 +399,6 @@ def entry(request, pk):
         form.fields['firstCa'].widget.attrs['class'] = 'form-control'
         form.fields['secondCa'].widget.attrs['class'] = 'form-control'
         form.fields['exam'].widget.attrs['class'] = 'form-control'
-        # form.fields['student'].queryset = students.objects.filter(className=1)
     singleSubject = allsubject.objects.get(id=pk)
     assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
         # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
@@ -444,3 +426,36 @@ class searchStudent(TemplateView):
         context = super(searchStudent, self).get_context_data(**kwargs)
         context["allStudents"] = students.objects.all()
         return context
+
+class addComment(CreateView):
+    model = comment
+    template_name = 'result/addComment.html'
+
+    def get (self, request, pk ,*args, **kwargs):
+        form = commentForm()
+        form.fields['className'].queryset = classArmTeacher.objects.filter(pk = pk )
+        assessments = assessment.objects.all().filter(className = pk )
+        students_in_assessment = students.objects.filter(id__in=assessments.values('student_id'))
+        comments = comment.objects.all().filter(className = pk )
+        form.fields['student'].queryset = students_in_assessment.exclude(id__in=comments.values('student_id'))
+        return render(request, self.template_name, {'form': form , 'assessment': assessments, 'comments': comments})
+    
+    def post(self, request, pk , *args, **kwargs):
+        form = commentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('result:addComment', pk = pk )
+        return render(request, self.template_name, {'form': form})
+
+class deleteComment(DeleteView):
+    model = comment
+    template_name = 'result/Delete.html'
+    def get_success_url(self):
+        return reverse_lazy('result:addComment', kwargs={'pk': self.object.className.id})
+
+class editComment(UpdateView):
+    model = comment
+    template_name = 'result/addComment.html'
+    form_class = commentForm
+    def get_success_url(self):
+        return reverse_lazy('result:addComment', kwargs={'pk': self.object.className.id})
