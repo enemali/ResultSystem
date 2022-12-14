@@ -143,7 +143,7 @@ class comment(models.Model):
     firstCacomment = models.CharField(max_length=1000, blank=True, null=True)
     secondCacomment = models.CharField(max_length=1000, blank=True, null=True)
     examcomment = models.CharField(max_length=1000, blank=True, null=True)
-    Aesthetic_Appreciation = models.CharField(max_length=1000, blank=True)
+    Aesthetic_Appreciation = models.CharField(max_length=5, blank=True)
     Attendance_in_Class = models.CharField(max_length=1000, blank=True)
     Creativity = models.CharField(max_length=1000, blank=True)
     Honesty = models.CharField(max_length=1000, blank=True)
