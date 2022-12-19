@@ -36,4 +36,5 @@ urlpatterns = [
     path('addComment/<int:pk>/', addComment.as_view(), name='addComment'),
     path('deleteComment/<int:pk>/', deleteComment.as_view(), name='deleteComment'),
     path('editComment/<int:pk>/', editComment.as_view(), name='editComment'),
+    path('examResult/<int:pk>/', examResult.as_view(), name='examResult'),
 ]

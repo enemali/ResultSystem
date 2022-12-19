@@ -459,3 +459,11 @@ class editComment(UpdateView):
     form_class = commentForm
     def get_success_url(self):
         return reverse_lazy('result:addComment', kwargs={'pk': self.object.className.id})
+
+class examResult(TemplateView):
+    template_name = 'result/examResult.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(examResult, self).get_context_data(**kwargs)
+        context["allResult"] = assessment.objects.all().filter(className = self.kwargs['pk'])
+        return context
