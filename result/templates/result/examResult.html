@@ -2,6 +2,7 @@
 xmlns:x="urn:schemas-microsoft-com:office:excel"
 xmlns="http://www.w3.org/TR/REC-html40">
 
+{% for assessment in assessmentResult %}
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
 <meta name=ProgId content=Excel.Sheet>
@@ -3866,7 +3867,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  </tr>
  <tr height=25 style='height:18.75pt'>
   <td height=25 class=xl10310370 style='height:18.75pt'>Names:</td>
-  <td colspan=5 class=xl10410370>NameABC1</td>
+  <td colspan=5 class=xl10410370>{{ assessment.student }}
   <td colspan=4 class=xl10410370>NameABC2</td>
   <td colspan=2 class=xl10410370>NameABC3</td>
  </tr>
@@ -4288,26 +4289,6 @@ xmlns="http://www.w3.org/TR/REC-html40">
 
 </body>
 
+{% endfor %}
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

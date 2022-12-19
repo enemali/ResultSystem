@@ -465,5 +465,5 @@ class examResult(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(examResult, self).get_context_data(**kwargs)
-        context["allResult"] = assessment.objects.all().filter(className = self.kwargs['pk'])
+        context["assessmentResult"] = assessment.objects.all().filter(className = self.kwargs['pk']).select_related('student')
         return context
