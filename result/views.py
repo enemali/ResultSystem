@@ -23,8 +23,7 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import AuthenticationForm
 from .filters import studentFilter
 from .models import User
-from django.db.models import Count, Sum, Avg, Max, Min , F, Q 
-
+from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField
 
 
 
@@ -465,5 +464,33 @@ class examResult(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(examResult, self).get_context_data(**kwargs)
-        context["assessmentResult"] = assessment.objects.all().filter(className = self.kwargs['pk']).select_related('student')
+        # context["allStudents"] = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
+        # context["assessmentSum"] = students.objects.filter(id__in=Subquery(assessment.objects.filter(className=self.kwargs['pk']).values('student_id').annotate(ca_total=Sum(F('firstCa') + F('secondCa'), output_field=FloatField()))))
+        # student_names = students.objects.filter(pk=OuterRef('student')).values('first_name', 'last_name', 'middle_name')
+        # context["assessmentResult"] = assessment.objects.filter(className=self.kwargs['pk']).values('student__first_name', 'student__last_name', 'student__middle_name', 'subjectName__subjectName', 'firstCa', 'secondCa', 'exam')
+        student_ids = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
+        context["all_students"] = student_ids.annotate(ca_total=Sum(F('assessment__firstCa') + F('assessment__secondCa'), output_field=FloatField()))
+        context["all_assessments"] = assessment.objects.filter(student_id__in=student_ids)
+        
+        
+        context["assessmentResult"] = assessment.objects.filter(className=self.kwargs['pk']).values(
+            'student__first_name', 
+            'student__last_name', 
+            'student__middle_name', 
+            'className__className__className',
+            'className__classArm__armName',
+            'subjectName__subjectName__subjectName', 
+            'firstCa', 
+            'secondCa', 
+            'exam',
+            'absentfirstCa',
+            'absentsecondCa',
+            'absentexam',
+            'section',
+            'term',
+            'session',
+                ).annotate(count = Count('student')).annotate(total = Sum('firstCa') + Sum('secondCa') + Sum('exam'))
+
+        # rewrite the above query to get first_name , last_name and other_name from related student table
+        
         return context

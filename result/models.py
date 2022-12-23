@@ -96,7 +96,7 @@ class allsubject(models.Model):
     subjectName = models.ForeignKey(subjectList, on_delete=models.CASCADE, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
-        return self.subjectName
+        return str(self.subjectName)
     
     class Meta:
         ordering = ['className']
