@@ -23,7 +23,10 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import AuthenticationForm
 from .filters import studentFilter
 from .models import User
-from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField
+from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Window, ExpressionWrapper, Value, IntegerField
+# import Round from math 
+from django.db.models.functions import Round
+
 
 
 
@@ -333,6 +336,25 @@ class CreateClassArm(CreateView):
         context['classArms'] = classArmTeacher.objects.all()
         return context
 
+class editClassArm(UpdateView):
+    model = classArmTeacher
+    form_class = ClassArmTeacherForm
+    template_name = 'result/CreateClassArm.html'
+    success_url = reverse_lazy('result:CreateClassArm')
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(editClassArm, self).get_context_data(**kwargs)
+    #     context['classArms'] = classArmTeacher.objects.all()
+    #     return context
+
+
+
+
+
+
+
+
+
 class EditSubject(UpdateView):
     model = allsubject
     fields = "__all__"
@@ -457,6 +479,7 @@ class editComment(UpdateView):
     model = comment
     template_name = 'result/addComment.html'
     form_class = commentForm
+    
     def get_success_url(self):
         return reverse_lazy('result:addComment', kwargs={'pk': self.object.className.id})
 
@@ -465,33 +488,24 @@ class examResult(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(examResult, self).get_context_data(**kwargs)
-        # context["allStudents"] = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
-        # context["assessmentSum"] = students.objects.filter(id__in=Subquery(assessment.objects.filter(className=self.kwargs['pk']).values('student_id').annotate(ca_total=Sum(F('firstCa') + F('secondCa'), output_field=FloatField()))))
-        # student_names = students.objects.filter(pk=OuterRef('student')).values('first_name', 'last_name', 'middle_name')
-        # context["assessmentResult"] = assessment.objects.filter(className=self.kwargs['pk']).values('student__first_name', 'student__last_name', 'student__middle_name', 'subjectName__subjectName', 'firstCa', 'secondCa', 'exam')
         student_ids = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
-        context["all_students"] = student_ids.annotate(ca_total=Sum(F('assessment__firstCa') + F('assessment__secondCa'), output_field=FloatField()))
-        context["all_assessments"] = assessment.objects.filter(student_id__in=student_ids)
         
-        
-        context["assessmentResult"] = assessment.objects.filter(className=self.kwargs['pk']).values(
-            'student__first_name', 
-            'student__last_name', 
-            'student__middle_name', 
-            'className__className__className',
-            'className__classArm__armName',
-            'subjectName__subjectName__subjectName', 
-            'firstCa', 
-            'secondCa', 
-            'exam',
-            'absentfirstCa',
-            'absentsecondCa',
-            'absentexam',
-            'section',
-            'term',
-            'session',
-                ).annotate(count = Count('student')).annotate(total = Sum('firstCa') + Sum('secondCa') + Sum('exam'))
+        context['highestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
+        context['lowestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
+        context['subjectAverage'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
+        context['subjectPosition2'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(position = Count('assessment__id'))
 
-        # rewrite the above query to get first_name , last_name and other_name from related student table
-        
+        context["all_students"] = student_ids.annotate(
+                examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
+                examaverage=Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2),
+                assessmentCount=Count('assessment__id'),
+                examObtainable=Count('assessment__id') * 100,
+            )
+        context["highestAverage"] = context["all_students"].order_by('-examaverage')[:1]
+        context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
+        context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
+        context["subjectPosition"] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(position = Count('assessment__id'))
+        context['comments'] = comment.objects.filter(className=self.kwargs['pk'])
         return context
+
+

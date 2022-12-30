@@ -73,6 +73,16 @@
                                                 <td class="py-4 px-6">
                                                     {{ classArm.numberOfStudents }}
                                                 </td>
+                                                <td class="py-4 px-6">
+                                                    <div class="flex item-center justify-center">
+                                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                                            <a href="{% url 'result:editClassArm' classArm.id %}" class="text-blue-500 hover:text-blue-600">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
                                                 <td class="py-4 px-6 text-right">
                                                     <div class="flex item-center justify-end">
                                                         <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">

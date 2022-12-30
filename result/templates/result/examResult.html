@@ -3807,161 +3807,194 @@ xmlns="http://www.w3.org/TR/REC-html40">
 </head>
 <body>
 
-	<h1> {{all_students.count}} </h1>
-	{% for student in all_students %}
-
-    {{ student.ca_total }}
-	{% for assessment in all_assessments %}
-    {{ assessment.firstCA }} {{ assessment.secondCA }}
-{% endfor %}
-{% endfor %}
 
 
-	{% comment %} <h1> {{assessmentSum}} </h1> {% endcomment %}
-	<h1> {{all_assessments.count}} </h1>
-
-	{{all_assessments}}
+{% comment %} {% for score in subjectPosition %}
+	<h1>{{score.last_name}}  {{score.subjectName}} {{score.position}} </h1>
+	{% for y in score.assessment_set.all %}
+		ccc {{y.subjectName}} {{y.examTotal}} {{y.position}} <br>
+	{% endfor %}
+{% endfor %} {% endcomment %}
 
 
 
-{% for student in allStudents %}
+{% for student in all_students %}
+	<div id="examResult_10370" align=center x:publishsource="Excel">
+	<table border=0 cellpadding=0 cellspacing=0 width=1013 class=xl6410370
+	style='border-collapse:collapse;table-layout:fixed;width:760pt'>
+	<col class=xl6410370 width=194 style='mso-width-source:userset;mso-width-alt:
+	7094;width:146pt'>
+	<col class=xl6410370 width=63 style='mso-width-source:userset;mso-width-alt:
+	2304;width:47pt'>
+	<col class=xl6410370 width=71 style='mso-width-source:userset;mso-width-alt:
+	2596;width:53pt'>
+	<col class=xl6410370 width=72 style='mso-width-source:userset;mso-width-alt:
+	2633;width:54pt'>
+	<col class=xl6410370 width=60 style='mso-width-source:userset;mso-width-alt:
+	2194;width:45pt'>
+	<col class=xl6410370 width=86 style='mso-width-source:userset;mso-width-alt:
+	3145;width:65pt'>
+	<col class=xl6410370 width=61 style='mso-width-source:userset;mso-width-alt:
+	2230;width:46pt'>
+	<col class=xl6410370 width=75 style='mso-width-source:userset;mso-width-alt:
+	2742;width:56pt'>
+	<col class=xl6410370 width=71 style='mso-width-source:userset;mso-width-alt:
+	2596;width:53pt'>
+	<col class=xl6410370 width=89 style='mso-width-source:userset;mso-width-alt:
+	3254;width:67pt'>
+	<col class=xl6410370 width=79 style='mso-width-source:userset;mso-width-alt:
+	2889;width:59pt'>
+	<col class=xl6410370 width=92 style='mso-width-source:userset;mso-width-alt:
+	3364;width:69pt'>
 
-<div id="examResult_10370" align=center x:publishsource="Excel">
-<table border=0 cellpadding=0 cellspacing=0 width=1013 class=xl6410370
- style='border-collapse:collapse;table-layout:fixed;width:760pt'>
- <col class=xl6410370 width=194 style='mso-width-source:userset;mso-width-alt:
- 7094;width:146pt'>
- <col class=xl6410370 width=63 style='mso-width-source:userset;mso-width-alt:
- 2304;width:47pt'>
- <col class=xl6410370 width=71 style='mso-width-source:userset;mso-width-alt:
- 2596;width:53pt'>
- <col class=xl6410370 width=72 style='mso-width-source:userset;mso-width-alt:
- 2633;width:54pt'>
- <col class=xl6410370 width=60 style='mso-width-source:userset;mso-width-alt:
- 2194;width:45pt'>
- <col class=xl6410370 width=86 style='mso-width-source:userset;mso-width-alt:
- 3145;width:65pt'>
- <col class=xl6410370 width=61 style='mso-width-source:userset;mso-width-alt:
- 2230;width:46pt'>
- <col class=xl6410370 width=75 style='mso-width-source:userset;mso-width-alt:
- 2742;width:56pt'>
- <col class=xl6410370 width=71 style='mso-width-source:userset;mso-width-alt:
- 2596;width:53pt'>
- <col class=xl6410370 width=89 style='mso-width-source:userset;mso-width-alt:
- 3254;width:67pt'>
- <col class=xl6410370 width=79 style='mso-width-source:userset;mso-width-alt:
- 2889;width:59pt'>
- <col class=xl6410370 width=92 style='mso-width-source:userset;mso-width-alt:
- 3364;width:69pt'>
+	<tr height=40 style='height:30.0pt'>
+	<td colspan=12 height=40 class=xl20510370 width=1013 style='height:30.0pt;
+	width:760pt'><a name="RANGE!A1:L58">HASIYANDA INTERNATIONAL SCHOOL</a></td>
+	</tr>
+	<tr height=30 style='mso-height-source:userset;height:22.5pt'>
+	<td colspan=12 height=30 class=xl9910370 style='height:22.5pt'>(Tomorrow Leaders)</td>
+	</tr>
+	<tr height=25 style='height:18.75pt'>
+	<td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>TINSHAMA BY EASTERN BYEPASS, HOTORO, KANO.</td>
+	</tr>
+	<tr height=25 style='height:18.75pt'>
+	<td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>ACADEMIC PROGRESS REPORT</td>
+	</tr>
+	<tr height=21 style='mso-height-source:userset;height:15.75pt'>
+	<td height=21 class=xl10110370 style='height:15.75pt'>Session:</td>
+	<td class=xl10110370 colspan=2>2021/2022</td>
+	<td class=xl10210370></td>
+	<td class=xl10210370></td>
+	<td class=xl6410370></td>
+	<td class=xl6410370></td>
+	<td class=xl6410370></td>
+	<td class=xl6410370></td>
+	<td class=xl6410370></td>
+	<td class=xl10210370>Term:</td>
+	<td class=xl10110370>3rd Term</td>
+	</tr>
+	<tr height=25 style='height:18.75pt'>
+	<td height=25 class=xl10310370 style='height:18.75pt'>Names:</td>
+	<td colspan=5 class=xl10410370>{{student.last_name}} </td>
+	<td colspan=4 class=xl10410370>{{student.first_name}}</td>
+	<td colspan=2 class=xl10410370>{{student.middle_name}}</td>
+	</tr>
+	<tr height=25 style='height:18.75pt'>
+	<td height=25 class=xl6410370 style='height:18.75pt'></td>
+	<td colspan=5 class=xl10510370>SURNAME</td>
+	<td colspan=4 class=xl10510370>FIRST NAME</td>
+	<td colspan=2 class=xl10510370>OTHER NAME</td>
+	</tr>
+	<tr height=25 style='height:18.75pt'>
+	<td height=25 class=xl10210370 style='height:18.75pt'>Class:</td>
+	<td colspan=4 class=xl10610370>{{student.assessment_set.all.0.className}}</td>
+	<td class=xl6410370></td>
+	<td colspan=3 class=xl10710370>Admission Number:</td>
+	<td class=xl10810370>&nbsp;</td>
+	<td class=xl6410370></td>
+	<td class=xl6410370></td>
+	</tr>
+	<tr height=25 style='height:18.75pt'>
+	<td height=25 class=xl6410370 style='height:18.75pt'>Number in Class:</td>
+	<td colspan=4 class=xl10910370>{{all_students.count}}</td>
+	<td class=xl11010370></td>
+	<td colspan=3 class=xl10710370>House:</td>
+	<td class=xl10810370>&nbsp;</td>
+	<td class=xl6410370></td>
+	<td class=xl6410370></td>
+	</tr>
+	<tr height=10 style='mso-height-source:userset;height:7.5pt'>
+	<td colspan=12 height=10 class=xl10010370 style='height:7.5pt'></td>
+	</tr>
+	<tr height=26 style='height:19.5pt'>
+	<td colspan=12 height=26 class=xl9810370 style='height:19.5pt'>ACADEMIC
+	PROGRESS REPORT ({{all_students.section}})</td>
+	</tr>
+	<tr height=27 style='height:20.25pt'>
+	<td colspan=2 rowspan=2 height=79 class=xl11110370 style='border-right:1.5pt solid #C00000;
+	border-bottom:1.5pt solid #C00000;height:59.25pt'>SUBJECTS:</td>
+	<td class=xl11210370 width=71 style='border-top:none;border-left:none;
+	width:53pt'>1st C.A</td>
+	<td class=xl11310370 width=72 style='border-top:none;border-left:none;
+	width:54pt'>2nd C.A</td>
+	<td class=xl11410370 style='border-top:none;border-left:none'>EXAM</td>
+	<td class=xl11510370 style='border-top:none'>TOTAL</td>
+	<td rowspan=2 class=xl11610370 style='border-bottom:1.5pt solid #C00000;
+	border-top:none'>Grade</td>
+	<td rowspan=2 class=xl11610370 style='border-bottom:1.5pt solid #C00000;
+	border-top:none'>Position</td>
+	<td colspan=3 class=xl6510370 style='border-right:1.5pt solid #C00000;
+	border-left:none'>CLASS</td>
+	<td rowspan=2 class=xl11810370 style='border-bottom:1.5pt solid #C00000;
+	border-top:none'>Remark</td>
+	</tr>
+	<tr height=52 style='height:39.0pt'>
+	<td height=52 class=xl12110370 style='height:39.0pt;border-top:none;
+	border-left:none'>20%</td>
+	<td class=xl12210370 style='border-top:none;border-left:none'>20%</td>
+	<td class=xl12310370 style='border-top:none;border-left:none'>60%</td>
+	<td class=xl12410370 style='border-top:none'>100%</td>
+	<td class=xl12610370 width=71 style='border-left:none;width:53pt'>Highest
+	Mark</td>
+	<td class=xl12710370 width=89 style='border-left:none;width:67pt'>Lowest Mark</td>
+	<td class=xl12810370 width=79 style='border-top:none;border-left:none;
+	width:59pt'>Average</td>
+	</tr>
 
- <tr height=40 style='height:30.0pt'>
-  <td colspan=12 height=40 class=xl20510370 width=1013 style='height:30.0pt;
-  width:760pt'><a name="RANGE!A1:L58">HASIYANDA INTERNATIONAL SCHOOL</a></td>
- </tr>
- <tr height=30 style='mso-height-source:userset;height:22.5pt'>
-  <td colspan=12 height=30 class=xl9910370 style='height:22.5pt'>(Tomorrow Leaders)</td>
- </tr>
- <tr height=25 style='height:18.75pt'>
-  <td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>TINSHAMA BY EASTERN BYEPASS, HOTORO, KANO.</td>
- </tr>
- <tr height=25 style='height:18.75pt'>
-  <td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>ACADEMIC PROGRESS REPORT</td>
- </tr>
- <tr height=21 style='mso-height-source:userset;height:15.75pt'>
-  <td height=21 class=xl10110370 style='height:15.75pt'>Session:</td>
-  <td class=xl10110370 colspan=2>2021/2022</td>
-  <td class=xl10210370></td>
-  <td class=xl10210370></td>
-  <td class=xl6410370></td>
-  <td class=xl6410370></td>
-  <td class=xl6410370></td>
-  <td class=xl6410370></td>
-  <td class=xl6410370></td>
-  <td class=xl10210370>Term:</td>
-  <td class=xl10110370>3rd Term</td>
- </tr>
- <tr height=25 style='height:18.75pt'>
-  <td height=25 class=xl10310370 style='height:18.75pt'>Names:</td>
-  <td colspan=5 class=xl10410370>{{student.last_name}} </td>
-  <td colspan=4 class=xl10410370>{{student.first_name}}</td>
-  <td colspan=2 class=xl10410370>{{student.middle_name}}</td>
- </tr>
- <tr height=25 style='height:18.75pt'>
-  <td height=25 class=xl6410370 style='height:18.75pt'></td>
-  <td colspan=5 class=xl10510370>SURNAME</td>
-  <td colspan=4 class=xl10510370>FIRST NAME</td>
-  <td colspan=2 class=xl10510370>OTHER NAME</td>
- </tr>
- <tr height=25 style='height:18.75pt'>
-  <td height=25 class=xl10210370 style='height:18.75pt'>Class:</td>
-  <td colspan=4 class=xl10610370>{{studentAssesmnet.className}}</td>
-  <td class=xl6410370></td>
-  <td colspan=3 class=xl10710370>Admission Number:</td>
-  <td class=xl10810370>&nbsp;</td>
-  <td class=xl6410370></td>
-  <td class=xl6410370></td>
- </tr>
- <tr height=25 style='height:18.75pt'>
-  <td height=25 class=xl6410370 style='height:18.75pt'>Number in Class:</td>
-  <td colspan=4 class=xl10910370>{{allStudents.count}}</td>
-  <td class=xl11010370></td>
-  <td colspan=3 class=xl10710370>House:</td>
-  <td class=xl10810370>&nbsp;</td>
-  <td class=xl6410370></td>
-  <td class=xl6410370></td>
- </tr>
- <tr height=10 style='mso-height-source:userset;height:7.5pt'>
-  <td colspan=12 height=10 class=xl10010370 style='height:7.5pt'></td>
- </tr>
- <tr height=26 style='height:19.5pt'>
-  <td colspan=12 height=26 class=xl9810370 style='height:19.5pt'>ACADEMIC
-  PROGRESS REPORT ({{studentAssesmnet.section}})</td>
- </tr>
- <tr height=27 style='height:20.25pt'>
-  <td colspan=2 rowspan=2 height=79 class=xl11110370 style='border-right:1.5pt solid #C00000;
-  border-bottom:1.5pt solid #C00000;height:59.25pt'>SUBJECTS:</td>
-  <td class=xl11210370 width=71 style='border-top:none;border-left:none;
-  width:53pt'>1st C.A</td>
-  <td class=xl11310370 width=72 style='border-top:none;border-left:none;
-  width:54pt'>2nd C.A</td>
-  <td class=xl11410370 style='border-top:none;border-left:none'>EXAM</td>
-  <td class=xl11510370 style='border-top:none'>TOTAL</td>
-  <td rowspan=2 class=xl11610370 style='border-bottom:1.5pt solid #C00000;
-  border-top:none'>Grade</td>
-  <td rowspan=2 class=xl11610370 style='border-bottom:1.5pt solid #C00000;
-  border-top:none'>Position</td>
-  <td colspan=3 class=xl6510370 style='border-right:1.5pt solid #C00000;
-  border-left:none'>CLASS</td>
-  <td rowspan=2 class=xl11810370 style='border-bottom:1.5pt solid #C00000;
-  border-top:none'>Remark</td>
- </tr>
- <tr height=52 style='height:39.0pt'>
-  <td height=52 class=xl12110370 style='height:39.0pt;border-top:none;
-  border-left:none'>20%</td>
-  <td class=xl12210370 style='border-top:none;border-left:none'>20%</td>
-  <td class=xl12310370 style='border-top:none;border-left:none'>60%</td>
-  <td class=xl12410370 style='border-top:none'>100%</td>
-  <td class=xl12610370 width=71 style='border-left:none;width:53pt'>Highest
-  Mark</td>
-  <td class=xl12710370 width=89 style='border-left:none;width:67pt'>Lowest Mark</td>
-  <td class=xl12810370 width=79 style='border-top:none;border-left:none;
-  width:59pt'>Average</td>
- </tr>
-
- {% for studentAssesmnet in student.assessment_set.all %}
- <tr height=26 style='height:19.5pt'>
-  <td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{studentAssesmnet.subjectName}}</td>
-  <td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssesmnet.firstCa }}</td>
-  <td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssesmnet.secondCa}}</td>
-  <td class=xl13210370 style='border-left:none'>{{studentAssesmnet.exam}}</td>
-  <td class=xl13310370 style='border-left:none'> {{studentAssesmnet.total}}</td>
-  <td class=xl13310370 style='border-top:none;border-left:none'>abc5</td>
-  <td class=xl13310370 style='border-top:none;border-left:none'>abc6</td>
-  <td class=xl13410370 style='border-left:none'>abc7</td>
-  <td class=xl13510370 style='border-left:none'>abc8</td>
-  <td class=xl13610370 style='border-left:none'>abc9</td>
-  <td class=xl13710370 style='border-top:none'>abc0</td>
- </tr>
+	{% for studentAssessment in student.assessment_set.all %}
+	<tr height=26 style='height:19.5pt'>
+	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{studentAssessment.subjectName}}</td>
+	<td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssessment.firstCa }}</td>
+	<td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssessment.secondCa}}</td>
+	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
+	<td class=xl13310370 style='border-left:none'> {{ studentAssessment.examTotal }}</td>
+	<td class=xl13310370 style='border-top:none;border-left:none'>
+	
+	{% with score=studentAssessment.examTotal %}
+		{% if score >= 80 %} A
+		{% elif score >= 60 %} B
+		{% elif score >= 50 %} G
+		{% elif score >= 40 %} P
+		{% else %} W
+		{% endif %}
+	{% endwith %}
+	</td>
+	<td class=xl13310370 style='border-top:none;border-left:none'>
+	---
+	</td>
+	<td class=xl13410370 style='border-left:none'>
+		{% for score in highestexamTotal %}
+			{% if score.id == studentAssessment.subjectName_id %}
+				{{score.highest}}
+			{% endif %}
+		{% endfor %}
+	</td>
+	<td class=xl13510370 style='border-left:none'>
+		{% for score in lowestexamTotal %}
+			{% if score.id == studentAssessment.subjectName_id %}
+				{{score.lowest}}
+			{% endif %}
+		{% endfor %}
+</td>
+	<td class=xl13610370 style='border-left:none'>
+		
+		{% for score in subjectAverage %}
+			{% if score.id == studentAssessment.subjectName_id %}
+				{{score.average}}
+			{% endif %}
+		{% endfor %}
+	</td>
+	<td class=xl13710370 style='border-top:none'>
+		{% with score=studentAssessment.examTotal %}
+		{% if score >= 80 %}Excellent
+		{% elif score >= 60 %}Very Good
+		{% elif score >= 50 %}Good
+		{% elif score >= 40 %}Pass
+		{% else %}Weak
+	{% endif %}
+	{% endwith %}
+	</td>
+	</tr>
  {% endfor %}
  
 
@@ -3970,9 +4003,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
  </tr>
  <tr height=33 style='mso-height-source:userset;height:24.95pt'>
   <td colspan=2 height=33 class=xl15910370 style='border-right:.5pt solid black;
-  height:24.95pt'>Total Marks Obtained:</td>
+  height:24.95pt'>Total Marks Obtained({{student.assessmentCount}} subjects</td>
   <td colspan=2 class=xl16110370 style='border-right:.5pt solid black;
-  border-left:none'>1546</td>
+  border-left:none'>{{student.examtotal}}</td>
   <td class=xl20810370>&nbsp;</td>
   <td colspan=3 class=xl20910370 width=222 style='border-right:1.5pt solid #C00000;
   width:167pt'>AFFECTIVE ASSESSMENT</td>
@@ -3984,20 +4017,20 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=33 class=xl15910370 style='border-right:.5pt solid black;
   height:24.95pt'>Out of:</td>
   <td colspan=2 class=xl16110370 style='border-right:.5pt solid black;
-  border-left:none'>1700</td>
+  border-left:none'>{{student.examObtainable}}</td>
   <td class=xl9910370></td>
   <td class=xl6510370>BEHAVIOUR</td>
   <td class=xl6610370>&nbsp;</td>
   <td class=xl6710370>RATE</td>
   <td class=xl6410370></td>
   <td colspan=3 class=xl8910370 width=260 style='border-right:.5pt solid black;
-  width:195pt'>PreNursery GRADES</td>
+  width:195pt'>GRADES</td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Average:</td>
   <td colspan=2 class=xl16310370 style='border-right:.5pt solid black;
-  border-left:none'>90.94</td>
+  border-left:none'>{{student.examaverage}}</td>
   <td class=xl16510370 width=60 style='width:45pt'></td>
   <td class=xl8710370 colspan=2 style='border-right:1.5pt solid #C00000'>Punctuality</td>
   <td class=xl6810370>A</td>
@@ -4037,7 +4070,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Highest Average:</td>
   <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>99.59</td>
+  border-left:none'>{{highestAverage.0.examaverage }}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Respect</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
@@ -4051,7 +4084,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Average:</td>
   <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>80.91</td>
+  border-left:none'>{{classAverage.classAvg}}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Honesty</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
@@ -4065,7 +4098,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Lowest Average:</td>
   <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>34.41</td>
+  border-left:none'>{{ lowestAverage.0.examaverage }}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Self
   Control</td>
@@ -4079,7 +4112,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Cummlative Average</td>
   <td colspan=2 class=xl17310370 style='border-right:.5pt solid black;
-  border-left:none'>1634.3125</td>
+  border-left:none'>.</td>
   <td class=xl17510370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Responsibility</td>
   <td class=xl7210370 style='border-top:none'>B</td>
@@ -4104,7 +4137,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl17610370 colspan=2 style='height:20.1pt'>Number of Days
   School Opened:</td>
-  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>0</td>
+  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>. </td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Leadership</td>
   <td class=xl7210370 style='border-top:none'>C</td>
@@ -4116,7 +4149,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl17610370 colspan=2 style='height:20.1pt'>Number of
   Day(s) Present:</td>
-  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>102</td>
+  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'> .</td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Self
   Confidence</td>
@@ -4129,7 +4162,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl17610370 colspan=2 style='height:20.1pt'>Number of
   Day(s) Absent:</td>
-  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>-102</td>
+  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>-</td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Perseverance</td>
   <td class=xl7210370 style='border-top:none'>B</td>
@@ -4154,7 +4187,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl17610370 style='height:20.1pt'>School Opened:</td>
   <td class=xl17710370>&nbsp;</td>
-  <td colspan=2 class=xl18010370 style='border-right:.5pt solid black'>10-January-2022</td>
+  <td colspan=2 class=xl18010370 style='border-right:.5pt solid black'> -</td>
   <td class=xl6410370></td>
   <td colspan=3 class=xl9510370 width=222 style='border-right:1.5pt solid #C00000;
   width:167pt'>PSYCHOMOTOR ASSESSMENT</td>
@@ -4167,7 +4200,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td height=26 class=xl17610370 style='height:20.1pt;border-top:none'>School
   Closed:</td>
   <td class=xl17710370 style='border-top:none'>&nbsp;</td>
-  <td colspan=2 class=xl18010370 style='border-right:.5pt solid black'>01-April-2022</td>
+  <td colspan=2 class=xl18010370 style='border-right:.5pt solid black'> -</td>
   <td class=xl6410370></td>
   <td colspan=3 class=xl19910370 style='border-right:1.5pt solid #C00000'>(Manual
   and Physical Skills)</td>
@@ -4180,7 +4213,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td height=26 class=xl17610370 style='height:20.1pt;border-top:none'>Next
   Term Begins:</td>
   <td class=xl17710370 style='border-top:none'>&nbsp;</td>
-  <td colspan=2 class=xl18010370 style='border-right:.5pt solid black'>02-April-2022</td>
+  <td colspan=2 class=xl18010370 style='border-right:.5pt solid black'> </td>
   <td class=xl6410370></td>
   <td colspan=2 class=xl20610370 style='border-right:1.5pt solid #C00000'>ACTIVITIES</td>
   <td class=xl8610370>RATE</td>
@@ -4234,7 +4267,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td rowspan=2 height=52 class=xl20110370 width=194 style='height:40.2pt;
   width:146pt'>Class Teacher's Comments:</td>
   <td colspan=11 rowspan=2 class=xl18310370 width=819 style='border-right:.5pt solid black;
-  width:614pt'>she is making progress academically.</td>
+  width:614pt'>--</td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
  </tr>
@@ -4242,7 +4275,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td rowspan=2 height=52 class=xl20310370 width=194 style='border-bottom:.5pt solid black;
   height:40.2pt;width:146pt'>Head Teacher's Comment:</td>
   <td colspan=11 rowspan=2 class=xl18910370 width=819 style='border-right:.5pt solid black;
-  border-bottom:.5pt solid black;width:614pt'>Highly remarkable, keep it up.</td>
+  border-bottom:.5pt solid black;width:614pt'> -- </td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
  </tr>

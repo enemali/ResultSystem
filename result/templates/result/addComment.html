@@ -23,7 +23,14 @@
                     Save Comment
                   </button>
                 {% csrf_token %}
-                {{ form}}
+                
+                {% for field in form %}
+                <div class="flex items-center mb-2">
+                  {{ field.label_tag }}
+                  {{ field }}
+                </div>
+              {% endfor %}
+              
             </form>
         </div>
 </div>

@@ -36,6 +36,7 @@ term_choices = (
                     ('3rd-Term', '3rd-Term'),
                    )
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
+comment_choise = ( ('A', 'A') , ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'))
 
 class setting(models.Model):
     announcement = models.CharField(max_length=100,null=True)
@@ -129,6 +130,20 @@ class assessment(models.Model):
     absentfirstCa = models.BooleanField(default=False)
     absentsecondCa = models.BooleanField(default=False)
     absentexam = models.BooleanField(default=False)
+    
+    @property
+    def caTotal(self):
+        return self.firstCa + self.secondCa
+
+    @property
+    def examTotal(self):
+        return self.firstCa + self.secondCa + self.exam
+
+    @property
+    def examTotalRank (self):
+        rank = assessment.objects.filter(examTotal__gt=self.examTotal, className=self.className, term=self.term, session=self.session).count() + 1
+        return rank
+
     def __str__(self):
         return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.subjectName)
     class Meta:
@@ -138,32 +153,32 @@ class comment(models.Model):
     className = models.ForeignKey(classArmTeacher, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(students, on_delete=models.CASCADE, null=True)
     term = models.CharField(max_length=100 , choices=term_choices)
-    session = models.CharField(max_length=1000)
+    session = models.CharField(max_length=1000,default='2022/2023')
     date = models.DateTimeField(auto_now_add=True)
     firstCacomment = models.CharField(max_length=1000, blank=True, null=True)
     secondCacomment = models.CharField(max_length=1000, blank=True, null=True)
     examcomment = models.CharField(max_length=1000, blank=True, null=True)
-    Aesthetic_Appreciation = models.CharField(max_length=5, blank=True)
-    Attendance_in_Class = models.CharField(max_length=1000, blank=True)
-    Creativity = models.CharField(max_length=1000, blank=True)
-    Honesty = models.CharField(max_length=1000, blank=True)
-    Leadership_Role = models.CharField(max_length=1000, blank=True)
-    Neatness = models.CharField(max_length=1000, blank=True)
-    Obedience = models.CharField(max_length=1000, blank=True)
-    Politeness = models.CharField(max_length=1000, blank=True)
-    Punctuality = models.CharField(max_length=1000, blank=True)
-    Self_Control = models.CharField(max_length=1000, blank=True)
-    Sense_of_Responsibility = models.CharField(max_length=1000, blank=True)
-    Sociability = models.CharField(max_length=1000, blank=True)
-    Games = models.CharField(max_length=1000, blank=True)
-    Sports = models.CharField(max_length=1000, blank=True)
-    Handling_of_Tools = models.CharField(max_length=1000, blank=True)
-    Handwriting = models.CharField(max_length=1000, blank=True)
-    Fluency = models.CharField(max_length=1000, blank=True)
-    Painting_and_Drawing = models.CharField(max_length=1000, blank=True)
-    Musical_Skills = models.CharField(max_length=1000, blank=True)
-    Crafts = models.CharField(max_length=1000, blank=True)
-    Number_of_Times_Present = models.CharField(max_length=1000, blank=True)
+    Aesthetic_Appreciation = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Attendance_in_Class =models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Creativity = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Honesty = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Leadership_Role = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Neatness = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Obedience = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Politeness = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Punctuality = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Self_Control = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Sense_of_Responsibility = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Sociability = models.CharField(max_length=100 , choices=comment_choise, blank=True)
+    Games = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Sports = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Handling_of_Tools = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Handwriting = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Fluency = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Painting_and_Drawing =  models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Musical_Skills = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Crafts = models.CharField(max_length=1000, choices=comment_choise, blank=True)
+    Number_of_Times_Present = models.IntegerField(default=0)
     def __str__(self):
         return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.comment)
     class Meta:
