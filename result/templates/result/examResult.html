@@ -3817,9 +3817,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
 {% endfor %} {% endcomment %}
 
 
-{% for x in allScores %}
+{% comment %} {% for x in allScores %}
 	{{x.subjectName}} {{x.examtotal}} {{x.student}} {{x.position}} <br>
-{% endfor %}
+{% endfor %} {% endcomment %}
 {% comment %} {% for student in all_students %}
 	<h1>{{student.first_name}} </h1>
 	<h3>{{student.comments}} </h3>
@@ -3979,7 +3979,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% endwith %}
 	</td>
 	<td class=xl13310370 style='border-top:none;border-left:none'>
-		{{studentAssessment.ranking}}
+		{% for score in allScores %}
+			{% if score.subjectName_id == studentAssessment.subjectName_id and score.student_id == student.id %}
+				{{score.position}}
+			{% endif %}
+		{% endfor %}
 	</td>
 	<td class=xl13410370 style='border-left:none'>
 		{% for score in highestexamTotal %}
@@ -4052,7 +4056,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   border-left:none'>{{student.examaverage}}</td>
   <td class=xl16510370 width=60 style='width:45pt'></td>
   <td class=xl8710370 colspan=2 style='border-right:1.5pt solid #C00000'>Punctuality</td>
-  <td class=xl6810370>A</td>
+  <td class=xl6810370>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Punctuality}} 
+  {% endfor %}
+   </td>
   <td class=xl6410370></td>
   <td class=xl8910370 width=89 style='border-top:none;width:67pt'>REMARK</td>
   <td class=xl6910370 width=79 style='border-top:none;width:59pt'>MARKS</td>
@@ -4065,7 +4073,12 @@ xmlns="http://www.w3.org/TR/REC-html40">
   border-left:none;width:107pt'>A</td>
   <td class=xl7310370 width=60 style='width:45pt'></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Attendance</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Attendance_in_Class}} 
+ 	 {% endfor %}
+   </td>
+</td>
   <td class=xl7310370 width=71 style='width:53pt'></td>
   <td class=xl7410370 style='border-top:none'>Excellent</td>
   <td class=xl7510370 style='border-left:none'>80 - 100</td>
@@ -4079,7 +4092,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7610370 width=60 style='width:45pt'></td>
   <td class=xl7010370 style='border-top:none'>Neatness</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
-  <td class=xl7210370 style='border-top:none'>C</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Neatness}} 
+ 	 {% endfor %}
+</td>
   <td class=xl7610370 width=71 style='width:53pt'></td>
   <td class=xl7710370 style='border-top:none'>Very Good</td>
   <td class=xl7810370 style='border-top:none;border-left:none'>60 - 79</td>
@@ -4093,7 +4110,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Respect</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Obedience}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl7710370 style='border-top:none'>Good</td>
   <td class=xl7810370 style='border-top:none;border-left:none'>50 - 64</td>
@@ -4107,7 +4128,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Honesty</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Honesty}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl7710370 style='border-top:none'>Pass</td>
   <td class=xl7810370 style='border-top:none;border-left:none'>40 - 49</td>
@@ -4121,7 +4146,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl17210370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Self
   Control</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Self_Control}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl7710370 style='border-top:none'>Weak</td>
   <td class=xl7810370 style='border-top:none;border-left:none'>00 - 39</td>
@@ -4134,7 +4163,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   border-left:none'>.</td>
   <td class=xl17510370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Responsibility</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Sense_of_Responsibility}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl6410370></td>
   <td class=xl6410370></td>
@@ -4146,9 +4179,13 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl6410370></td>
   <td class=xl6410370></td>
   <td class=xl6410370></td>
-  <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Relationship
-  with <span style='display:none'>Others</span></td>
-  <td class=xl7210370 style='border-top:none'>A</td>
+  <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Relating
+  with others</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Sociability}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td colspan=3 class=xl9110370 style='border-right:.5pt solid black'>KEY TO
   RATINGS:</td>
@@ -4159,7 +4196,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>. </td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Leadership</td>
-  <td class=xl7210370 style='border-top:none'>C</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Leadership_Role}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl7910370 colspan=2 style='border-right:1.5pt solid #C00000'>5 -
   Excellent</td>
@@ -4168,11 +4209,19 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td height=26 class=xl17610370 colspan=2 style='height:20.1pt'>Number of
   Day(s) Present:</td>
-  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'> .</td>
+  <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'> 
+	{%for comment in student.comment_set.all %}
+		{{ comment.Number_of_Times_Present}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Self
   Confidence</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Fluency}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl8110370 colspan=2 style='border-right:1.5pt solid #C00000'>4 -
   Very Good</td>
@@ -4184,7 +4233,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>-</td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Perseverance</td>
-  <td class=xl7210370 style='border-top:none'>B</td>
+  <td class=xl7210370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Self_Control}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl8110370 style='border-top:none'>3 - Good</td>
   <td class=xl8210370 style='border-top:none'>&nbsp;</td>
@@ -4197,7 +4250,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl6410370></td>
   <td class=xl6410370></td>
   <td colspan=2 class=xl9310370 style='border-right:1.5pt solid #C00000'>Creativity</td>
-  <td class=xl8310370 style='border-top:none'>C</td>
+  <td class=xl8310370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Creativity}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl8110370 style='border-top:none'>2 - Poor</td>
   <td class=xl8210370 style='border-top:none'>&nbsp;</td>
@@ -4249,7 +4306,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl6410370></td>
   <td class=xl8710370 style='border-top:none'>Sport</td>
   <td class=xl8810370 style='border-top:none'>&nbsp;</td>
-  <td class=xl6810370>C</td>
+  <td class=xl6810370>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Sports}} 
+ 	 {% endfor %}
+</td>
   <td class=xl6410370></td>
   <td class=xl6410370></td>
   <td class=xl6410370></td>
@@ -4262,7 +4323,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl22710370>&nbsp;</td>
   <td class=xl10810370>&nbsp;</td>
   <td colspan=2 class=xl22810370 style='border-right:1.5pt solid #C00000'>Fluency</td>
-  <td class=xl23010370 style='border-top:none'>B</td>
+  <td class=xl23010370 style='border-top:none'>
+	{%for comment in student.comment_set.all %}
+		{{ comment.Fluency}} 
+ 	 {% endfor %}
+</td>
   <td class=xl10810370>&nbsp;</td>
   <td class=xl10810370>&nbsp;</td>
   <td class=xl10810370>&nbsp;</td>
@@ -4286,7 +4351,12 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td rowspan=2 height=52 class=xl20110370 width=194 style='height:40.2pt;
   width:146pt'>Class Teacher's Comments:</td>
   <td colspan=11 rowspan=2 class=xl18310370 width=819 style='border-right:.5pt solid black;
-  width:614pt'> {{student.comments}} </td>
+  width:614pt'> 
+  {%for comment in student.comment_set.all %}
+		{{ comment.examcomment }} 
+  {% endfor %}
+
+</td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
  </tr>

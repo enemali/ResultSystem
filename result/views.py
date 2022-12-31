@@ -493,23 +493,25 @@ class examResult(TemplateView):
         context['highestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
         context['lowestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
         context['subjectAverage'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
-        context['subjectPosition2'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(position = Count('assessment__id'))
+
+        context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
+            examtotal= F('firstCa') + F('secondCa') + F('exam'),
+            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc())
+            )
 
         context["all_students"] = student_ids.annotate(
                 examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
                 examaverage=Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2),
                 assessmentCount=Count('assessment__id'),
                 examObtainable=Count('assessment__id') * 100,
-                comments = Coalesce(Subquery(comment.objects.filter(student_id=OuterRef('id')).values('examcomment')[:1]), Value('')),
-                subjectPosition = Subquery(allsubject.objects.filter(className=self.kwargs['pk']).annotate(position = Count('assessment__id')).filter(assessment__student_id=OuterRef('id')).values('position')[:1]),
+                position = context['allScores'].filter(student_id=OuterRef('id')).values('position')
             )
+
         context["highestAverage"] = context["all_students"].order_by('-examaverage')[:1]
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
-        context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
-            examtotal= F('firstCa') + F('secondCa') + F('exam'),
-            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc()))
-        context['allSubjects'] = allsubject.objects.filter(className=self.kwargs['pk'])
+        
+        context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id'))
         return context
 
 
