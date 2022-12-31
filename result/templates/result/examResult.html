@@ -3817,6 +3817,25 @@ xmlns="http://www.w3.org/TR/REC-html40">
 {% endfor %} {% endcomment %}
 
 
+{% for x in allScores %}
+	{{x.subjectName}} {{x.examtotal}} {{x.student}} {{x.position}} <br>
+{% endfor %}
+{% comment %} {% for student in all_students %}
+	<h1>{{student.first_name}} </h1>
+	<h3>{{student.comments}} </h3>
+	<h3>{{student.position}} </h>
+	<h3>rank {{student.subjectPosition}} </h> <br>
+
+	{% for x in student.assessment_set.all %}
+		subject:- {{x.subjectName}}<br>
+		Total:- {{x.examtotal}}<br>
+		Rank:-{{x.subjectRank}}<br>
+		comment:-{{x.subjectPosition}}<br>
+	{% endfor %}
+{% endfor %} {% endcomment %}
+
+
+
 
 {% for student in all_students %}
 	<div id="examResult_10370" align=center x:publishsource="Excel">
@@ -3960,7 +3979,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% endwith %}
 	</td>
 	<td class=xl13310370 style='border-top:none;border-left:none'>
-	---
+		{{studentAssessment.ranking}}
 	</td>
 	<td class=xl13410370 style='border-left:none'>
 		{% for score in highestexamTotal %}
@@ -4267,7 +4286,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td rowspan=2 height=52 class=xl20110370 width=194 style='height:40.2pt;
   width:146pt'>Class Teacher's Comments:</td>
   <td colspan=11 rowspan=2 class=xl18310370 width=819 style='border-right:.5pt solid black;
-  width:614pt'>--</td>
+  width:614pt'> {{student.comments}} </td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
  </tr>

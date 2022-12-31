@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from multiselectfield import MultiSelectField
+from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Window, ExpressionWrapper, Value, IntegerField
+
 
 # from users.models import User
 User = get_user_model()
@@ -139,10 +141,19 @@ class assessment(models.Model):
     def examTotal(self):
         return self.firstCa + self.secondCa + self.exam
 
-    @property
-    def examTotalRank (self):
-        rank = assessment.objects.filter(examTotal__gt=self.examTotal, className=self.className, term=self.term, session=self.session).count() + 1
-        return rank
+    # @property
+    # def ranking(self):
+    #     total  = self.firstCa + self.secondCa + self.exam
+    #     count = assessment.objects.filter(
+    #         className=self.className, 
+    #         subjectName=self.subjectName, 
+    #         section=self.section, 
+    #         term=self.term, 
+    #         session=self.session
+    #     ).filter(examTotal__gt=total
+    #     ).count()
+    #     return count + 1
+
 
     def __str__(self):
         return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.subjectName)
@@ -155,8 +166,8 @@ class comment(models.Model):
     term = models.CharField(max_length=100 , choices=term_choices)
     session = models.CharField(max_length=1000,default='2022/2023')
     date = models.DateTimeField(auto_now_add=True)
-    firstCacomment = models.CharField(max_length=1000, blank=True, null=True)
-    secondCacomment = models.CharField(max_length=1000, blank=True, null=True)
+    # firstCacomment = models.CharField(max_length=1000, blank=True, null=True)
+    # secondCacomment = models.CharField(max_length=1000, blank=True, null=True)
     examcomment = models.CharField(max_length=1000, blank=True, null=True)
     Aesthetic_Appreciation = models.CharField(max_length=100 , choices=comment_choise, blank=True)
     Attendance_in_Class =models.CharField(max_length=100 , choices=comment_choise, blank=True)

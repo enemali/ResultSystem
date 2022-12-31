@@ -77,6 +77,18 @@
                 </a>
                 {% endif %}
               </td>
+
+              {%if class.classTeacher == request.user  or request.user.is_staff%}
+              <td class="px-4 border-2 border-blue-300">
+               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{% url 'result:examResult' subject.id %}">
+                 View Result
+               </a>
+              {% else %}
+              <td class="px-4 border-2 border-blue-300"> </td>
+              {% endif %}
+
+
             </tr>
             {% endfor %}
           </tbody>

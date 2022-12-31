@@ -23,9 +23,9 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import AuthenticationForm
 from .filters import studentFilter
 from .models import User
-from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Window, ExpressionWrapper, Value, IntegerField
+from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Value,Window, ExpressionWrapper, IntegerField
 # import Round from math 
-from django.db.models.functions import Round
+from django.db.models.functions import Round,Coalesce,Rank
 
 
 
@@ -500,12 +500,16 @@ class examResult(TemplateView):
                 examaverage=Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2),
                 assessmentCount=Count('assessment__id'),
                 examObtainable=Count('assessment__id') * 100,
+                comments = Coalesce(Subquery(comment.objects.filter(student_id=OuterRef('id')).values('examcomment')[:1]), Value('')),
+                subjectPosition = Subquery(allsubject.objects.filter(className=self.kwargs['pk']).annotate(position = Count('assessment__id')).filter(assessment__student_id=OuterRef('id')).values('position')[:1]),
             )
         context["highestAverage"] = context["all_students"].order_by('-examaverage')[:1]
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
-        context["subjectPosition"] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(position = Count('assessment__id'))
-        context['comments'] = comment.objects.filter(className=self.kwargs['pk'])
+        context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
+            examtotal= F('firstCa') + F('secondCa') + F('exam'),
+            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc()))
+        context['allSubjects'] = allsubject.objects.filter(className=self.kwargs['pk'])
         return context
 
 

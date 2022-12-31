@@ -25,12 +25,17 @@
                 {% csrf_token %}
                 
                 {% for field in form %}
+                {% if field != field.firstCacomment %}
                 <div class="flex items-center mb-2">
                   {{ field.label_tag }}
                   {{ field }}
                 </div>
+                {% endif %}
               {% endfor %}
               
+              <button type="submit" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Save Comment
+              </button>
             </form>
         </div>
 </div>
