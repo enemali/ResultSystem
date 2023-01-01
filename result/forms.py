@@ -48,7 +48,8 @@ class loginForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = students
-        fields = [ 'last_name','first_name', 'middle_name', 'className', 'classArm']
+        fields = "__all__"
+        
         labels = {  'last_name': 'Surname Name', 
                      'first_name': 'First Name',  
                     'middle_name': 'Other Name'}
