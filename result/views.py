@@ -149,7 +149,7 @@ class classList(ListView):
         if self.request.user.is_staff:
             context['all_class'] = classArmTeacher.objects.annotate(commentCount = Count('comment__id'))
         else:
-            context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section)
+            context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(commentCount = Count('comment__id'))
             # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
 
