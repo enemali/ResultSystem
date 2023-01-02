@@ -77,13 +77,9 @@ class ImageForm(forms.ModelForm):
 class settingForm(forms.ModelForm):
     class Meta:
         model = setting
-        fields = ['announcement',
-                    'announcement_date',
-                    'news'
-                    ]
-        widgets = {
-            'announcement_date' : DatePickerInput(),
-        }
+        fields = '__all__'
+        # fields = ['announcement','announcement_date','news']
+        widgets = {'announcement_date' : DatePickerInput()}
         
 class SubjectstudentForm(forms.ModelForm):
     class Meta:
@@ -123,7 +119,6 @@ class entryformsetHelper(FormHelper):
         
         self.template = 'bootstrap/table_inline_formset.html'
 
-
 class subjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
@@ -144,7 +139,6 @@ class subjectListForm(forms.ModelForm):
         model = subjectList
         fields = ['subjectName', 'subjectSection']
 
-
 class commentForm(forms.ModelForm):
     class Meta:
         model = comment
@@ -155,7 +149,6 @@ class commentForm(forms.ModelForm):
             'examcomment': forms.Textarea(attrs={'rows': 3, 'cols': 40 , 'placeholder': 'Enter Exam Comment'}),
         }
     
-
 commentformset = modelformset_factory(comment , fields= '__all__' , extra=0)
 class commentformsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):

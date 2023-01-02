@@ -44,6 +44,12 @@ class setting(models.Model):
     announcement = models.CharField(max_length=100,null=True)
     announcement_date = models.DateField(auto_now_add=False,null=True)
     news = models.CharField(max_length=100,null=True)
+    current_Term = models.CharField(max_length=100,choices=term_choices,null=True)
+    current_Session = models.CharField(max_length=100,null=True)
+    date_Term_Begin = models.DateField(auto_now_add=False,null=True)
+    date_Term_End = models.DateField(auto_now_add=False,null=True)
+    number_of_days_school_open = models.IntegerField(null=True)
+    next_term_begins = models.DateField(auto_now_add=False,null=True)
  
 class Images(models.Model):
     image = models.ImageField(null=True,blank=True)

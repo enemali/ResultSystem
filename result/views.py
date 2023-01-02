@@ -28,9 +28,6 @@ from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterR
 from django.db.models.functions import Round,Coalesce,Rank
 
 
-
-
-
 # class index(TemplateView):
 #     queryset = setting.objects.first()
 #     template_name = 'result/index.html'
@@ -105,6 +102,7 @@ class settings(LoginRequiredMixin, TemplateView):
         context['sectionForm'] = sectionForm()
         context['imageForm'] = ImageForm()
         context['settingForm'] = settingForm()
+        
         context['allclass'] = all_class.objects.all()
         context['classArm'] = classArm.objects.all()
         context['sections'] = section.objects.all()
@@ -114,7 +112,6 @@ class settings(LoginRequiredMixin, TemplateView):
         return context
      
     def post(self, request, *args, **kwargs):
-
         classForm = allClassForm(request.POST)
         armForm = classArmForm(request.POST)
         SectionForm = sectionForm(request.POST)
@@ -150,10 +147,10 @@ class classList(ListView):
         context = super(classList, self).get_context_data(**kwargs)
         context['user'] = self.request.user
         if self.request.user.is_staff:
-            context['all_class'] = classArmTeacher.objects.all()
+            context['all_class'] = classArmTeacher.objects.annotate(commentCount = Count('comment__id'))
         else:
             context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section)
-            context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
+            # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
 
 class classDetails(DetailView):
@@ -341,19 +338,6 @@ class editClassArm(UpdateView):
     form_class = ClassArmTeacherForm
     template_name = 'result/CreateClassArm.html'
     success_url = reverse_lazy('result:CreateClassArm')
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(editClassArm, self).get_context_data(**kwargs)
-    #     context['classArms'] = classArmTeacher.objects.all()
-    #     return context
-
-
-
-
-
-
-
-
 
 class EditSubject(UpdateView):
     model = allsubject
