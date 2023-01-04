@@ -39,6 +39,23 @@ class RegistrationForm(forms.ModelForm):
         help_texts = { k:"" for k in fields }
         field_classes = {'username': UsernameField}
 
+class UserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ("username", 
+                  "first_name", 
+                  "last_name", 
+                  "email", 
+                  "is_staff",
+                  'section',
+                  )
+        exclude = ('password',)
+        help_texts = { k:"" for k in fields }
+        # cahnge labe for is_staff
+        labels = { 'is_staff': 'Is Admin' }
+        field_classes = {'username': UsernameField}
+
+
 class loginForm(forms.ModelForm):
     class Meta:
         model = User
@@ -77,9 +94,10 @@ class ImageForm(forms.ModelForm):
 class settingForm(forms.ModelForm):
     class Meta:
         model = setting
-        fields = '__all__'
+
+        fields = 'current_Term','current_Session','date_Term_Begin','date_Term_End','number_of_days_school_open','next_term_begins'
         # fields = ['announcement','announcement_date','news']
-        widgets = {'announcement_date' : DatePickerInput()}
+        widgets = {'announcement_date' : DatePickerInput(), 'next_term_begins' : DatePickerInput(), 'date_Term_Begin' : DatePickerInput(), 'date_Term_End' : DatePickerInput()}
         
 class SubjectstudentForm(forms.ModelForm):
     class Meta:

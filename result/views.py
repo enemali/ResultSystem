@@ -101,13 +101,13 @@ class settings(LoginRequiredMixin, TemplateView):
         context['armForm'] = classArmForm()
         context['sectionForm'] = sectionForm()
         context['imageForm'] = ImageForm()
-        context['settingForm'] = settingForm()
+        # context['settingForm'] = settingForm()
         
         context['allclass'] = all_class.objects.all()
         context['classArm'] = classArm.objects.all()
         context['sections'] = section.objects.all()
         context['img'] = Images.objects.all()
-        context['setting'] = setting.objects.all()
+        context['settingtype'] = 'classsetting'
         context['studentCount'] = students.objects.all().count()
         return context
      
@@ -116,7 +116,7 @@ class settings(LoginRequiredMixin, TemplateView):
         armForm = classArmForm(request.POST)
         SectionForm = sectionForm(request.POST)
         imageForm = ImageForm(request.POST, request.FILES)
-        AllsettingForm = settingForm(request.POST)
+        # AllsettingForm = settingForm(request.POST)
 
         if classForm.is_valid():
             classForm.save()
@@ -129,14 +129,14 @@ class settings(LoginRequiredMixin, TemplateView):
             return redirect('result:settings')
         if imageForm.is_valid():
             imageForm.save()
-        if AllsettingForm.is_valid():
-            AllsettingForm.save()
-            return redirect('result:settings')
+        # if AllsettingForm.is_valid():
+        #     AllsettingForm.save()
+        #     return redirect('result:settings')
 
         return render(request, 'result/settings.html', {'classForm': classForm, 
                                                         'sectionForm': sectionForm, 
                                                         'imageForm': imageForm,
-                                                        'settingForm': AllsettingForm,
+                                                        # 'settingForm': AllsettingForm,
                                                         'armForm': armForm})
                                                         
 class classList(ListView):
@@ -146,10 +146,15 @@ class classList(ListView):
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
         context['user'] = self.request.user
+        context['setting'] = setting.objects.all()
         if self.request.user.is_staff:
-            context['all_class'] = classArmTeacher.objects.annotate(commentCount = Count('comment__id'))
+            context['all_class'] = classArmTeacher.objects.annotate(
+                commentCount = Count('comment__id'),
+                # studentCount = Count('student__id'),
+                )
         else:
             context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(commentCount = Count('comment__id'))
+    
             # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
 
@@ -266,16 +271,16 @@ class EditStudent(UpdateView):
 
 class EditTeacher(UpdateView):
     model = User
-    form_class = RegistrationForm
-    form_class.base_fields.pop('password')
+    form_class = UserChangeForm
     success_url = reverse_lazy('result:settings')
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         id = self.object.id
-        form = RegistrationForm(instance=self.object)
+        form = UserChangeForm(instance=self.object)
         Button = 'Update Teacher'
-        return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button})
+        setting = settings.objects.all()
+        return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button, 'setting': setting})
 
 class studentList(ListView):
     model = students
@@ -498,4 +503,10 @@ class examResult(TemplateView):
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id'))
         return context
 
-
+class editSettings(UpdateView):
+    model = setting
+    template_name = 'result/settings.html'
+    form_class = settingForm
+    
+    def get_success_url(self):
+        return reverse_lazy('result:settings')
