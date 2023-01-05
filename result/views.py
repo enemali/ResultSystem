@@ -151,9 +151,11 @@ class classList(ListView):
         if self.request.user.is_staff:
             context['all_class'] = classArmTeacher.objects.annotate(
                 commentCount = Count('comment__student__id', distinct=True),
-                student_in_assessment = Count('assessment__student__id', distinct=True),)
+                student_in_assessment = Count('assessment__student__id', distinct=True))
         else:
-            context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(commentCount = Count('comment__id'))
+            context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(
+                commentCount = Count('comment__id', distinct=True),
+                student_in_assessment = Count('assessment__student__id', distinct=True))
     
             # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
@@ -489,7 +491,7 @@ class examResult(TemplateView):
         context['highestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
         context['lowestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
         context['subjectAverage'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
-
+        context['setting'] = setting.objects.all()
         context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
             examtotal= F('firstCa') + F('secondCa') + F('exam'),
             position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc())
@@ -507,7 +509,8 @@ class examResult(TemplateView):
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
         
-        context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id'))
+        context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
+            )
         return context
 
 class editSettings(UpdateView):

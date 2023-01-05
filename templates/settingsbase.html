@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap">
-                   {% if settingtype != 'classsetting' %}
+                   {% comment %} {% if settingtype != 'classsetting' %}
                     <form method="post"  class="">
                           {% csrf_token %}
                           {{ form.as_p }}
@@ -157,7 +157,7 @@
                         </button>
                         <input type="hidden" name="form_type" value="sectionform"> 
                     </form>
-                    {% endif %}
+                    {% endif %} {% endcomment %}
             </div>
                     {% block content %}
                     {% endblock content %}
