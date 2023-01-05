@@ -17,7 +17,7 @@
 
 {% if setting.count > 0 %}
        <h4 class="font-bold pl-2"> 
-           SettingID ---- {{setting.0.id}}<br>
+           {% comment %} SettingID ---- {{setting.0.id}}<br> {% endcomment %}
            Current Term-----{{setting.0.current_Term}}<br>
            Current Session-----{{setting.0.current_Session}}<br>
            Date Term Begins-----{{setting.0.date_Term_Begin}}<br>
@@ -69,15 +69,17 @@
                     </svg>
               </a>
               </button>
-              {{ class.className }} {{ class.classArm }} {{class.studentCount}}
+              {{ class.className }} {{ class.classArm }} ( {{class.student_in_assessment}} )
            </td>
 
             <td class="whitespace-nowrap px-2 border-2 border-blue-300"> {{ class.classTeacher }} </td>
             <td class=" whitespace-nowrap border-2 border-blue-300">
 
-              {%if class.commentCount > 0%}
+              {%if class.commentCount == class.student_in_assessment %}
                 <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-green-500 rounded-full">{{class.commentCount}}</span>
-               {%else%}
+               {% elif class.commentCount > 0 %}
+               <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-black-100 bg-yellow-300 rounded-full">{{class.commentCount}}</span>
+                {%else%}
                 <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-500 rounded-full">{{class.commentCount}}</span>
                {%endif%}
 

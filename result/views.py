@@ -147,16 +147,23 @@ class classList(ListView):
         context = super(classList, self).get_context_data(**kwargs)
         context['user'] = self.request.user
         context['setting'] = setting.objects.all()
+        context['settingForm'] = settingForm()
         if self.request.user.is_staff:
             context['all_class'] = classArmTeacher.objects.annotate(
-                commentCount = Count('comment__id'),
-                # studentCount = Count('student__id'),
-                )
+                commentCount = Count('comment__student__id', distinct=True),
+                student_in_assessment = Count('assessment__student__id', distinct=True),)
         else:
             context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(commentCount = Count('comment__id'))
     
             # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
+
+    def post(self, request, *args, **kwargs):
+        TermlysettingForm = settingForm(request.POST)
+        if TermlysettingForm.is_valid():
+            TermlysettingForm.save()
+            return redirect('result:classList')
+        return render(request, 'result/classList.html', {'settingForm': settingForm})
 
 class classDetails(DetailView):
     model = classArmTeacher
@@ -509,4 +516,4 @@ class editSettings(UpdateView):
     form_class = settingForm
     
     def get_success_url(self):
-        return reverse_lazy('result:settings')
+        return reverse_lazy('result:classList')
