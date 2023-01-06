@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-{% comment %} include navbar {% endcomment %}
 {% include 'navbar.html' %}
 
 <!-- ====== Table Section Start -->
@@ -15,94 +14,89 @@
        <h2 class="text-xs text-indigo-500 tracking-widest font-medium title-font mb-1">Welcome {{user.username}} {{user.role}}</h2>
        <p class=" mx-auto leading-relaxed text-base">Click a class Arrow button to view deatails</p>
 
-{% if setting.count > 0 %}
-       <h4 class="font-bold pl-2"> 
-           {% comment %} SettingID ---- {{setting.0.id}}<br> {% endcomment %}
-           Current Term-----{{setting.0.current_Term}}<br>
-           Current Session-----{{setting.0.current_Session}}<br>
-           Date Term Begins-----{{setting.0.date_Term_Begin}}<br>
-           Date Term Ends-----{{setting.0.date_Term_End}}<br>
-           Number of Days School Open-----{{setting.0.number_of_days_school_open}}<br>
-           Next Term Begins-----{{setting.0.next_term_begins}}<br>
-       </h4>
-{% endif %}
+        {% if setting.count > 0 %}
+              <h4 class="font-bold pl-2"> 
+                  Current Term-----{{setting.0.current_Term}}<br>
+                  Current Session-----{{setting.0.current_Session}}<br>
+                  Date Term Begins-----{{setting.0.date_Term_Begin}}<br>
+                  Date Term Ends-----{{setting.0.date_Term_End}}<br>
+                  Number of Days School Open-----{{setting.0.number_of_days_school_open}}<br>
+                  Next Term Begins-----{{setting.0.next_term_begins}}<br>
+                    {% if request.user.is_staff %}
+                      <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
+                        <a href="{% url 'result:editSettings' setting.0.id %}"> Edit Termly Settings </a>
+                      </button>
+                    {% endif %}
+              </h4>
+        {% endif %}
 
+        <div class="w-full mx-auto">
+          <table class="table-auto w-auto text-left whitespace-no-wrap">
+            <thead>
+              <tr>
+                <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tl rounded-bl">Classes</th>
+                <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Class Teacher</th>
+                <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Add Comment</th>
+                <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">View Result</th>
+                <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Last Comment</th>
+                <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Last Score Entry</th>
+              </tr>
+            </thead>
+            <tbody>
+    
+               {% for class in all_class %}
+              <tr>
+                <td class=" whitespace-nowrap  hover:bg-green-300  border-2 border-blue-300">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">
+                  <a href="{% url 'result:classDetails' class.id %}">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                  </a>
+                  </button>
+                  {{ class.className }} {{ class.classArm }} ( {{class.student_in_assessment}} )
+               </td>
+    
+                <td class="whitespace-nowrap px-2 border-2 border-blue-300"> {{ class.classTeacher }} </td>
+                <td class=" whitespace-nowrap border-2 border-blue-300">
+    
+                  {%if class.commentCount == class.student_in_assessment %}
+                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-green-500 rounded-full">{{class.commentCount}}</span>
+                   {% elif class.commentCount > 0 %}
+                   <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-black-100 bg-yellow-300 rounded-full">{{class.commentCount}}</span>
+                    {%else%}
+                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-500 rounded-full">{{class.commentCount}}</span>
+                   {%endif%}
+    
+                {% if class.classTeacher == request.user  or request.user.is_staff %}
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <a href="{% url 'result:addComment' class.id %}">+ Comment </a>
+                  </button>
+                {% endif %}
+                </td>
+    
+                <td class="whitespace-nowrap border-2 border-blue-300">
+                {% if class.classTeacher == request.user or request.user.is_staff %}
+                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <a href="{% url 'result:examResult' class.id %}">View Result</a>
+                  </button>
+                {% endif %}
+                </td>
 
-{% if request.user.is_staff %}
-{% if setting.count < 1 %}
-   <form method="post"  class="">
-         {% csrf_token %}
-         {{ settingForm.as_p }}
-       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
-           type="submit"> Add Termly Settings
-       </button>
-       <input type="hidden" name="form_type" value="sectionform"> 
-   </form>
-{% else %}
-       <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
-         <a href="{% url 'result:editSettings' setting.0.id %}"> Edit Termly Settings </a>
-       </button>
- </form>
-{% endif %}
+                <td class="whitespace-nowrap border-2 border-blue-300">
+                  {{ class.latestCommentdate }}
+                </td>
+                <td class="whitespace-nowrap border-2 border-blue-300">
+                  {{ class.latestAssessmentdate }}
+                </td>
+    
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
 
-{% endif %}
-     </div>
-     <div class="w-full mx-auto">
-      <table class="table-auto w-auto text-left whitespace-no-wrap">
-        <thead>
-          <tr>
-            <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tl rounded-bl">Classes</th>
-            <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Class Teacher</th>
-            <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">Add Comment</th>
-            <th class="px-4 title-font tracking-wider font-medium text-gray-900 text-sm bg-blue-300 rounded-tr rounded-br">View Result</th>
-          </tr>
-        </thead>
-        <tbody>
-
-           {% for class in all_class %}
-          <tr>
-            <td class=" whitespace-nowrap  hover:bg-green-300  border-2 border-blue-300">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">
-              <a href="{% url 'result:classDetails' class.id %}">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-              </a>
-              </button>
-              {{ class.className }} {{ class.classArm }} ( {{class.student_in_assessment}} )
-           </td>
-
-            <td class="whitespace-nowrap px-2 border-2 border-blue-300"> {{ class.classTeacher }} </td>
-            <td class=" whitespace-nowrap border-2 border-blue-300">
-
-              {%if class.commentCount == class.student_in_assessment %}
-                <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-green-500 rounded-full">{{class.commentCount}}</span>
-               {% elif class.commentCount > 0 %}
-               <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-black-100 bg-yellow-300 rounded-full">{{class.commentCount}}</span>
-                {%else%}
-                <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-500 rounded-full">{{class.commentCount}}</span>
-               {%endif%}
-
-            {% if class.classTeacher == request.user  or request.user.is_staff %}
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              <a href="{% url 'result:addComment' class.id %}">+ Comment </a>
-              </button>
-            {% endif %}
-            </td>
-
-            <td class="whitespace-nowrap border-2 border-blue-300">
-            {% if class.classTeacher == request.user or request.user.is_staff %}
-             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              <a href="{% url 'result:examResult' class.id %}">View Result</a>
-              </button>
-            {% endif %}
-            </td>
-
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+      </div>
    </div>
  </section>
  

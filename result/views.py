@@ -149,9 +149,13 @@ class classList(ListView):
         context['setting'] = setting.objects.all()
         context['settingForm'] = settingForm()
         if self.request.user.is_staff:
+            context["btn"] = "Edit Termlly Settings"
             context['all_class'] = classArmTeacher.objects.annotate(
                 commentCount = Count('comment__student__id', distinct=True),
-                student_in_assessment = Count('assessment__student__id', distinct=True))
+                student_in_assessment = Count('assessment__student__id', distinct=True),
+                latestCommentdate = Max('comment__date'),
+                latestAssessmentdate = Max('assessment__date')
+                )
         else:
             context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(
                 commentCount = Count('comment__id', distinct=True),
@@ -515,7 +519,7 @@ class examResult(TemplateView):
 
 class editSettings(UpdateView):
     model = setting
-    template_name = 'result/settings.html'
+    template_name = 'result/editTermsetting.html'
     form_class = settingForm
     
     def get_success_url(self):

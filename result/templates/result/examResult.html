@@ -4231,9 +4231,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td height=26 class=xl17610370 colspan=2 style='height:20.1pt'>Number of
   Day(s) Absent:</td>
   <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>
+	{% if setting %}
 	{%for comment in student.comment_set.all %}
 	{{ comment.daysAbsent }}
 	{% endfor %}
+	{% endif %}
 </td>
   <td class=xl6410370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Perseverance</td>
