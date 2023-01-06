@@ -198,6 +198,13 @@ class comment(models.Model):
     # Musical_Skills = models.CharField(max_length=1000, choices=comment_choise, blank=True)
     # Crafts = models.CharField(max_length=1000, choices=comment_choise, blank=True)
     Number_of_Times_Present = models.IntegerField(default=0)
+    
+    @property
+    def daysAbsent(self):
+        return setting.objects.first().number_of_days_school_open - self.Number_of_Times_Present
+    
+    
+    
     def __str__(self):
         return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.comment)
     class Meta:
