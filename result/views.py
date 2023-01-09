@@ -159,7 +159,10 @@ class classList(ListView):
         else:
             context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(
                 commentCount = Count('comment__id', distinct=True),
-                student_in_assessment = Count('assessment__student__id', distinct=True))
+                student_in_assessment = Count('assessment__student__id', distinct=True),
+                latestCommentdate = Max('comment__date'),
+                latestAssessmentdate = Max('assessment__date')
+            )
     
             # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context

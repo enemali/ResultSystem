@@ -4070,7 +4070,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Grade:</td>
   <td colspan=2 class=xl16610370 width=143 style='border-right:.5pt solid black;
-  border-left:none;width:107pt'>A</td>
+  border-left:none;width:107pt'>
+	{% with score=student.examaverage %}
+		{% if score >= 80 %}A
+		{% elif score >= 60 %}B
+		{% elif score >= 50 %}C
+		{% elif score >= 40 %}D
+		{% else %}E
+	{% endif %}
+	{%endwith%}
+</td>
   <td class=xl7310370 width=60 style='width:45pt'></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Attendance</td>
   <td class=xl7210370 style='border-top:none'>
