@@ -234,6 +234,7 @@ class subjectDetails(CreateView):
         else:
             print(Form.errors)
             return redirect('result:subjectDetails', pk=pk)
+            
      
 class assessmentEntry(UpdateView):
     model = assessment
@@ -501,7 +502,8 @@ class examResult(TemplateView):
         context['setting'] = setting.objects.all()
         context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
             examtotal= F('firstCa') + F('secondCa') + F('exam'),
-            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc())
+            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc()),
+        
             )
 
         context["all_students"] = student_ids.annotate(

@@ -13,6 +13,7 @@ from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelChoiceField
 from crispy_forms.helper import FormHelper, Layout
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class UserCreateForm(UserCreationForm):
     class Meta:
@@ -54,7 +55,6 @@ class UserChangeForm(UserChangeForm):
         # cahnge labe for is_staff
         labels = { 'is_staff': 'Is Admin' }
         field_classes = {'username': UsernameField}
-
 
 class loginForm(forms.ModelForm):
     class Meta:
@@ -108,6 +108,7 @@ class AssessmentForm(forms.ModelForm):
     class Meta:
         model = assessment
         fields = ['className','student','subjectName','firstCa','secondCa','exam']
+        
         # disable  dropdown for student, subjectName and className
         widgets = { 'student': forms.HiddenInput(),
                     'subjectName': forms.HiddenInput(),

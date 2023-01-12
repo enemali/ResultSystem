@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from multiselectfield import MultiSelectField
 from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Window, ExpressionWrapper, Value, IntegerField
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # from users.models import User
 User = get_user_model()
@@ -130,9 +130,9 @@ class assessment(models.Model):
     className = models.ForeignKey(classArmTeacher, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(students, on_delete=models.CASCADE, null=True)
     subjectName = models.ForeignKey(allsubject, on_delete=models.CASCADE, null=True)
-    firstCa = models.IntegerField(default=0)
-    secondCa = models.IntegerField(default=0)
-    exam = models.IntegerField(default=0)
+    firstCa = models.IntegerField(default=0 , validators=[MaxValueValidator(20) , MinValueValidator(0)])
+    secondCa = models.IntegerField(default=0 , validators=[MaxValueValidator(20) , MinValueValidator(0)])
+    exam = models.IntegerField(default=0 , validators=[MaxValueValidator(60) , MinValueValidator(0)])
     section = models.CharField(max_length=100, choices=section_choices)
     term = models.CharField(max_length=100 , choices=term_choices)
     session = models.CharField(max_length=1000)
