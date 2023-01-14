@@ -146,7 +146,7 @@ class subjectForm(forms.ModelForm):
 class SubjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
-        fields = ['subjectName', 'className', 'subjectTeacher']
+        fields = '__all__'
       
 class ClassArmTeacherForm(forms.ModelForm):
     class Meta:

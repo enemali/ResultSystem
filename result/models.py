@@ -103,6 +103,8 @@ class allsubject(models.Model):
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.CASCADE, null=True)
     subjectName = models.ForeignKey(subjectList, on_delete=models.CASCADE, null=True)
+    subSubject = models.BooleanField(default=False)
+    parentSubject = models.CharField(max_length=100, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return str(self.subjectName)
@@ -140,6 +142,7 @@ class assessment(models.Model):
     absentfirstCa = models.BooleanField(default=False)
     absentsecondCa = models.BooleanField(default=False)
     absentexam = models.BooleanField(default=False)
+
     
     @property
     def caTotal(self):

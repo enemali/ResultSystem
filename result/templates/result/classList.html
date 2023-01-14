@@ -46,8 +46,8 @@
             <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300">Class Teacher</th>
             <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300">Add Comment</th>
             <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300">View Result</th>
-            <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300">Last Comment</th>
-            <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300">Last Score Entry</th>
+            <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300 whitespace-nowrap">Last Comment</th>
+            <th class="sticky top-0 border-4 border-blue-300  py-3 text-red-900 bg-red-300 whitespace-nowrap">Last Score Entry</th>
           </tr>
         </thead>
 
@@ -57,7 +57,7 @@
             <td class="border-4 border-blue-100  bg-red-300  text-center sticky left-0 ">
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">
                 <a href="{% url 'result:classDetails' class.id %}">
-                  {{ class.className }} {{ class.classArm }} ( {{class.student_in_assessment}} )
+                  {{ class.className }} {{ class.classArm }}-{{class.student_in_assessment}}
                 </a>
               </button>
               
@@ -85,10 +85,10 @@
               </button>
             {% endif %}
             </td>
-            <td class="border-4 border-blue-300 text-center whitespace-no-wrap ">
+            <td class="border-4 border-blue-300 text-center  ">
               {{ class.latestCommentdate }}
             </td>
-            <td class="border-4 border-blue-300 text-center whitespace-no-wrap ">
+            <td class="border-4 border-blue-300 text-center ">
               {{ class.latestAssessmentdate }}
             </td>
           </tr>

@@ -3906,7 +3906,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 	<tr height=25 style='height:18.75pt'>
 	<td height=25 class=xl10210370 style='height:18.75pt'>Class:</td>
-	<td colspan=4 class=xl10610370>{{student.assessment_set.all.0.className}} {{student.className__all_class__section__sectionName}}</td>
+	<td colspan=4 class=xl10610370>{{student.assessment_set.all.0.className}}</td>
 	<td class=xl6410370></td>
 	<td colspan=3 class=xl10710370>Admission Number:</td>
 	<td class=xl10810370>&nbsp; {{student.admission_number}}</td>
@@ -3927,7 +3927,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 	<tr height=26 style='height:19.5pt'>
 	<td colspan=12 height=26 class=xl9810370 style='height:19.5pt'>ACADEMIC
-	PROGRESS REPORT ({{allScores.section}})</td>
+	PROGRESS REPORT ({{student.studentsection}})</td>
 	</tr>
 	<tr height=27 style='height:20.25pt'>
 	<td colspan=2 rowspan=2 height=79 class=xl11110370 style='border-right:1.5pt solid #C00000;
@@ -3968,13 +3968,28 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
 	<td class=xl13310370 style='border-left:none'> {{ studentAssessment.examTotal }}</td>
 	<td class=xl13310370 style='border-top:none;border-left:none'>
-	
+		{% comment %} student.studentclass {% endcomment %}
+
 	{% with score=studentAssessment.examTotal %}
-		{% if score >= 80 %} A
-		{% elif score >= 60 %} B
-		{% elif score >= 50 %} G
-		{% elif score >= 40 %} P
-		{% else %} W
+	{% if 'College-Senior' in student.studentsection %}
+			{% if score >= 75 %} A1
+			{% elif score >= 70 %} B2
+			{% elif score >= 65 %} B3
+			{% elif score >= 60 %} C4
+			{% elif score >= 55 %} C5
+			{% elif score >= 50 %} C6
+			{% elif score >= 45 %} D7
+			{% elif score >= 40 %} E8
+			{% else %} F9
+			{% endif %}
+		{% else %}
+			{% if score >= 75 %} A
+			{% elif score >= 60 %} B
+			{% elif score >= 50 %} C
+			{% elif score >= 45 %} D
+			{% elif score >= 40 %} D
+			{% else %} F
+		{% endif %}
 		{% endif %}
 	{% endwith %}
 	</td>
@@ -4009,12 +4024,26 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</td>
 	<td class=xl13710370 style='border-top:none'>
 		{% with score=studentAssessment.examTotal %}
-		{% if score >= 80 %}Excellent
-		{% elif score >= 60 %}Very Good
-		{% elif score >= 50 %}Good
-		{% elif score >= 40 %}Pass
-		{% else %}Weak
-	{% endif %}
+		{% if 'College-Senior' in student.studentsection %}
+			{% if score >= 75 %} Excellent
+			{% elif score >= 70 %} Very Good
+			{% elif score >= 65 %} Good
+			{% elif score >= 60 %} Credit
+			{% elif score >= 55 %} Credit
+			{% elif score >= 50 %} Credit
+			{% elif score >= 45 %} Pass
+			{% elif score >= 40 %} Pass
+			{% else %} Fail
+			{% endif %}
+		{% else %}
+			{% if score >= 75 %} Excellent
+			{% elif score >= 60 %} Very Good
+			{% elif score >= 50 %} Good
+			{% elif score >= 45 %} Pass
+			{% elif score >= 40 %} Pass
+			{% else %} F
+		{% endif %}
+		{% endif %}
 	{% endwith %}
 	</td>
 	</tr>
@@ -4078,7 +4107,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 		{% elif score >= 40 %}D
 		{% else %}E
 	{% endif %}
-	{%endwith%}
+	{% endwith %}
 </td>
   <td class=xl7310370 width=60 style='width:45pt'></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Attendance</td>
@@ -4089,9 +4118,17 @@ xmlns="http://www.w3.org/TR/REC-html40">
    </td>
 </td>
   <td class=xl7310370 width=71 style='width:53pt'></td>
-  <td class=xl7410370 style='border-top:none'>Excellent</td>
-  <td class=xl7510370 style='border-left:none'>80 - 100</td>
-  <td class=xl21610370 style='border-top:none;border-left:none'>A</td>
+
+  {% if 'College-Senior' in student.studentsection %}
+  <td class=xl7410370 style='border-top:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>Excellent</div>Very Good</td>
+  <td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>75-100</div>70-74</td>
+  <td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>A1</div>B2</td>
+  {% else %}
+  <td class=xl7410370 style='border-top'> Excellent</td>
+  <td class=xl7510370 style='border-left:none'> 75-100</td>
+  <td class=xl7510370 style='border-left:none'> A</td>
+  {% endif %}
+  
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
@@ -4107,9 +4144,17 @@ xmlns="http://www.w3.org/TR/REC-html40">
  	 {% endfor %}
 </td>
   <td class=xl7610370 width=71 style='width:53pt'></td>
-  <td class=xl7710370 style='border-top:none'>Very Good</td>
-  <td class=xl7810370 style='border-top:none;border-left:none'>60 - 79</td>
-  <td class=xl21710370 style='border-top:none;border-left:none'>B</td>
+
+  {% if 'College-Senior' in student.studentsection %}
+  <td class=xl7410370 style='border-top:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>Good</div>Credit</td>
+  <td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>65-69</div>60-64</td>
+  <td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>B3</div>C4</td>
+  {% else %}
+  <td class=xl7410370 style='border-top'> Very Good</td>
+  <td class=xl7510370 style='border-left:none'> 60-74</td>
+  <td class=xl7510370 style='border-left:none'> B</td>
+  {% endif %}
+
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
@@ -4125,10 +4170,17 @@ xmlns="http://www.w3.org/TR/REC-html40">
  	 {% endfor %}
 </td>
   <td class=xl6410370></td>
-  <td class=xl7710370 style='border-top:none'>Good</td>
-  <td class=xl7810370 style='border-top:none;border-left:none'>50 - 64</td>
-  <td class=xl21710370 style='border-top:none;border-left:none'>G</td>
- </tr>
+    
+{% if 'College-Senior' in student.studentsection %}
+<td class=xl7410370 style='border-top:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>Credit</div>Credit</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>55-59</div>50-54</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>C5</div>C6</td>
+{% else %}
+<td class=xl7410370 style='border-top'>Good</td>
+<td class=xl7510370 style='border-left:none'> 50-59</td>
+<td class=xl7510370 style='border-left:none'>C</td>
+{% endif %}
+
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Average:</td>
@@ -4143,10 +4195,17 @@ xmlns="http://www.w3.org/TR/REC-html40">
  	 {% endfor %}
 </td>
   <td class=xl6410370></td>
-  <td class=xl7710370 style='border-top:none'>Pass</td>
-  <td class=xl7810370 style='border-top:none;border-left:none'>40 - 49</td>
-  <td class=xl21710370 style='border-top:none;border-left:none'>P</td>
- </tr>
+    
+{% if 'College-Senior' in student.studentsection %}
+<td class=xl7410370 style='border-top:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>Pass</div>Pass</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>45-49</div>40-44</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>D7</div>E8</td>
+{% else %}
+<td class=xl7410370 style='border-top'>Pass</td>
+<td class=xl7510370 style='border-left:none'>45-49</td>
+<td class=xl7510370 style='border-left:none'>D</td>
+{% endif %}
+
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Lowest Average:</td>
@@ -4161,9 +4220,17 @@ xmlns="http://www.w3.org/TR/REC-html40">
  	 {% endfor %}
 </td>
   <td class=xl6410370></td>
-  <td class=xl7710370 style='border-top:none'>Weak</td>
-  <td class=xl7810370 style='border-top:none;border-left:none'>00 - 39</td>
-  <td class=xl21710370 style='border-top:none;border-left:none'>W</td>
+    
+{% if 'College-Senior' in student.studentsection %}
+<td class=xl7410370 style='border-top:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>Fail</div>-</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>00-39</div>-</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>F9</div>-</td>
+{% else %}
+<td class=xl7410370 style='border-top:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>Pass</div>Fail</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>40-44</div>00-39</td>
+<td class=xl7510370 style='border-left:none;font-size:11.5px'><div style='border-bottom:1pt solid #C00000'>E</div>F</td>
+{% endif %}
+
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
@@ -4377,9 +4444,15 @@ xmlns="http://www.w3.org/TR/REC-html40">
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td rowspan=2 height=52 class=xl20310370 width=194 style='border-bottom:.5pt solid black;
-  height:40.2pt;width:146pt'>Head Teacher's Comment:</td>
+  height:40.2pt;width:146pt'>
+  {% if student.studentsection == 'College-Junior' or student.studentsection == 'College-Senior' %}
+	Principal's Comment:
+  {% else %}
+  Head Teacher's Comment:
+  {% endif %}
+</td>
   <td colspan=11 rowspan=2 class=xl18910370 width=819 style='border-right:.5pt solid black;
-  border-bottom:.5pt solid black;width:614pt'> -- </td>
+  border-bottom:.5pt solid black;width:614pt'> {{ student.failedAssessment }} </td>
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
  </tr>
