@@ -532,6 +532,8 @@ class examResult(TemplateView):
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
             )
     
+
+    
         ALLstudents = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
         
         final_assessments = []
@@ -555,9 +557,9 @@ class examResult(TemplateView):
                         'parentSubjectTOTAL',
                         'parentSubjectAVEREG',
                         ).annotate(
-                        TOTAL = Sum('firstCa') + Sum('secondCa') + Sum('exam'),
-                        firstCa = Sum('firstCa'),
-                        secondCa = Sum('secondCa'),
+                        TOTAL = (Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam'),
+                        firstCa = Sum('firstCa')/2,
+                        secondCa = Sum('secondCa')/2,
                         exam = Sum('exam'),
                         )
 
