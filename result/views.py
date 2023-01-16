@@ -26,6 +26,7 @@ from .models import User
 from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Value,Window, ExpressionWrapper, IntegerField
 # import Round from math 
 from django.db.models.functions import Round,Coalesce,Rank
+import random
 
 
 # class index(TemplateView):
@@ -572,8 +573,29 @@ class examResult(TemplateView):
                 student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
                 student_subjects_count = student_main_assessments.count()
 
-            student_average = round(student_total / student_subjects_count, 2)
+            student_average = round(student_total / student_subjects_count, 2) 
             examObtainable = int(student_subjects_count) * 100
+            
+            score = student_average
+            remarks = {
+                80: ["Excellent perfomnace, nerver relent in your effort", "Outstanding performance!", "Keep up the great work!"],
+                60: ["Good result , never relent in your effort!", "Solid effort! keep trying", "You're on the right track!"],
+                50: ["Good result, but can still improve.", "Good result but needs more effort.", "Good perfomance More focus is needed."],
+                0: ["Not satisfactory.", "Needs significant improvement.", "You need to work harder."]
+            }
+
+            if score >= 80:
+                remark = random.choice(remarks[80])
+            elif score >= 60:
+                remark = random.choice(remarks[60])
+            elif score >= 50:
+                remark = random.choice(remarks[50])
+            else:
+                remark = random.choice(remarks[0])
+
+
+            
+            
             final_assessments.append({
                                         'student': student, 
                                         'subjects': student_main_assessments, 
@@ -582,7 +604,9 @@ class examResult(TemplateView):
                                         'studentaverage': student_average,
                                         'student_subjects_count': student_subjects_count,
                                         'examObtainable': examObtainable,
+                                        'remarks': remark,
                                         })
+
         context['final_assessments'] = final_assessments
         return context
         
