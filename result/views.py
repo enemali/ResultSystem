@@ -370,7 +370,7 @@ class EditSubject(UpdateView):
     model = allsubject
     form_class = subjectForm
     template_name = 'result/subjectCreate.html'
-    success_url = reverse_lazy('result:subjectCreate')
+    success_url = reverse_lazy('result:index')
 
     # def get_context_data(self, **kwargs):
     #     context = super(EditSubject, self).get_context_data(**kwargs)
