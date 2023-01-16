@@ -23,7 +23,7 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import AuthenticationForm
 from .filters import studentFilter
 from .models import User
-from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Value,Window, ExpressionWrapper, IntegerField
+from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Value,Window, ExpressionWrapper, IntegerField, Case, When, Value, CharField
 # import Round from math 
 from django.db.models.functions import Round,Coalesce,Rank
 import random
@@ -555,10 +555,12 @@ class examResult(TemplateView):
             student_parent_assessments = class_parent_assessment.filter(student=student
                 ).values('student', 
                         'subjectName__parentSubject__parentSubjectName',
-                        'parentSubjectTOTAL',
-                        'parentSubjectAVEREG',
                         ).annotate(
-                        TOTAL = (Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam'),
+                        TOTAL = Case(
+                                    When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
+                                    When(subjectName__parentSubject__parentSubjectName='National values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
+                                    default= int(0),
+                                    output_field=FloatField()),
                         firstCa = Sum('firstCa')/2,
                         secondCa = Sum('secondCa')/2,
                         exam = Sum('exam'),
