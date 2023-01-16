@@ -99,12 +99,18 @@ class classArmTeacher(models.Model):
     class Meta:
         ordering = ['className']
 
+class parentsubject(models.Model):
+    parentSubjectName = models.CharField(max_length=100, null=True)
+    def __str__(self):
+        return str(self.parentSubjectName)
+
+
 class allsubject(models.Model):
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.CASCADE, null=True)
     subjectName = models.ForeignKey(subjectList, on_delete=models.CASCADE, null=True)
-    subSubject = models.BooleanField(default=False)
-    parentSubject = models.CharField(max_length=100, null=True)
+    is_childSubject = models.BooleanField(default=False)
+    parentSubject = models.ForeignKey(parentsubject, on_delete=models.CASCADE, null=True)
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return str(self.subjectName)
@@ -151,6 +157,14 @@ class assessment(models.Model):
     @property
     def examTotal(self):
         return self.firstCa + self.secondCa + self.exam
+
+    # @property
+    # def is_childSubject(self):
+    #     return self.subjectName.is_childSubject
+
+    # @property
+    # def parentSubject(self):
+    #     return self.subjectName.parentSubject
 
     # @property
     # def ranking(self):

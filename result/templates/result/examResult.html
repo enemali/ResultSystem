@@ -3817,9 +3817,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 {% endfor %} {% endcomment %}
 
 
-{% comment %} {% for x in allScores %}
-	{{x.subjectName}} {{x.examtotal}} {{x.student}} {{x.position}} <br>
-{% endfor %} {% endcomment %}
+
 {% comment %} {% for student in all_students %}
 	<h1>{{student.first_name}} </h1>
 	<h3>{{student.comments}} </h3>
@@ -3834,7 +3832,25 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% endfor %}
 {% endfor %} {% endcomment %}
 
+{% comment %} {% for final_assessments in final_assessments %}
+    <h1>Name: {{ final_assessments.student.last_name }} {{ final_assessments.student.first_name }} {{ final_assessments.student.middle_name }}</h1>
+    <h1>id: {{ final_assessments.student.id }}<h1>
+    <h3>Total: {{final_assessments.studenttotal}} </h3>
+	<h3>Number of subject: {{final_assessments.student_subjects_count}} </h3>
+	<h3>Average: {{final_assessments.studentaverage}} </h3>
+	<ol>
+        {% for subject in final_assessments.subjects %}
+            <li>{{ subject.subjectName }} {{ subject.firstCa }} {{ subject.secondCa }} {{ subject.exam }} {{ subject.total }} --{{ subject.average }}</li>
+        {% endfor %}
+        {% for subject in final_assessments.parent_subjects %}
+            <li>{{ subject.subjectName__parentSubject__parentSubjectName }} {{ subject.firstCa }} {{ subject.secondCa }} {{ subject.exam }} {{ subject.TOTAL }} --{{ subject.parentSubjectAVEREG }}</li>
+        {% endfor %}
+    </ol>
+{% endfor %} {% endcomment %}
 
+{% comment %} {% for x in allScores %}
+	{{x.subjectName}} {{x.Subjectexamtotal}} {{x.student}} {{x.position}} <br>
+{% endfor %} {% endcomment %}
 
 
 {% for student in all_students %}
@@ -3961,8 +3977,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 
 	{% for studentAssessment in student.assessment_set.all %}
-	<tr height=26 style='height:19.5pt'>
-	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{studentAssessment.subjectName}}</td>
+	{% if not studentAssessment.subjectName.is_childSubject %}
+<tr height=26 style='height:19.5pt'>
+<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{studentAssessment.subjectName}} </td>
 	<td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssessment.firstCa }}</td>
 	<td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssessment.secondCa}}</td>
 	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
@@ -4046,18 +4063,144 @@ xmlns="http://www.w3.org/TR/REC-html40">
 		{% endif %}
 	{% endwith %}
 	</td>
-	</tr>
+</tr>
+	{% endif%}
  {% endfor %}
- 
+
+
+ {% comment %} parentSubject {% endcomment %}
+ {% for final_assessments in final_assessments %}
+ {% if final_assessments.student.id == student.id %}
+    {% comment %} <h1>Name: {{ final_assessments.student.last_name }} {{ final_assessments.student.first_name }} {{ final_assessments.student.middle_name }}</h1>
+    <h1>id: {{ final_assessments.student.id }}<h1>
+    <h3>Total: {{final_assessments.studenttotal}} </h3>
+	<h3>Number of subject: {{final_assessments.student_subjects_count}} </h3>
+	<h3>Average: {{final_assessments.studentaverage}} </h3>
+	<ol>
+        {% for subject in final_assessments.subjects %}
+            <li>{{ subject.subjectName }} {{ subject.firstCa }} {{ subject.secondCa }} {{ subject.exam }} {{ subject.total }} --{{ subject.average }}</li>
+        {% endfor %}
+        {% for subject in final_assessments.parent_subjects %}
+            <li>{{ subject.subjectName__parentSubject__parentSubjectName }} {{ subject.firstCa }} {{ subject.secondCa }} {{ subject.exam }} {{ subject.TOTAL }} --{{ subject.parentSubjectAVEREG }}</li>
+        {% endfor %}
+    </ol> {% endcomment %}
+	{% for subject in final_assessments.parent_subjects  %}
+ <tr height=26 style='height:19.5pt'>
+	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{ subject.subjectName__parentSubject__parentSubjectName }}</td>
+		<td class=xl13010370 style='border-top:none;border-left:none'>{{subject.firstCa }}</td>
+		<td class=xl13110370 style='border-top:none;border-left:none'>{{subject.secondCa}}</td>
+		<td class=xl13210370 style='border-left:none'>{{subject.exam}}</td>
+		<td class=xl13310370 style='border-left:none'> {{ subject.TOTAL }}</td>
+		<td class=xl13310370 style='border-top:none;border-left:none'>
+			{% comment %} student.studentclass {% endcomment %}
+	
+		{% with score=subject.TOTAL %}
+		{% if 'College-Senior' in student.studentsection %}
+				{% if score >= 75 %} A1
+				{% elif score >= 70 %} B2
+				{% elif score >= 65 %} B3
+				{% elif score >= 60 %} C4
+				{% elif score >= 55 %} C5
+				{% elif score >= 50 %} C6
+				{% elif score >= 45 %} D7
+				{% elif score >= 40 %} E8
+				{% else %} F9
+				{% endif %}
+			{% else %}
+				{% if score >= 75 %} A
+				{% elif score >= 60 %} B
+				{% elif score >= 50 %} C
+				{% elif score >= 45 %} D
+				{% elif score >= 40 %} D
+				{% else %} F
+			{% endif %}
+			{% endif %}
+		{% endwith %}
+		</td>
+		<td class=xl13310370 style='border-top:none;border-left:none'>
+			{% for score in allScores %}
+				{% if score.subjectName_id == studentAssessment.subjectName_id and score.student_id == student.id %}
+					{{score.position}}
+				{% endif %}
+			{% endfor %}
+		</td>
+		<td class=xl13410370 style='border-left:none'>
+			{% for score in highestexamTotal %}
+				{% if score.id == studentAssessment.subjectName_id %}
+					{{score.highest}}
+				{% endif %}
+			{% endfor %}
+		</td>
+		<td class=xl13510370 style='border-left:none'>
+			{% for score in lowestexamTotal %}
+				{% if score.id == studentAssessment.subjectName_id %}
+					{{score.lowest}}
+				{% endif %}
+			{% endfor %}
+	</td>
+		<td class=xl13610370 style='border-left:none'>
+			
+			{% for score in subjectAverage %}
+				{% if score.id == studentAssessment.subjectName_id %}
+					{{score.average}}
+				{% endif %}
+			{% endfor %}
+		</td>
+		<td class=xl13710370 style='border-top:none'>
+			{% with score=subject.TOTAL %}
+			{% if 'College-Senior' in student.studentsection %}
+				{% if score >= 75 %} Excellent
+				{% elif score >= 70 %} Very Good
+				{% elif score >= 65 %} Good
+				{% elif score >= 60 %} Credit
+				{% elif score >= 55 %} Credit
+				{% elif score >= 50 %} Credit
+				{% elif score >= 45 %} Pass
+				{% elif score >= 40 %} Pass
+				{% else %} Fail
+				{% endif %}
+			{% else %}
+				{% if score >= 75 %} Excellent
+				{% elif score >= 60 %} Very Good
+				{% elif score >= 50 %} Good
+				{% elif score >= 45 %} Pass
+				{% elif score >= 40 %} Pass
+				{% else %} F
+			{% endif %}
+			{% endif %}
+		{% endwith %}
+		</td>
+	</tr>
+	{% endfor %}
+
+
+
+
+
+{% comment %} row end {% endcomment %}
+
+
+{% comment %} parentSubject {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
 
  <tr height=8 style='mso-height-source:userset;height:6.0pt'>
   <td colspan=12 height=8 class=xl10010370 style='height:6.0pt'></td>
  </tr>
  <tr height=33 style='mso-height-source:userset;height:24.95pt'>
   <td colspan=2 height=33 class=xl15910370 style='border-right:.5pt solid black;
-  height:24.95pt'>Total Marks Obtained({{student.assessmentCount}} subjects</td>
+  height:24.95pt'>Total Marks Obtained {{final_assessments.student_subjects_count}}  subjects</td>
   <td colspan=2 class=xl16110370 style='border-right:.5pt solid black;
-  border-left:none'>{{student.examtotal}}</td>
+  border-left:none'>{{final_assessments.studenttotal}} </td>
   <td class=xl20810370>&nbsp;</td>
   <td colspan=3 class=xl20910370 width=222 style='border-right:1.5pt solid #C00000;
   width:167pt'>AFFECTIVE ASSESSMENT</td>
@@ -4069,7 +4212,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=33 class=xl15910370 style='border-right:.5pt solid black;
   height:24.95pt'>Out of:</td>
   <td colspan=2 class=xl16110370 style='border-right:.5pt solid black;
-  border-left:none'>{{student.examObtainable}}</td>
+  border-left:none'>{{final_assessments.examObtainable}}</td>
   <td class=xl9910370></td>
   <td class=xl6510370>BEHAVIOUR</td>
   <td class=xl6610370>&nbsp;</td>
@@ -4082,7 +4225,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Average:</td>
   <td colspan=2 class=xl16310370 style='border-right:.5pt solid black;
-  border-left:none'>{{student.examaverage}}</td>
+  border-left:none'>{{final_assessments.studentaverage}}</td>
   <td class=xl16510370 width=60 style='width:45pt'></td>
   <td class=xl8710370 colspan=2 style='border-right:1.5pt solid #C00000'>Punctuality</td>
   <td class=xl6810370>
@@ -4100,14 +4243,30 @@ xmlns="http://www.w3.org/TR/REC-html40">
   height:20.1pt'>Final Grade:</td>
   <td colspan=2 class=xl16610370 width=143 style='border-right:.5pt solid black;
   border-left:none;width:107pt'>
-	{% with score=student.examaverage %}
-		{% if score >= 80 %}A
-		{% elif score >= 60 %}B
-		{% elif score >= 50 %}C
-		{% elif score >= 40 %}D
-		{% else %}E
+
+{% with Average=final_assessments.studentaverage %}
+	{% if 'College-Senior' in student.studentsection %}
+		{% if Average >= 75 %} A1
+		{% elif Average >= 70 %} B2
+		{% elif Average >= 65 %} B3
+		{% elif Average >= 60 %} C4
+		{% elif Average >= 55 %} C5
+		{% elif Average >= 50 %} C6
+		{% elif Average >= 45 %} D7
+		{% elif Average >= 40 %} E8
+		{% else %} F9
+		{% endif %}
+	{% else %}
+		{% if Average >= 75 %} A
+		{% elif Average >= 60 %} B
+		{% elif Average >= 50 %} C
+		{% elif Average >= 45 %} D
+		{% elif Average >= 40 %} D
+		{% else %} F
+		{% endif %}
 	{% endif %}
-	{% endwith %}
+{% endwith %}
+
 </td>
   <td class=xl7310370 width=60 style='width:45pt'></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Attendance</td>
@@ -4134,7 +4293,13 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Remark: (Pass/Fail):</td>
   <td colspan=2 class=xl16810370 style='border-right:.5pt solid black;
-  border-left:none'>Pass</td>
+  border-left:none'>
+	{% with Average=final_assessments.studentaverage %}
+			{% if Average >= 40 %} Pass
+			{% else %} Fail
+			{% endif %}
+		{% endwith %}
+</td>
   <td class=xl7610370 width=60 style='width:45pt'></td>
   <td class=xl7010370 style='border-top:none'>Neatness</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
@@ -4234,7 +4399,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
  </tr>
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
-  height:20.1pt'>Cummlative Average</td>
+  height:20.1pt'>
+  {% comment %} Cummlative Average {% endcomment %}
+</td>
   <td colspan=2 class=xl17310370 style='border-right:.5pt solid black;
   border-left:none'>.</td>
   <td class=xl17510370></td>
@@ -4511,6 +4678,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
 </table>
 
 </div>
+
+{% endif %}
+{% endfor %}
 
 </body>
 {% endfor %}

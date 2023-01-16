@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.forms.widgets import DateInput
-from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm,classArmTeacher,subjectList,comment
+from .models import students , all_class , section , allsubject , Images , setting , assessment , classArm,classArmTeacher,subjectList,comment,parentsubject
 from .widgets import DatePickerInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -138,16 +138,21 @@ class entryformsetHelper(FormHelper):
         
         self.template = 'bootstrap/table_inline_formset.html'
 
+# class subjectForm(forms.ModelForm):
+#     class Meta:
+#         model = allsubject
+#         fields = ['subjectName', 'className', 'subjectTeacher']
+        
 class subjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
-        fields = ['subjectName', 'className', 'subjectTeacher']
-        
-class SubjectForm(forms.ModelForm):
-    class Meta:
-        model = allsubject
         fields = '__all__'
-      
+
+class parentsubjectForm(forms.ModelForm):
+    class Meta:
+        model = parentsubject
+        fields ='__all__' 
+
 class ClassArmTeacherForm(forms.ModelForm):
     class Meta:
         model = classArmTeacher

@@ -331,17 +331,22 @@ class subjectCreate(TemplateView):
         context['allsubjects'] = allsubject.objects.all()
         context['subjectlist'] = subjectList.objects.all()
         context['subjectListForm'] = subjectListForm()
-        context['subjectForm'] = SubjectForm()
+        context['form'] = subjectForm()
+        context['parentsbjForm'] = parentsubjectForm()
         return context
 
     def post(self, request, *args, **kwargs):
         subjectListFrm = subjectListForm(request.POST)
-        subjectFrm = SubjectForm(request.POST)
+        form = subjectForm(request.POST)
+        parentsbjForm = parentsubjectForm(request.POST)
         if subjectListFrm.is_valid():
             subjectListFrm.save()
             return redirect('result:subjectCreate')
-        if subjectFrm.is_valid():
-            subjectFrm.save()
+        if form.is_valid():
+            form.save()
+            return redirect('result:subjectCreate')
+        if parentsbjForm.is_valid():
+            parentsbjForm.save()
             return redirect('result:subjectCreate')
 
 class CreateClassArm(CreateView):
@@ -363,14 +368,14 @@ class editClassArm(UpdateView):
 
 class EditSubject(UpdateView):
     model = allsubject
-    fields = "__all__"
+    form_class = subjectForm
     template_name = 'result/subjectCreate.html'
     success_url = reverse_lazy('result:subjectCreate')
 
-    def get_context_data(self, **kwargs):
-        context = super(EditSubject, self).get_context_data(**kwargs)
-        context['subjectForm'] = SubjectForm
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(EditSubject, self).get_context_data(**kwargs)
+    #     context['subjectForm'] = self.form_class
+    #     return context
 
 class deleteSubject(DeleteView):
     model = allsubject
@@ -496,22 +501,24 @@ class examResult(TemplateView):
         context = super(examResult, self).get_context_data(**kwargs)
         student_ids = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
         
+        
         context['highestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
         context['lowestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
         context['subjectAverage'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
         context['setting'] = setting.objects.all()
+        
         context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
-            examtotal= F('firstCa') + F('secondCa') + F('exam'),
-            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('examtotal').desc()),
+            Subjectexamtotal= F('firstCa') + F('secondCa') + F('exam'),
+            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('Subjectexamtotal').desc()),
 
             )
 
         context["all_students"] = student_ids.annotate(
-                examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
+                # examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
                 examaverage=Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2),
                 assessmentCount=Count('assessment__id'),
                 examObtainable=Count('assessment__id') * 100,
-                position = context['allScores'].filter(student_id=OuterRef('id')).values('position'),
+                # position = context['allScores'].filter(student_id=OuterRef('id')).values('position'),
                 studentsection = section.objects.filter(id=OuterRef('className__section_id')).values('sectionName'),
                 studentclass = classArmTeacher.objects.filter(className=OuterRef('className_id')).values('className__className'),
                 # failedAssessment = context['allScores'].filter(student_id=OuterRef('id'), examtotal__lt=40).values('subjectName__subjectName'),
@@ -524,7 +531,58 @@ class examResult(TemplateView):
         
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
             )
+    
+        ALLstudents = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
+        
+        final_assessments = []
+
+        class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'],subjectName__is_childSubject=False).annotate(
+            total=Sum(F('firstCa') + F('secondCa') + F('exam')))
+        class_parent_assessment = assessment.objects.filter(
+            className=self.kwargs['pk'],subjectName__is_childSubject=True
+                ).annotate(
+                    parentSubjectTOTAL=Sum(F('firstCa') + F('secondCa') + F('exam')),
+                    parentSubjectAVEREG= Avg(F('firstCa') + F('secondCa') + F('exam')),
+
+                    )
+        
+
+        for student in ALLstudents:
+            student_main_assessments = class_main_assessment.filter(student=student)
+            student_parent_assessments = class_parent_assessment.filter(student=student
+                ).values('student', 
+                        'subjectName__parentSubject__parentSubjectName',
+                        'parentSubjectTOTAL',
+                        'parentSubjectAVEREG',
+                        ).annotate(
+                        TOTAL = Sum('firstCa') + Sum('secondCa') + Sum('exam'),
+                        firstCa = Sum('firstCa'),
+                        secondCa = Sum('secondCa'),
+                        exam = Sum('exam'),
+                        )
+
+        #     # add student_main_assessments dict to student_parent_assessments dict
+            student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL'] + student_parent_assessments[0]['TOTAL']
+            student_subjects_count = student_main_assessments.count() + student_parent_assessments.count()
+            student_average = round(student_total / student_subjects_count, 2)
+            examObtainable = int(student_subjects_count) * 100
+            final_assessments.append({
+                                        'student': student, 
+                                        'subjects': student_main_assessments, 
+                                        'parent_subjects': student_parent_assessments,
+                                        'studenttotal': student_total,
+                                        'studentaverage': student_average,
+                                        'student_subjects_count': student_subjects_count,
+                                        'examObtainable': examObtainable,
+                                        })
+        context['final_assessments'] = final_assessments
         return context
+        
+
+        # multi line comment
+
+
+    
 
 class editSettings(UpdateView):
     model = setting
