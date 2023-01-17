@@ -3811,7 +3811,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 </head>
 <body>
 
-{{final_assessments.class_parent_assessment}}
+
 
 {% comment %} {% for score in subjectPosition %}
 	<h1>{{score.last_name}}  {{score.subjectName}} {{score.position}} </h1>
@@ -4135,10 +4135,10 @@ xmlns="http://www.w3.org/TR/REC-html40">
 					{{subject.parentSubjectPOSITION}}
 		</td>
 		<td class=xl13410370 style='border-left:none'>
-					{{subject.parentSubjectMAX}}
+					{{subject.highest}}
 		</td>
 		<td class=xl13510370 style='border-left:none'>
-					{{subject.parentSubjectMIN}}
+					{{subject.lowest}}
 	</td>
 		<td class=xl13610370 style='border-left:none'>
 					{{subject.parentSubjectAVERAGE}}
