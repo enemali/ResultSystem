@@ -543,7 +543,7 @@ class examResult(TemplateView):
             total=Sum(F('firstCa') + F('secondCa') + F('exam')))
        
         class_parent_assessment = assessment.objects.filter(
-            className=self.kwargs['pk'],subjectName__is_childSubject=True).values('subjectName__parentSubject__parentSubjectName', 'student_id'
+            className=self.kwargs['pk'],subjectName__is_childSubject=True).values('subjectName__parentSubject__parentSubjectName'
                 ).annotate(
                     parentSubjectTOTAL=Sum(F('firstCa') + F('secondCa') + F('exam')),
                     parentSubjectAVERAGE= Avg(F('firstCa') + F('secondCa') + F('exam')),
@@ -562,6 +562,7 @@ class examResult(TemplateView):
                             default= int(0),
                             output_field=FloatField()),
                     parentSubjectPOSITION = Window(expression=Rank(), partition_by=[F('subjectName__parentSubject_id')], order_by=F('parentSubjectTOTAL').desc()),
+                    # position =              Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('Subjectexamtotal').desc()),
                     )
         
 
@@ -594,10 +595,8 @@ class examResult(TemplateView):
                                     then=Sum('secondCa')/2),
                                     default= int(0),
                                     output_field=FloatField()),
-                        exam = Sum('exam'),
-                        
+                        exam = Sum('exam'),                        
                         )
-
         #     # add student_main_assessments dict to student_parent_assessments dict
             # parent_subject = student_parent_assessments[0]['TOTAL']
             if len(student_parent_assessments) > 0:
@@ -612,7 +611,7 @@ class examResult(TemplateView):
             
             
             remarks = {
-                80: ["Excellent perfomnace, nerver relent in your effort", "Outstanding performance!", "Keep up the great work!"],
+                80: ["Excellent perfomnace, never relent in your effort", "Outstanding performance!", "Keep up the great work!"],
                 60: ["Good result , never relent in your effort!", "Solid effort! keep trying", "You're on the right track!"],
                 50: ["Good result, but can still improve.", "Good result but needs more effort.", "Good perfomance More focus is needed."],
                 0: ["Not satisfactory.", "Needs significant improvement.", "You need to work harder."]
