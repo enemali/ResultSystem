@@ -580,8 +580,20 @@ class examResult(TemplateView):
                                     When(subjectName__parentSubject__parentSubjectName='National Values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
                                     default= int(0),
                                     output_field=FloatField()),
-                        firstCa = Sum('firstCa')/2,
-                        secondCa = Sum('secondCa')/2,
+                        firstCa = Case(
+                                    When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', 
+                                    then=Sum('firstCa')/4),
+                                    When(subjectName__parentSubject__parentSubjectName='National Values',
+                                    then=Sum('firstCa')/2),
+                                    default= int(0),
+                                    output_field=FloatField()),
+                        secondCa = Case(
+                                    When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
+                                    then=Sum('secondCa')/4),
+                                    When(subjectName__parentSubject__parentSubjectName='National Values',
+                                    then=Sum('secondCa')/2),
+                                    default= int(0),
+                                    output_field=FloatField()),
                         exam = Sum('exam'),
                         
                         )
@@ -627,7 +639,7 @@ class examResult(TemplateView):
                                         'student_subjects_count': student_subjects_count,
                                         'examObtainable': examObtainable,
                                         'remarks': remark,
-                                        'class_parent_assessment': class_parent_assessment,
+                                        'parent_assessment': class_parent_assessment,
                                         })
 
         context['final_assessments'] = final_assessments
