@@ -541,12 +541,27 @@ class examResult(TemplateView):
 
         class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'],subjectName__is_childSubject=False).annotate(
             total=Sum(F('firstCa') + F('secondCa') + F('exam')))
+       
         class_parent_assessment = assessment.objects.filter(
-            className=self.kwargs['pk'],subjectName__is_childSubject=True
+            className=self.kwargs['pk'],subjectName__is_childSubject=True).values('subjectName__parentSubject__parentSubjectName', 'student_id'
                 ).annotate(
                     parentSubjectTOTAL=Sum(F('firstCa') + F('secondCa') + F('exam')),
-                    parentSubjectAVEREG= Avg(F('firstCa') + F('secondCa') + F('exam')),
-
+                    parentSubjectAVERAGE= Avg(F('firstCa') + F('secondCa') + F('exam')),
+                    parentSubjectMAX = Case(
+                            When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', 
+                            then=Max((F('firstCa')/4) + (F('secondCa') /4)+ F('exam'))),
+                            When(subjectName__parentSubject__parentSubjectName='National Values',
+                            then=Max((F('firstCa')/2) + (F('secondCa') /2)+ F('exam'))),
+                            default= int(0),
+                            output_field=FloatField()),
+                    parentSubjectMIN = Case(
+                            When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
+                            then=Min((F('firstCa')/4) + (F('secondCa') /4)+ F('exam'))),
+                            When(subjectName__parentSubject__parentSubjectName='National Values',
+                            then=Min((F('firstCa')/2) + (F('secondCa') /2)+ F('exam'))),
+                            default= int(0),
+                            output_field=FloatField()),
+                    parentSubjectPOSITION = Window(expression=Rank(), partition_by=[F('subjectName__parentSubject_id')], order_by=F('parentSubjectTOTAL').desc()),
                     )
         
 
@@ -555,15 +570,20 @@ class examResult(TemplateView):
             student_parent_assessments = class_parent_assessment.filter(student=student
                 ).values('student', 
                         'subjectName__parentSubject__parentSubjectName',
+                        'parentSubjectAVERAGE',
+                        'parentSubjectMAX',
+                        'parentSubjectMIN',
+                       
                         ).annotate(
                         TOTAL = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
-                                    When(subjectName__parentSubject__parentSubjectName='National values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
+                                    When(subjectName__parentSubject__parentSubjectName='National Values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
                                     default= int(0),
                                     output_field=FloatField()),
                         firstCa = Sum('firstCa')/2,
                         secondCa = Sum('secondCa')/2,
                         exam = Sum('exam'),
+                        
                         )
 
         #     # add student_main_assessments dict to student_parent_assessments dict
@@ -607,6 +627,7 @@ class examResult(TemplateView):
                                         'student_subjects_count': student_subjects_count,
                                         'examObtainable': examObtainable,
                                         'remarks': remark,
+                                        'class_parent_assessment': class_parent_assessment,
                                         })
 
         context['final_assessments'] = final_assessments

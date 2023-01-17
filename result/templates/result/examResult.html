@@ -3811,7 +3811,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 </head>
 <body>
 
-
+{{final_assessments.class_parent_assessment}}
 
 {% comment %} {% for score in subjectPosition %}
 	<h1>{{score.last_name}}  {{score.subjectName}} {{score.position}} </h1>
@@ -3986,7 +3986,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% for studentAssessment in student.assessment_set.all %}
 	{% if not studentAssessment.subjectName.is_childSubject %}
 <tr height=26 style='height:19.5pt'>
-<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{studentAssessment.subjectName}} </td>
+<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt ; font-weight:bold'>{{studentAssessment.subjectName}} </td>
 	<td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssessment.firstCa }}</td>
 	<td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssessment.secondCa}}</td>
 	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
@@ -4093,7 +4093,14 @@ xmlns="http://www.w3.org/TR/REC-html40">
     </ol> {% endcomment %}
 	{% for subject in final_assessments.parent_subjects  %}
  <tr height=26 style='height:19.5pt'>
-	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt'>{{ subject.subjectName__parentSubject__parentSubjectName }}</td>
+	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt; font-weight:bold'>
+		{{ subject.subjectName__parentSubject__parentSubjectName }}<br>
+{% for mainAssessment in student.assessment_set.all %}
+	{% if mainAssessment.subjectName.parentSubject.parentSubjectName == subject.subjectName__parentSubject__parentSubjectName %}
+	<div style='font-size:11.5px; font-weight:normal'>{{ mainAssessment.subjectName.subjectName }}--({{ mainAssessment.firstCa }}) ({{ mainAssessment.secondCa }}) ({{ mainAssessment.exam }})</div>
+	{% endif %}
+{% endfor %}
+	</td>
 		<td class=xl13010370 style='border-top:none;border-left:none'>{{subject.firstCa }}</td>
 		<td class=xl13110370 style='border-top:none;border-left:none'>{{subject.secondCa}}</td>
 		<td class=xl13210370 style='border-left:none'>{{subject.exam}}</td>
@@ -4125,33 +4132,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
 		{% endwith %}
 		</td>
 		<td class=xl13310370 style='border-top:none;border-left:none'>
-			{% for score in allScores %}
-				{% if score.subjectName_id == studentAssessment.subjectName_id and score.student_id == student.id %}
-					{{score.position}}
-				{% endif %}
-			{% endfor %}
+					{{subject.parentSubjectPOSITION}}
 		</td>
 		<td class=xl13410370 style='border-left:none'>
-			{% for score in highestexamTotal %}
-				{% if score.id == studentAssessment.subjectName_id %}
-					{{score.highest}}
-				{% endif %}
-			{% endfor %}
+					{{subject.parentSubjectMAX}}
 		</td>
 		<td class=xl13510370 style='border-left:none'>
-			{% for score in lowestexamTotal %}
-				{% if score.id == studentAssessment.subjectName_id %}
-					{{score.lowest}}
-				{% endif %}
-			{% endfor %}
+					{{subject.parentSubjectMIN}}
 	</td>
 		<td class=xl13610370 style='border-left:none'>
-			
-			{% for score in subjectAverage %}
-				{% if score.id == studentAssessment.subjectName_id %}
-					{{score.average}}
-				{% endif %}
-			{% endfor %}
+					{{subject.parentSubjectAVERAGE}}
 		</td>
 		<td class=xl13710370 style='border-top:none'>
 			{% with score=subject.TOTAL %}
