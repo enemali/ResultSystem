@@ -660,7 +660,7 @@ class editSettings(UpdateView):
 
 class assesment_delete(DeleteView):
     model = assessment
-    template_name = 'result/delete.html'
+    template_name = 'result/Delete.html'
     
     def get_success_url(self):
         return reverse_lazy('result:classList', kwargs={'pk': self.object.className.id})
