@@ -3939,7 +3939,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td colspan=4 class=xl10610370>{{student.assessment_set.all.0.className}}</td>
 	<td class=xl6410370></td>
 	<td colspan=3 class=xl10710370>Admission Number:</td>
-	<td class=xl10810370>&nbsp; {{student.admission_number}}</td>
+	<td class=xl10810370>&nbsp;  {% if student.admission_number == None %}-{%else%}{{student.admission_number}}{%endif%}</td>
 	<td class=xl6410370></td>
 	<td class=xl6410370></td>
 	</tr>
@@ -4109,6 +4109,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  	<tr height=26 style='height:19.5pt'>
 	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt; font-weight:bold'>
 		{{ subject.subjectName__parentSubject__parentSubjectName }}<br>
+		
 	{% for mainAssessment in student.assessment_set.all %}
 	{% if mainAssessment.subjectName.parentSubject.parentSubjectName == subject.subjectName__parentSubject__parentSubjectName %}
 	<div style='font-size:11.5px; font-weight:normal'>{{ mainAssessment.subjectName.subjectName }}--({{ mainAssessment.firstCa }}) ({{ mainAssessment.secondCa }}) ({{ mainAssessment.exam }})</div>
