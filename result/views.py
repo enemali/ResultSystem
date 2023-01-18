@@ -500,8 +500,8 @@ class examResult(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(examResult, self).get_context_data(**kwargs)
-        student_ids = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
         
+        student_ids = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
         
         context['highestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
         context['lowestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
@@ -525,11 +525,9 @@ class examResult(TemplateView):
                 # failedAssessment = context['allScores'].filter(student_id=OuterRef('id'), examtotal__lt=40).values('subjectName__subjectName'),
                 )
                 # studentclass = classArmTeacher.objects.filter(className=OuterRef('className_id')).values('className__className'),
-            
         context["highestAverage"] = context["all_students"].order_by('-examaverage')[:1]
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
-        
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
             )
     
@@ -574,7 +572,6 @@ class examResult(TemplateView):
                         'parentSubjectAVERAGE',
                         'parentSubjectMAX',
                         'parentSubjectMIN',
-                       
                         ).annotate(
                         TOTAL = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
@@ -611,7 +608,7 @@ class examResult(TemplateView):
             
             
             remarks = {
-                80: ["Excellent perfomnace, never relent in your effort", "Outstanding performance!", "Keep up the great work!"],
+                80: ["Excellent performance , never relent in your effort", "Outstanding performance!", "Keep up the great work!"],
                 60: ["Good result , never relent in your effort!", "Solid effort! keep trying", "You're on the right track!"],
                 50: ["Good result, but can still improve.", "Good result but needs more effort.", "Good perfomance More focus is needed."],
                 0: ["Not satisfactory.", "Needs significant improvement.", "You need to work harder."]

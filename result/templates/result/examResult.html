@@ -3819,51 +3819,6 @@ xmlns="http://www.w3.org/TR/REC-html40">
 <body>
 
 
-
-{% comment %} {% for score in subjectPosition %}
-	<h1>{{score.last_name}}  {{score.subjectName}} {{score.position}} </h1>
-	{% for y in score.assessment_set.all %}
-		ccc {{y.subjectName}} {{y.examTotal}} {{y.position}} <br>
-	{% endfor %}
-{% endfor %} {% endcomment %}
-
-
-
-{% comment %} {% for student in all_students %}
-	<h1>{{student.first_name}} </h1>
-	<h3>{{student.comments}} </h3>
-	<h3>{{student.position}} </h>
-	<h3>rank {{student.subjectPosition}} </h> <br>
-
-	{% for x in student.assessment_set.all %}
-		subject:- {{x.subjectName}}<br>
-		Total:- {{x.examtotal}}<br>
-		Rank:-{{x.subjectRank}}<br>
-		comment:-{{x.subjectPosition}}<br>
-	{% endfor %}
-{% endfor %} {% endcomment %}
-
-{% comment %} {% for final_assessments in final_assessments %}
-    <h1>Name: {{ final_assessments.student.last_name }} {{ final_assessments.student.first_name }} {{ final_assessments.student.middle_name }}</h1>
-    <h1>id: {{ final_assessments.student.id }}<h1>
-    <h3>Total: {{final_assessments.studenttotal}} </h3>
-	<h3>Number of subject: {{final_assessments.student_subjects_count}} </h3>
-	<h3>Average: {{final_assessments.studentaverage}} </h3>
-	<ol>
-        {% for subject in final_assessments.subjects %}
-            <li>{{ subject.subjectName }} {{ subject.firstCa }} {{ subject.secondCa }} {{ subject.exam }} {{ subject.total }} --{{ subject.average }}</li>
-        {% endfor %}
-        {% for subject in final_assessments.parent_subjects %}
-            <li>{{ subject.subjectName__parentSubject__parentSubjectName }} {{ subject.firstCa }} {{ subject.secondCa }} {{ subject.exam }} {{ subject.TOTAL }} --{{ subject.parentSubjectAVEREG }}</li>
-        {% endfor %}
-    </ol>
-{% endfor %} {% endcomment %}
-
-{% comment %} {% for x in allScores %}
-	{{x.subjectName}} {{x.Subjectexamtotal}} {{x.student}} {{x.position}} <br>
-{% endfor %} {% endcomment %}
-
-
 {% for student in all_students %}
 
 <div class="pagebreak"> </div>
@@ -3936,7 +3891,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 	<tr height=25 style='height:18.75pt'>
 	<td height=25 class=xl10210370 style='height:18.75pt'>Class:</td>
-	<td colspan=4 class=xl10610370>{{student.assessment_set.all.0.className}}</td>
+	<td colspan=4 class=xl10610370>{{student.assessment_set.all.5.className}}</td>
 	<td class=xl6410370></td>
 	<td colspan=3 class=xl10710370>Admission Number:</td>
 	<td class=xl10810370>&nbsp;  {% if student.admission_number == None %}-{%else%}{{student.admission_number}}{%endif%}</td>
@@ -4078,7 +4033,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 			{% elif score >= 50 %} Good
 			{% elif score >= 45 %} Pass
 			{% elif score >= 40 %} Pass
-			{% else %} F
+			{% else %} Fail
 		{% endif %}
 		{% endif %}
 	{% endwith %}
@@ -4109,7 +4064,6 @@ xmlns="http://www.w3.org/TR/REC-html40">
  	<tr height=26 style='height:19.5pt'>
 	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt; font-weight:bold'>
 		{{ subject.subjectName__parentSubject__parentSubjectName }}<br>
-		
 	{% for mainAssessment in student.assessment_set.all %}
 	{% if mainAssessment.subjectName.parentSubject.parentSubjectName == subject.subjectName__parentSubject__parentSubjectName %}
 	<div style='font-size:11.5px; font-weight:normal'>{{ mainAssessment.subjectName.subjectName }}--({{ mainAssessment.firstCa }}) ({{ mainAssessment.secondCa }}) ({{ mainAssessment.exam }})</div>
@@ -4346,7 +4300,8 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Highest Average:</td>
   <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>{{highestAverage.0.examaverage }}</td>
+  border-left:none'>
+  {{highestAverage.0.examaverage }}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Respect</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
