@@ -663,4 +663,4 @@ class assesment_delete(DeleteView):
     template_name = 'result/Delete.html'
     
     def get_success_url(self):
-        return reverse_lazy('result:classList', kwargs={'pk': self.object.className.id})
+        return reverse_lazy('result:examResult', kwargs={'pk': self.object.className.id})
