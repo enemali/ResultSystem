@@ -39,4 +39,5 @@ urlpatterns = [
     path('examResult/<int:pk>/', examResult.as_view(), name='examResult'),
     path('editClassArm/<int:pk>/', editClassArm.as_view(), name='editClassArm'),
     path('editSettings/<int:pk>/', editSettings.as_view(), name='editSettings'),
+    path('assesment_delete/<int:pk>/', assesment_delete.as_view(), name='assesment_delete'),
 ]

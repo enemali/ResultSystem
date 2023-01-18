@@ -543,7 +543,7 @@ class examResult(TemplateView):
             total=Sum(F('firstCa') + F('secondCa') + F('exam')))
        
         class_parent_assessment = assessment.objects.filter(
-            className=self.kwargs['pk'],subjectName__is_childSubject=True).values('subjectName__parentSubject__parentSubjectName'
+            className=self.kwargs['pk'],subjectName__is_childSubject=True).values('subjectName__parentSubject__parentSubjectName', 'student_id'
                 ).annotate(
                     parentSubjectTOTAL=Sum(F('firstCa') + F('secondCa') + F('exam')),
                     parentSubjectAVERAGE= Avg(F('firstCa') + F('secondCa') + F('exam')),
@@ -657,3 +657,10 @@ class editSettings(UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('result:classList')
+
+class assesment_delete(DeleteView):
+    model = assessment
+    template_name = 'result/delete.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('result:classList', kwargs={'pk': self.object.className.id})

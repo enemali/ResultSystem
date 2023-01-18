@@ -3807,13 +3807,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 
 							@media print {
 								.pagebreak { page-break-before: always; } /* page-break-after works, as well */
-								
-								#printPageButton {
-									display: none;
-								  }
 							}
-
-							
 		--></style>
 </head>
 <body>
@@ -3907,7 +3901,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>TINSHAMA BY EASTERN BYEPASS, HOTORO, KANO.</td>
 	</tr>
 	<tr height=25 style='height:18.75pt'>
-	<td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>ACADEMIC PROGRESS REPORT   </td>
+	<td colspan=12 height=25 class=xl10010370 style='height:18.75pt'>ACADEMIC PROGRESS REPORT</td>
 	</tr>
 	<tr height=21 style='mso-height-source:userset;height:15.75pt'>
 	<td height=21 class=xl10110370 style='height:15.75pt'>Session:</td>
@@ -3957,9 +3951,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 	<tr height=26 style='height:19.5pt'>
 	<td colspan=12 height=26 class=xl9810370 style='height:19.5pt'>ACADEMIC
-	PROGRESS REPORT ({{student.studentsection}}) 
-	<button style=" font-weight:bold; font-size: 20px; background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;" onclick="window.print()">Print</button>
-</td>
+	PROGRESS REPORT ({{student.studentsection}})</td>
 	</tr>
 	<tr height=27 style='height:20.25pt'>
 	<td colspan=2 rowspan=2 height=79 class=xl11110370 style='border-right:1.5pt solid #C00000;
@@ -3995,11 +3987,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% for studentAssessment in student.assessment_set.all %}
 	{% if not studentAssessment.subjectName.is_childSubject %}
 <tr height=26 style='height:19.5pt'>
-<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt ; font-weight:bold'>{{studentAssessment.subjectName}} 
-	
-	<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
-		<a style="color:white;" {% if request.user.is_staff %} href="{% url 'result:assesment_delete' studentAssessment.id %}" {% endif %}>Delete</a>
-	</button></td>
+<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt ; font-weight:bold'>{{studentAssessment.subjectName}} </td>
 	<td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssessment.firstCa }}</td>
 	<td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssessment.secondCa}}</td>
 	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
@@ -4007,7 +3995,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td class=xl13310370 style='border-top:none;border-left:none'>
 		{% comment %} student.studentclass {% endcomment %}
 
-{% with score=studentAssessment.examTotal %}
+	{% with score=studentAssessment.examTotal %}
 	{% if 'College-Senior' in student.studentsection %}
 			{% if score >= 75 %} A1
 			{% elif score >= 70 %} B2
@@ -4088,8 +4076,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  {% endfor %}
 
 
- {% comment %} thi is where merged subjects starts from  {% endcomment %}
- 
+ {% comment %} parentSubject {% endcomment %}
  {% for final_assessments in final_assessments %}
  {% if final_assessments.student.id == student.id %}
     {% comment %} <h1>Name: {{ final_assessments.student.last_name }} {{ final_assessments.student.first_name }} {{ final_assessments.student.middle_name }}</h1>
@@ -4106,14 +4093,14 @@ xmlns="http://www.w3.org/TR/REC-html40">
         {% endfor %}
     </ol> {% endcomment %}
 	{% for subject in final_assessments.parent_subjects  %}
- 	<tr height=26 style='height:19.5pt'>
+ <tr height=26 style='height:19.5pt'>
 	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt; font-weight:bold'>
 		{{ subject.subjectName__parentSubject__parentSubjectName }}<br>
-	{% for mainAssessment in student.assessment_set.all %}
+{% for mainAssessment in student.assessment_set.all %}
 	{% if mainAssessment.subjectName.parentSubject.parentSubjectName == subject.subjectName__parentSubject__parentSubjectName %}
 	<div style='font-size:11.5px; font-weight:normal'>{{ mainAssessment.subjectName.subjectName }}--({{ mainAssessment.firstCa }}) ({{ mainAssessment.secondCa }}) ({{ mainAssessment.exam }})</div>
 	{% endif %}
-	{% endfor %}
+{% endfor %}
 	</td>
 		<td class=xl13010370 style='border-top:none;border-left:none'>{{subject.firstCa }}</td>
 		<td class=xl13110370 style='border-top:none;border-left:none'>{{subject.secondCa}}</td>
@@ -4146,26 +4133,21 @@ xmlns="http://www.w3.org/TR/REC-html40">
 		{% endwith %}
 		</td>
 		<td class=xl13310370 style='border-top:none;border-left:none'>
-
-	
-			{% for Psubject in final_assessments.parent_assessment %} <!-- loop through parent_assessment context -->
-			
-			{% if Psubject.subjectName__parentSubject__parentSubjectName == subject.subjectName__parentSubject__parentSubjectName and Psubject.student_id == student.id %}
-					{{Psubject.parentSubjectPOSITION}}
+			{% for studentParent in final_assessments.parent_assessment %}
+				{% if studentParent.student == student.student%}
+					{{ studentParent.parentSubjectPOSITION }}
+				{% endif %}
+			{% endfor %}
 		</td>
-		
 		<td class=xl13410370 style='border-left:none'>
-					{{Psubject.parentSubjectMAX}}
+					{{subject.parentSubjectMAX}}
 		</td>
 		<td class=xl13510370 style='border-left:none'>
-					{{Psubject.parentSubjectMIN}}
+					{{subject.parentSubjectMIN}}
 	</td>
 		<td class=xl13610370 style='border-left:none'>
-					{{Psubject.parentSubjectAVERAGE}}
+					{{subject.parentSubjectAVERAGE}}
 		</td>
-		{% endif %}
-		{% endfor %}
-
 		<td class=xl13710370 style='border-top:none'>
 			{% with score=subject.TOTAL %}
 			{% if 'College-Senior' in student.studentsection %}
