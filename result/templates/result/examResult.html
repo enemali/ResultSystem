@@ -3816,7 +3816,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 							
 		--></style>
 </head>
-<body>
+<body onload="myFunction()">
 
 
 {% for student in all_students %}
@@ -4199,7 +4199,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Average:</td>
-  <td colspan=2 class=xl16310370 style='border-right:.5pt solid black;
+  <td id = "stdAvg" colspan=2 class=xl16310370 style='border-right:.5pt solid black;
   border-left:none'>{{final_assessments.studentaverage}}</td>
   <td class=xl16510370 width=60 style='width:45pt'></td>
   <td class=xl8710370 colspan=2 style='border-right:1.5pt solid #C00000'>Punctuality</td>
@@ -4299,9 +4299,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Highest Average:</td>
-  <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>
-  {{highestAverage.0.examaverage }}</td>
+  <td id ="higheststdAvg" colspan=2 class=xl17010370 style='border-right:.5pt solid black;
+  border-left:none' >
+  {{highestAverage }}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Respect</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
@@ -4661,4 +4661,30 @@ xmlns="http://www.w3.org/TR/REC-html40">
 </body>
 {% endfor %}
 
+
+<script type="text/javascript">
+
+	function myFunction() {
+		var divs = document.querySelectorAll('#stdAvg');
+		var highestdivs = document.querySelectorAll('#higheststdAvg');
+
+		var highestValue = 0;
+		for (var i = 0; i < divs.length; i++) {
+			
+			var value = parseFloat (divs[i].innerHTML);
+			if (value > highestValue) {
+				highestValue = value;
+			}
+		}
+		for (var i = 0; i < divs.length; i++) {
+			highestdivs[i].innerHTML = highestValue;
+			
+		}
+		
+	}
+
+	{% comment %} alert("The highest value is: " + highestValue); {% endcomment %}
+
+
+</script>
 </html>

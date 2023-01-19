@@ -525,7 +525,7 @@ class examResult(TemplateView):
                 # failedAssessment = context['allScores'].filter(student_id=OuterRef('id'), examtotal__lt=40).values('subjectName__subjectName'),
                 )
                 # studentclass = classArmTeacher.objects.filter(className=OuterRef('className_id')).values('className__className'),
-        context["highestAverage"] = context["all_students"].order_by('-examaverage')[:1]
+        context["highestAverage"] = context["all_students"].order_by('-examaverage').first().examaverage
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
