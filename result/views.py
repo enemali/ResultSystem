@@ -27,6 +27,9 @@ from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterR
 # import Round from math 
 from django.db.models.functions import Round,Coalesce,Rank
 import random
+import inflect
+p=inflect.engine()
+
 
 
 # class index(TemplateView):
@@ -531,17 +534,27 @@ class examResult(TemplateView):
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
             )
     
-
-    
         ALLstudents = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
-        
         final_assessments = []
+        
+        # class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'], subjectName__is_childSubject=False)
+        # total = class_main_assessment.annotate(total= F('firstCa') + F('secondCa') + F('exam'))
+        # average = total.values('subjectName').distinct().annotate(average=Round (Avg(F('total')), 2))
+        # maximum = total.values('subjectName').distinct().annotate(maximum=Max('total'))
+        # minimum = total.values('subjectName').distinct().annotate(minimum=Min('total'))
+        # rank = total.annotate(rank=Window(expression=Rank(), partition_by=[F('subjectName')], order_by=F('total').desc()))
+        # context = {'rank': rank,'maximum': maximum, 'minimum': minimum , 'average_dict': average}
+        # return context
 
-        class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'],subjectName__is_childSubject=False).annotate(
-            total=Sum(F('firstCa') + F('secondCa') + F('exam')))
+
+        class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'],subjectName__is_childSubject=False
+        ).annotate(total= F('firstCa') + F('secondCa') + F('exam')).values('subjectName__subjectName', 'total'
+        ).annotate(Average= Avg(F('total')))
+                    # ordianl_position = p.ordinal(56))
        
         class_parent_assessment = assessment.objects.filter(
-            className=self.kwargs['pk'],subjectName__is_childSubject=True).values('subjectName__parentSubject__parentSubjectName', 'student_id'
+            className=self.kwargs['pk'],subjectName__is_childSubject=True
+            ).values('subjectName__parentSubject__parentSubjectName', 'student_id'
                 ).annotate(
                     parentSubjectTOTAL=Sum(F('firstCa') + F('secondCa') + F('exam')),
                     parentSubjectAVERAGE= Avg(F('firstCa') + F('secondCa') + F('exam')),
@@ -567,12 +580,7 @@ class examResult(TemplateView):
         for student in ALLstudents:
             student_main_assessments = class_main_assessment.filter(student=student)
             student_parent_assessments = class_parent_assessment.filter(student=student
-                ).values('student', 
-                        'subjectName__parentSubject__parentSubjectName',
-                        'parentSubjectAVERAGE',
-                        'parentSubjectMAX',
-                        'parentSubjectMIN',
-                        ).annotate(
+                ).annotate(
                         TOTAL = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
                                     When(subjectName__parentSubject__parentSubjectName='National Values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
@@ -595,9 +603,9 @@ class examResult(TemplateView):
                         exam = Sum('exam'),                        
                         )
         #     # add student_main_assessments dict to student_parent_assessments dict
-            # parent_subject = student_parent_assessments[0]['TOTAL']
             if len(student_parent_assessments) > 0:
-                student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL'] + student_parent_assessments[0]['TOTAL']
+                student_total =student_parent_assessments.aggregate(Sum('TOTAL'))['TOTAL__sum'] + student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
+                # student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL'] + student_parent_assessments[0]['TOTAL']
                 student_subjects_count = student_main_assessments.count() + student_parent_assessments.count()
             else:
                 student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
@@ -605,13 +613,25 @@ class examResult(TemplateView):
 
             student_average = round(student_total / student_subjects_count, 2) 
             examObtainable = int(student_subjects_count) * 100
-            
+            failed_subjects = student_main_assessments.filter(total__lt=40).count() + student_parent_assessments.filter(TOTAL__lt=40).count()
+            passed_subjects = student_subjects_count - failed_subjects
+            failed_subjects_list = list(
+                student_main_assessments.filter(total__lt=40).values_list('subjectName__subjectName__subjectName', flat=True)
+                ) + list(student_parent_assessments.filter(TOTAL__lt=40).values_list('subjectName__parentSubject__parentSubjectName', 
+                flat=True))
+            if len(failed_subjects_list) > 1:
+                last_item = failed_subjects_list.pop()
+                failed_subjects_list = ', '.join(failed_subjects_list) + ' and ' + last_item
+            else:
+                failed_subjects_list = ', '.join(failed_subjects_list)
+        
             
             remarks = {
                 80: ["Excellent performance , never relent in your effort", "Outstanding performance!", "Keep up the great work!"],
                 60: ["Good result , never relent in your effort!", "Solid effort! keep trying", "You're on the right track!"],
-                50: ["Good result, but can still improve.", "Good result but needs more effort.", "Good perfomance More focus is needed."],
-                0: ["Not satisfactory.", "Needs significant improvement.", "You need to work harder."]
+                50: ["Good result, but can still improve", "Good result but needs more effort", "Good perfomance More focus is needed"],
+                40: ["Fair result, but can still improve", "You needs more effort", "Fair perfomance, More focus is needed"],
+                0: ["Not satisfactory", "Needs significant improvement", "Your performance is below average"]
             }
            
             if student_average >= 80:
@@ -620,15 +640,23 @@ class examResult(TemplateView):
                 remark = random.choice(remarks[60])
             elif student_average >= 50:
                 remark = random.choice(remarks[50])
+            elif student_average >= 40:
+                remark = random.choice(remarks[40])
             else:
                 remark = random.choice(remarks[0])
 
+            if failed_subjects:
+                if student_average >= 60:
+                    remark += f" but you failed in: {failed_subjects_list}"
+                elif student_average >= 50:
+                    remark += f" and try to improve in {failed_subjects_list}"
+                else:
+                    remark += f" You need to work harder in {failed_subjects_list}"
 
-            
-            
             final_assessments.append({
                                         'student': student, 
-                                        'subjects': student_main_assessments, 
+                                        'main_subjects': student_main_assessments, 
+                                        'class_main_assessment': class_main_assessment,
                                         'parent_subjects': student_parent_assessments,
                                         'studenttotal': student_total,
                                         'studentaverage': student_average,
@@ -636,16 +664,18 @@ class examResult(TemplateView):
                                         'examObtainable': examObtainable,
                                         'remarks': remark,
                                         'parent_assessment': class_parent_assessment,
+                                        'failed_subjects': failed_subjects,
+                                        'passed_subjects': passed_subjects,
+                                        'failed_subjects_list': failed_subjects_list,
                                         })
 
+        context['class_lowest_student_average'] = min([student['studentaverage'] for student in final_assessments])
+        context['class_highest_student_average'] = max([student['studentaverage'] for student in final_assessments])
+        context['class_final_average'] = round(sum([student['studentaverage'] for student in final_assessments]) / len(final_assessments), 2)
+        context['class_students_count'] = len(final_assessments)
+
         context['final_assessments'] = final_assessments
-        return context
-        
-
-        # multi line comments
-
-
-    
+        return context   
 
 class editSettings(UpdateView):
     model = setting

@@ -3818,6 +3818,54 @@ xmlns="http://www.w3.org/TR/REC-html40">
 </head>
 <body onload="myFunction()">
 
+{% comment %} 
+
+	<table>
+		<thead>
+			<tr>
+				<th style="border:1px solid #ddd;">STUDENT</th>
+				<th style="border:1px solid #ddd;">SUBJECT</th>
+				<th style="border:1px solid #ddd;">1st</th>
+				<th style="border:1px solid #ddd;">2nd</th>
+				<th style="border:1px solid #ddd;">EXAM</th>
+				<th style="border:1px solid #ddd;">TOTAL</th>
+				<th style="border:1px solid #ddd;">AVERAGE</th>
+				<th style="border:1px solid #ddd;">MAX</th>
+				<th style="border:1px solid #ddd;">MIN</th>
+				<th style="border:1px solid #ddd;">RANK</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for record in rank %}
+<tr>
+<td style="border:1px solid #ddd;">{{ record.student}}</td>
+<td style="border:1px solid #ddd;">{{ record.subjectName.id}}</td>
+<td style="border:1px solid #ddd;">{{ record.firstCa}}</td>
+<td style="border:1px solid #ddd;">{{ record.secondCa}}</td>
+<td style="border:1px solid #ddd;">{{ record.exam}}</td>
+<td style="border:1px solid #ddd;">{{ record.total }}</td>
+<td style="border:1px solid #ddd;">{% for subjectAVG in average_dict %} {% if subjectAVG.subjectName == record.subjectName_id %} {{ subjectAVG.average }} {% endif %} {% endfor %}</td>
+<td style="border:1px solid #ddd;">{% for subjectMAX in maximum %} {% if subjectMAX.subjectName == record.subjectName_id %} {{ subjectMAX.maximum }} {% endif %} {% endfor %}</td>
+<td style="border:1px solid #ddd;">{% for subjectMIN in minimum %} {% if subjectMIN.subjectName == record.subjectName_id %} {{ subjectMIN.minimum }} {% endif %} {% endfor %}</td>
+<td style="border:1px solid #ddd;">{{ record.rank }}</td>
+{% comment %} <td style="border:1px solid #ddd;">{{ maximum_dict[(record.student_id,record.subjectName)]}}</td>
+<td style="border:1px solid #ddd;">{{ minimum_dict[(record.student_id,record.subjectName)]}}</td>
+<td style="border:1px solid #ddd;">{{ record.rank }}</td> {% endcomment %}
+{% comment %} 
+</tr>
+{% endfor %}
+</tbody>
+</table>
+		</tbody>
+	</table>
+	 {% endcomment %}
+
+
+
+
+
+
+
 
 {% for student in all_students %}
 
@@ -4301,7 +4349,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   height:20.1pt'>Final Class Highest Average:</td>
   <td id ="higheststdAvg" colspan=2 class=xl17010370 style='border-right:.5pt solid black;
   border-left:none' >
-  {{highestAverage }}</td>
+  {{class_highest_student_average }}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Respect</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
@@ -4326,7 +4374,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Average:</td>
   <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>{{classAverage.classAvg}}</td>
+  border-left:none'>{{class_final_average}}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 style='border-top:none'>Honesty</td>
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
@@ -4351,7 +4399,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>Final Class Lowest Average:</td>
   <td colspan=2 class=xl17010370 style='border-right:.5pt solid black;
-  border-left:none'>{{ lowestAverage.0.examaverage }}</td>
+  border-left:none'>{{ class_lowest_student_average }}</td>
   <td class=xl17210370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Self
   Control</td>
@@ -4376,10 +4424,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <tr height=26 style='mso-height-source:userset;height:20.1pt'>
   <td colspan=2 height=26 class=xl15910370 style='border-right:.5pt solid black;
   height:20.1pt'>
-  {% comment %} Cummlative Average {% endcomment %}
+  Number of subjects failed: 
 </td>
   <td colspan=2 class=xl17310370 style='border-right:.5pt solid black;
-  border-left:none'>.</td>
+  border-left:none'>
+  {% if final_assessments.failed_subjects == 0 %}
+  None
+  {% else %}
+  {{ final_assessments.failed_subjects }}
+  {% endif %}
+</td>
   <td class=xl17510370></td>
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Responsibility</td>
   <td class=xl7210370 style='border-top:none'>
@@ -4676,14 +4730,15 @@ xmlns="http://www.w3.org/TR/REC-html40">
 				highestValue = value;
 			}
 		}
-		for (var i = 0; i < divs.length; i++) {
-			highestdivs[i].innerHTML = highestValue;
-			
-		}
 		
+
 	}
 
-	{% comment %} alert("The highest value is: " + highestValue); {% endcomment %}
+	{% comment %} for (var i = 0; i < divs.length; i++) {
+			highestdivs[i].innerHTML = highestValue;
+					alert("The highest value is: " + highestValue);
+
+		} {% endcomment %}
 
 
 </script>
