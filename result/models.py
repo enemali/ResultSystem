@@ -104,7 +104,6 @@ class parentsubject(models.Model):
     def __str__(self):
         return str(self.parentSubjectName)
 
-
 class allsubject(models.Model):
     subjectTeacher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     className = models.ForeignKey(classArmTeacher, related_name="subjectclass", on_delete=models.CASCADE, null=True)

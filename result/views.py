@@ -167,7 +167,8 @@ class classList(ListView):
                 latestCommentdate = Max('comment__date'),
                 latestAssessmentdate = Max('assessment__date')
             )
-    
+        # context['assessmentError'] = assessment.objects.exclude(subjectName__className = F('className'))
+
             # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
 
