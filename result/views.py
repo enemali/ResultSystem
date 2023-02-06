@@ -146,30 +146,36 @@ class settings(LoginRequiredMixin, TemplateView):
 class classList(ListView):
     model = classArmTeacher
     template_name = 'result/classList.html'
+    currrent_assessment = assessment
     
     def get_context_data(self, **kwargs):
         context = super(classList, self).get_context_data(**kwargs)
         context['user'] = self.request.user
         context['setting'] = setting.objects.all()
         context['settingForm'] = settingForm()
+        context['assessment'] = assessment.objects.filter(
+                                                    term = setting.objects.get(setting_type = 'term').setting_value, 
+                                                    session = setting.objects.get(setting_type = 'session').setting_value)
+        context['all_class'] = classArmTeacher.objects.filter(
+                                                            # id__in = context['assessment'].values_list('className_id', flat=True)
+                                                            )
         if self.request.user.is_staff:
             context["btn"] = "Edit Termlly Settings"
-            context['all_class'] = classArmTeacher.objects.annotate(
+            context['all_class'] = context['all_class'].annotate(
                 commentCount = Count('comment__student__id', distinct=True),
                 student_in_assessment = Count('assessment__student__id', distinct=True),
                 latestCommentdate = Max('comment__date'),
                 latestAssessmentdate = Max('assessment__date')
                 )
         else:
-            context['all_class'] = classArmTeacher.objects.filter(className__section__sectionName = self.request.user.section).annotate(
-                commentCount = Count('comment__id', distinct=True),
-                student_in_assessment = Count('assessment__student__id', distinct=True),
-                latestCommentdate = Max('comment__date'),
-                latestAssessmentdate = Max('assessment__date')
+            context['all_class'] = context['all_class'].filter(className__section__sectionName = self.request.user.section).annotate(
+                            commentCount = Count('comment__id', distinct=True),
+                            student_in_assessment = Count(context['assessment'].values_list('student__id', flat=True), distinct=True),
+                            latestCommentdate = Max('comment__date'),
+                            latestAssessmentdate = Max(context['assessment'].values_list('date', flat=True))
             )
         # context['assessmentError'] = assessment.objects.exclude(subjectName__className = F('className'))
-
-            # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
+        # context['sectionSubjects'] = allsubject.objects.filter(className__className__section__sectionName = self.request.user.section).values('className__className').distinct()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -194,11 +200,15 @@ class classDetails(DetailView):
         context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
        
         context['students'] = students.objects.filter(classArm = self.get_object().classArm ,className = self.get_object().className)
-        context['assessment'] = assessment.objects.filter(className_id = self.kwargs['pk'])
+        context['assessment'] = assessment.objects.filter(
+                                                            className_id = self.kwargs['pk'],
+                                                            term = setting.objects.get(setting_type = 'term').setting_value,
+                                                            session = setting.objects.get(setting_type = 'session').setting_value
+                                                            )
         context['firstCAEntry']= context['subjects'].annotate(
-                                 firstCa_Count =Count('assessment', filter=Q(assessment__firstCa__gt=0, assessment__term__isnull=False)),
-                                 secondCa_Count =Count('assessment', filter=Q(assessment__secondCa__gt=0)),
-                                 exam_Count =Count('assessment', filter=Q(assessment__exam__gt=0)),
+                                 firstCa_Count =Count(context['assessment'].values_list('firstCa', flat=True), filter=Q(assessment__firstCa__gt=0)),
+                                 secondCa_Count =Count(context['assessment'].values_list('secondCa', flat=True), filter=Q(assessment__secondCa__gt=0)),
+                                 exam_Count =Count(context['assessment'].values_list('exam', flat=True), filter=Q(assessment__exam__gt=0)),
                                  student_Count =Count('assessment')
                                  )
         return context
@@ -210,7 +220,11 @@ class subjectDetails(CreateView):
     
     def get(self, request,pk, *args, **kwargs):
         singleSubject = allsubject.objects.get(id=pk)
-        assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
+        assessment_query = assessment.objects.filter(
+                                                    subjectName=singleSubject.id,
+                                                    term = setting.objects.get(setting_type = 'term').setting_value,
+                                                    session = setting.objects.get(setting_type = 'session').setting_value
+                                                    )
         # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
         # student_query not in assessment_query
         students_query = students.objects.filter(className=singleSubject.className.className,
@@ -219,7 +233,13 @@ class subjectDetails(CreateView):
         if students_query.count() > 0:
             assessmentBulk = []
             for student in students_query:
-                assessmentBulk.append(assessment(student=student, subjectName=singleSubject,className = singleSubject.className))
+                assessmentBulk.append(assessment(
+                                      student=student, 
+                                      subjectName=singleSubject,
+                                      className = singleSubject.className,
+                                      term = setting.objects.get(setting_type = 'term').setting_value,
+                                      session = setting.objects.get(setting_type = 'session').setting_value
+                                      ))
             assessment.objects.bulk_create(assessmentBulk)
 
         Form = SubjectstudentForm()

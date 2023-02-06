@@ -50,6 +50,18 @@ class setting(models.Model):
     date_Term_End = models.DateField(auto_now_add=False,null=True)
     number_of_days_school_open = models.IntegerField(null=True)
     next_term_begins = models.DateField(auto_now_add=False,null=True)
+    setting_type = models.CharField(max_length=100,null=True)
+    setting_value = models.CharField(max_length=100,null=True)
+    is_current_setting = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [ 
+                        models.UniqueConstraint(
+                        fields=['is_current_setting'], 
+                        condition=Q(is_current_setting=True), 
+                        name='unique_is_current_setting'
+                        ) 
+                        ]
  
 class Images(models.Model):
     image = models.ImageField(null=True,blank=True)
@@ -147,7 +159,8 @@ class assessment(models.Model):
     absentfirstCa = models.BooleanField(default=False)
     absentsecondCa = models.BooleanField(default=False)
     absentexam = models.BooleanField(default=False)
-
+    recordedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    # to_field = 'classTeacher'
     
     @property
     def caTotal(self):

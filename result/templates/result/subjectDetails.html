@@ -22,11 +22,11 @@
      </div>
      <div>
  <!-- class Entry button -->
-    <a href="{% url 'result:entry' singleSubject.id %}"> 
+    {% comment %} <a href="{% url 'result:entry' singleSubject.id %}"> 
         <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
           {{singleSubject.subjectName}} Class Entry
         </button>
-      </a>  
+      </a>   {% endcomment %}
        <!-- class Entry button -->
      </div>
 
@@ -94,7 +94,14 @@
            {% for StudentAssessment in assessment %}
           
            <tr>
-             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }} </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }}
+              <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
+                <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </button>
+              </a>
+            </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.className }} </td>
              {% if StudentAssessment.absentfirstCa %}
               <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
@@ -120,7 +127,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </button>
-            </a>
+                </a>
            </tr>
            {% endfor %}
              
