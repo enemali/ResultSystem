@@ -524,25 +524,30 @@ class examResult(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(examResult, self).get_context_data(**kwargs)
+        termly_assessment = assessment.objects.filter(
+                                                        className=self.kwargs['pk'],
+                                                        term = setting.objects.get(setting_type = 'term').setting_value,
+                                                        session = setting.objects.get(setting_type = 'session').setting_value,
+                                                        )
         
-        student_ids = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
+        student_ids = students.objects.filter(id__in=termly_assessment.values('student_id'))
         
-        context['highestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
-        context['lowestexamTotal'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
-        context['subjectAverage'] = allsubject.objects.filter(className=self.kwargs['pk']).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
+        context['highestexamTotal'] = allsubject.objects.filter(id__in=termly_assessment).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
+        context['lowestexamTotal'] = allsubject.objects.filter(id__in=termly_assessment).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
+        context['subjectAverage'] = allsubject.objects.filter(id__in=termly_assessment).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
         context['setting'] = setting.objects.all()
         
-        context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
-            Subjectexamtotal= F('firstCa') + F('secondCa') + F('exam'),
-            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('Subjectexamtotal').desc()),
+        # context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
+        #     Subjectexamtotal= F('firstCa') + F('secondCa') + F('exam'),
+        #     position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('Subjectexamtotal').desc()),
 
-            )
+        #     )
 
         context["all_students"] = student_ids.annotate(
                 # examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
                 examaverage=Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2),
-                assessmentCount=Count('assessment__id'),
-                examObtainable=Count('assessment__id') * 100,
+                assessmentCount=Count(termly_assessment.values('id')),
+                examObtainable=Count(termly_assessment.values('id')) * 100,
                 # position = context['allScores'].filter(student_id=OuterRef('id')).values('position'),
                 studentsection = section.objects.filter(id=OuterRef('className__section_id')).values('sectionName'),
                 studentclass = classArmTeacher.objects.filter(className=OuterRef('className_id')).values('className__className'),
@@ -555,7 +560,11 @@ class examResult(TemplateView):
         context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
             )
     
-        ALLstudents = students.objects.filter(id__in=assessment.objects.filter(className=self.kwargs['pk']).values('student_id'))
+        ALLstudents = students.objects.filter(id__in=assessment.objects.filter(
+                                                    className=self.kwargs['pk'],
+                                                    # term = setting.objects.get(setting_type = 'term').setting_value, 
+                                                    #  session = setting.objects.get(setting_type = 'session').setting_value,
+                                                    ).values('student_id'))
         final_assessments = []
         
         # class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'], subjectName__is_childSubject=False)
