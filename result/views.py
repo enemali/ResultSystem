@@ -321,7 +321,7 @@ class EditTeacher(UpdateView):
         id = self.object.id
         form = UserChangeForm(instance=self.object)
         Button = 'Update Teacher'
-        setting = settings.objects.all()
+        schlsetting = setting.objects.all()
         return render(request, 'result/Edit.html', {'form': form, 'id': id, 'Button': Button, 'setting': setting})
 
 class studentList(ListView):
