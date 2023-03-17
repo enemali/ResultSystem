@@ -153,23 +153,23 @@ class classList(ListView):
         context['user'] = self.request.user
         context['setting'] = setting.objects.all()
         context['settingForm'] = settingForm()
-        context['assessment'] = assessment.objects.filter(
-                                                    term = setting.objects.get(setting_type = 'term').setting_value, 
-                                                    session = setting.objects.get(setting_type = 'session').setting_value)
+        context['current_term'] = setting.objects.get(setting_type = 'term').setting_value
+        context['current_session'] = setting.objects.get(setting_type = 'session').setting_value
+        context['assessment'] = assessment.objects.filter(term = context['current_term'],session = context['current_session'])
         context['all_class'] = classArmTeacher.objects.filter(
                                                             # id__in = context['assessment'].values_list('className_id', flat=True)
                                                             )
         if self.request.user.is_staff:
             context["btn"] = "Edit Termlly Settings"
             context['all_class'] = context['all_class'].annotate(
-                commentCount = Count('comment__student__id', distinct=True),
+                # commentCount = Count('comment__student__id', distinct=True),
                 student_in_assessment = Count('assessment__student__id', distinct=True),
                 latestCommentdate = Max('comment__date'),
                 latestAssessmentdate = Max('assessment__date')
                 )
         else:
             context['all_class'] = context['all_class'].filter(className__section__sectionName = self.request.user.section).annotate(
-                            commentCount = Count('comment__id', distinct=True),
+                            # commentCount = Count('comment__id', distinct=True),
                             student_in_assessment = Count(context['assessment'].values_list('student__id', flat=True), distinct=True),
                             latestCommentdate = Max('comment__date'),
                             latestAssessmentdate = Max(context['assessment'].values_list('date', flat=True))
@@ -193,19 +193,17 @@ class classDetails(DetailView):
     def get_context_data(self, **kwargs):
         context = super(classDetails, self).get_context_data(**kwargs)
         context['user'] = self.request.user
+        context['current_term'] = setting.objects.get(setting_type = 'term').setting_value
+        context['current_session'] = setting.objects.get(setting_type = 'session').setting_value
         # if self.request.user.is_staff:
         #     context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
         # else:
         #     context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
+        context['assessment'] = assessment.objects.filter(className_id = self.kwargs['pk'], term = context['current_term'],session = context['current_session'])
         context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
-       
-        context['students'] = students.objects.filter(classArm = self.get_object().classArm ,className = self.get_object().className)
-        context['assessment'] = assessment.objects.filter(
-                                                            className_id = self.kwargs['pk'],
-                                                            term = setting.objects.get(setting_type = 'term').setting_value,
-                                                            session = setting.objects.get(setting_type = 'session').setting_value
-                                                            )
-        context['firstCAEntry']= context['subjects'].annotate(
+        context['subject_in_assessment'] = context['subjects'].filter(id__in = context['assessment'].values_list('subjectName_id', flat=True))
+        context['students'] = students.objects.filter(classArm = self.get_object().classArm,className = self.get_object().className)
+        context['assessmentEntry']= context['subjects'].annotate(
                                  firstCa_Count =Count(context['assessment'].values_list('firstCa', flat=True), filter=Q(assessment__firstCa__gt=0)),
                                  secondCa_Count =Count(context['assessment'].values_list('secondCa', flat=True), filter=Q(assessment__secondCa__gt=0)),
                                  exam_Count =Count(context['assessment'].values_list('exam', flat=True), filter=Q(assessment__exam__gt=0)),
@@ -258,8 +256,7 @@ class subjectDetails(CreateView):
             return redirect('result:subjectDetails', pk=pk)
         else:
             print(Form.errors)
-            return redirect('result:subjectDetails', pk=pk)
-            
+            return redirect('result:subjectDetails', pk=pk)        
      
 class assessmentEntry(UpdateView):
     model = assessment
