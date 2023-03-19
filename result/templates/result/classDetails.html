@@ -19,7 +19,7 @@
           <div class="text-purple-500"> PURPLE => InComplete Entry</div>
           <div class=""> WHITE => Completed</div>
         </h1>
-        
+        {{assessment.count}}
         <table class="table-auto w-auto text-left whitespace-no-wrap">
           <thead>
             <tr  >
@@ -48,33 +48,33 @@
               </td>
               {% endif %}
           <!--- first CA count  --> 
-              {% if subject.firstCa_Count > 0 and subject.firstCa_Count < students.count %}
-                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.firstCa_Count }} </td>
-              {% elif subject.firstCa_Count == 0 %}
-                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ subject.firstCa_Count }} </td>
+              {% if classSubject.firstCa_Count > 0 and classSubject.firstCa_Count < students.count %}
+                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.firstCa_Count }} </td>
+              {% elif classSubject.firstCa_Count == 0 %}
+                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.firstCa_Count }} </td>
               {% else %}
-                  <td class="px-4 border-2 border-green-300">{{ subject.firstCa_Count }} </td>
+                  <td class="px-4 border-2 border-green-300">{{ classSubject.firstCa_Count }} </td>
               {% endif %}
           <!--- second CA count  -->
-              {% if subject.secondCa_Count > 0 and subject.secondCa_Count < students.count %}
-                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.secondCa_Count }} </td>
-              {% elif subject.secondCa_Count == 0 %}
-                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ subject.secondCa_Count }} </td>
+              {% if classSubject.secondCa_Count > 0 and classSubject.secondCa_Count < students.count %}
+                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.secondCa_Count }} </td>
+              {% elif classSubject.secondCa_Count == 0 %}
+                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.secondCa_Count }} </td>
               {% else %}
-                  <td class="px-4 border-2 border-green-300">{{ subject.secondCa_Count }} </td>
+                  <td class="px-4 border-2 border-green-300">{{ classSubject.secondCa_Count }} </td>
               {% endif %}
           <!--- exam count  -->
-              {% if subject.exam_Count > 0 and subject.exam_Count < students.count %}
+              {% if classSubject.exam_Count > 0 and classSubject.exam_Count < students.count %}
                   <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.exam_Count }} </td>
-              {% elif subject.exam_Count == 0 %}
-                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ subject.exam_Count }} </td>
+              {% elif classSubject.exam_Count == 0 %}
+                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.exam_Count }} </td>
               {% else %}
-                  <td class="px-4 border-2 border-green-300">{{ subject.exam_Count }} </td>
+                  <td class="px-4 border-2 border-green-300">{{ classSubject.exam_Count }} </td>
               {% endif %}
             
-              <td class="px-4 border-2 border-green-300"> {{ subject.subjectTeacher }} </td>
+              <td class="px-4 border-2 border-green-300"> {{ classSubject.subjectTeacher }} </td>
               <td class="px-0 border-2 border-green-300 ">
-                {% if subject.subjectTeacher == request.user or request.user.is_staff %}
+                {% if classSubject.subjectTeacher == request.user or request.user.is_staff %}
                 <a href="{% url 'result:subjectDetails' classSubject.id %}"> 
                   <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Start Entry

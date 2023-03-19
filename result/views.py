@@ -195,20 +195,32 @@ class classDetails(DetailView):
         context['user'] = self.request.user
         context['current_term'] = setting.objects.get(setting_type = 'term').setting_value
         context['current_session'] = setting.objects.get(setting_type = 'session').setting_value
-        # if self.request.user.is_staff:
-        #     context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
-        # else:
-        #     context['subjects'] = allsubject.objects.filter(subjectTeacher = self.request.user , className_id = self.kwargs['pk'])
+        
         context['assessment'] = assessment.objects.filter(className_id = self.kwargs['pk'], term = context['current_term'],session = context['current_session'])
         context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
         context['subject_in_assessment'] = context['subjects'].filter(id__in = context['assessment'].values_list('subjectName_id', flat=True))
         context['students'] = students.objects.filter(classArm = self.get_object().classArm,className = self.get_object().className)
         context['assessmentEntry']= context['subjects'].annotate(
-                                 firstCa_Count =Count(context['assessment'].values_list('firstCa', flat=True), filter=Q(assessment__firstCa__gt=0)),
-                                 secondCa_Count =Count(context['assessment'].values_list('secondCa', flat=True), filter=Q(assessment__secondCa__gt=0)),
-                                 exam_Count =Count(context['assessment'].values_list('exam', flat=True), filter=Q(assessment__exam__gt=0)),
-                                 student_Count =Count('assessment')
-                                 )
+                     firstCa_Count = Count('id',
+                                    id__in=context['assessment'].values_list('subjectName_id', flat=True),
+                                    filter=Q(assessment__firstCa__gt=0,
+                                    assessment__term = context['current_term'],
+                                    assessment__session = context['current_session']
+                                    )),
+                    secondCa_Count = Count('id',
+                                    id__in=context['assessment'].values_list('subjectName_id', flat=True),
+                                    filter=Q(assessment__secondCa__gt=0,
+                                    assessment__term = context['current_term'],
+                                    assessment__session = context['current_session']
+                                    )),
+                    exam_Count = Count('id',
+                                    id__in=context['assessment'].values_list('subjectName_id', flat=True),
+                                    filter=Q(assessment__exam__gt=0,
+                                    assessment__term = context['current_term'],
+                                    assessment__session = context['current_session'] 
+                                    )),
+                    student_Count =Count('assessment__student__id', distinct=True,filter=Q(assessment__term = context['current_term'],assessment__session = context['current_session']))
+                                    )
         return context
 
 class subjectDetails(CreateView):
