@@ -168,7 +168,9 @@ class classList(ListView):
                 latestAssessmentdate = Max('assessment__date')
                 )
         else:
-            context['all_class'] = context['all_class'].filter(className__section__sectionName = self.request.user.section).annotate(
+            context['all_class'] = context['all_class'].filter(
+                className__section__sectionName__startswith=str(self.request.user.section)[:4]
+                ).annotate(
                             # commentCount = Count('comment__id', distinct=True),
                             student_in_assessment = Count(context['assessment'].values_list('student__id', flat=True), distinct=True),
                             latestCommentdate = Max('comment__date'),
