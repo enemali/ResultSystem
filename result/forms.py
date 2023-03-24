@@ -118,7 +118,12 @@ class AssessmentForm(forms.ModelForm):
 entryformset = modelformset_factory(assessment , 
 fields = ['className','student','firstCa','secondCa','exam','absentfirstCa','absentsecondCa','absentexam'],
  extra=0,
-labels = {'absentfirstCa': '1st-CA Absent', 'absentsecondCa': '2nd-CA Absent', 'absentexam': 'Exam Absent' })
+labels = {'absentfirstCa': '1st-CA Absent', 'absentsecondCa': '2nd-CA Absent', 'absentexam': 'Exam Absent' },
+widgets = { 'student': forms.Select(attrs={'id': 'studentdrpdwn'}),
+            'className': forms.Select(attrs={'id':'studentdrpdwn'}),
+           }
+)
+
 
 class entryformsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):

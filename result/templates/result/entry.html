@@ -29,10 +29,13 @@
     </div>
 </div>
 
-    {% comment %} {% csrf_token %}
-    {% for form in formset %}
-        {{ form.as_p }}
-    {% endfor %}
-      <button type="submit" class=" px-3 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-800  focus:outline-none focus:bg-gray-900  transition duration-300 transform active:scale-95 ease-in-out">
-         <span class="pl-2 mx-1">Save</span>
-      </button> {% endcomment %}
+<script>
+    
+    var studentDrpDwns = document.querySelectorAll('#studentdrpdwn');
+    for (var i = 0; i < studentDrpDwns.length; i++) {
+        studentDrpDwns[i].addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            
+        });
+    }
+</script>
