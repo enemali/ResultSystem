@@ -459,15 +459,26 @@ class print(TemplateView):
     get_success_url = reverse_lazy('result:print')
 
 def entry(request, pk):
-    entry_formset = entryformset(queryset=assessment.objects.filter(subjectName=pk))
+    current_term_assessment = assessment.objects.filter(
+                                term = setting.objects.get(setting_type = 'term').setting_value,
+                                session = setting.objects.get(setting_type = 'session').setting_value,
+                                subjectName = pk
+                                )
+    current_term_assessment2 = assessment.objects.prefetch_related('subjectName').filter(
+                                term = setting.objects.get(setting_type = 'term').setting_value,
+                                session = setting.objects.get(setting_type = 'session').setting_value,
+                                subjectName = pk
+                                )
+    entry_formset = entryformset(queryset=current_term_assessment)
     helper = entryformsetHelper()
-    subject = allsubject.objects.get(id=pk)
     for form in entry_formset:
-        form.fields['student'].readonly = True
-        form.fields['className'].readonly = True
+        # form.fields['student'].readonly = True
+        # form.fields['className'].readonly = True
         form.fields['firstCa'].widget.attrs['class'] = 'form-control'
         form.fields['secondCa'].widget.attrs['class'] = 'form-control'
         form.fields['exam'].widget.attrs['class'] = 'form-control'
+    
+    subject = allsubject.objects.get(id=pk)
     singleSubject = allsubject.objects.get(id=pk)
     assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
         # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
