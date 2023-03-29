@@ -33,9 +33,9 @@ allclass_choices = (
                     ('SS3', 'SS3'),
                    )
 term_choices = (
-                    ('1st-Term', '1st-Term'),
-                    ('2nd-Term', '2nd-Term'),
-                    ('3rd-Term', '3rd-Term'),
+                    ('1', '1st-Term'),
+                    ('2', '2nd-Term'),
+                    ('3', '3rd-Term'),
                    )
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
 comment_choise = ( ('A', 'A') , ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'))
@@ -151,7 +151,7 @@ class assessment(models.Model):
     subjectName = models.ForeignKey(allsubject, on_delete=models.CASCADE, null=True)
     firstCa = models.IntegerField(default=0 , validators=[MaxValueValidator(20) , MinValueValidator(0)])
     secondCa = models.IntegerField(default=0 , validators=[MaxValueValidator(20) , MinValueValidator(0)])
-    exam = models.IntegerField(default=0 , validators=[MaxValueValidator(60) , MinValueValidator(0)])
+    exam = models.IntegerField(default=0 , validators=[MaxValueValidator(100) , MinValueValidator(0)])
     section = models.CharField(max_length=100, choices=section_choices)
     term = models.CharField(max_length=100 , choices=term_choices)
     session = models.CharField(max_length=1000)

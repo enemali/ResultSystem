@@ -514,9 +514,19 @@ class addComment(CreateView):
     def get (self, request, pk ,*args, **kwargs):
         form = commentForm()
         form.fields['className'].queryset = classArmTeacher.objects.filter(pk = pk )
-        assessments = assessment.objects.all().filter(className = pk )
+        term = setting.objects.get(setting_type = 'term').setting_value
+        session = setting.objects.get(setting_type = 'session').setting_value
+        assessments = assessment.objects.all().filter(
+                                                className = pk ,
+                                                term = term,
+                                                session = session
+                                                )
         students_in_assessment = students.objects.filter(id__in=assessments.values('student_id'))
-        comments = comment.objects.all().filter(className = pk )
+        comments = comment.objects.all().filter(
+                                            className = pk ,
+                                            term = term,
+                                            session = session
+                                         )
         form.fields['student'].queryset = students_in_assessment.exclude(id__in=comments.values('student_id'))
         return render(request, self.template_name, {'form': form , 'assessment': assessments, 'comments': comments})
     
