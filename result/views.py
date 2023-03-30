@@ -525,8 +525,7 @@ class addComment(CreateView):
         comments = comment.objects.all().filter(
                                             className = pk ,
                                             term = term,
-                                            session = session
-                                         )
+                                            session = session)
         form.fields['student'].queryset = students_in_assessment.exclude(id__in=comments.values('student_id'))
         return render(request, self.template_name, {'form': form , 'assessment': assessments, 'comments': comments})
     
