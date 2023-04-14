@@ -63,6 +63,8 @@
               
             </td>
             <td class="border-4 border-blue-300    text-center">{{ class.classTeacher }}</td>
+            
+            
             <td class="border-4 border-blue-300    text-center">
               {%if class.commentCount == class.student_in_assessment %}
                 <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-green-500 rounded-full">{{class.commentCount}}</span>
@@ -71,13 +73,14 @@
                 {%else%}
                 <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-500 rounded-full">{{class.commentCount}}</span>
                {%endif%}
-
             {% if class.classTeacher == request.user  or request.user.is_staff %}
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               <a href="{% url 'result:addComment' class.id %}">Comment </a>
               </button>
             {% endif %}
             </td>
+
+
             <td class="border-4 border-blue-300    text-center">
             {% if class.classTeacher == request.user or request.user.is_staff %}
              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
