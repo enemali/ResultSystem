@@ -555,10 +555,12 @@ class examResult(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(examResult, self).get_context_data(**kwargs)
+        thisTerm = setting.objects.get(setting_type = 'term').setting_value
+        thisSession = setting.objects.get(setting_type = 'session').setting_value
         termly_assessment = assessment.objects.filter(
                                                         className=self.kwargs['pk'],
-                                                        term = setting.objects.get(setting_type = 'term').setting_value,
-                                                        session = setting.objects.get(setting_type = 'session').setting_value,
+                                                        term = thisTerm,
+                                                        session = thisSession,
                                                         )
         
         student_ids = students.objects.filter(id__in=termly_assessment.values('student_id'))
@@ -588,8 +590,12 @@ class examResult(TemplateView):
         context["highestAverage"] = context["all_students"].order_by('-examaverage').first().examaverage
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
-        context["allComments"] = comment.objects.filter(className=self.kwargs['pk'], student = OuterRef('id')).annotate(
-            )
+        context["allComments"] = comment.objects.filter(
+                                                        className=self.kwargs['pk'], 
+                                                        student = OuterRef('id'),
+                                                        term=thisTerm,
+                                                        session=thisSession,
+                                                        )
     
         ALLstudents = students.objects.filter(id__in=assessment.objects.filter(
                                                     className=self.kwargs['pk'],
@@ -734,6 +740,8 @@ class examResult(TemplateView):
         context['class_highest_student_average'] = max([student['studentaverage'] for student in final_assessments])
         context['class_final_average'] = round(sum([student['studentaverage'] for student in final_assessments]) / len(final_assessments), 2)
         context['class_students_count'] = len(final_assessments)
+        context['thisTerm'] = thisTerm
+        context['thisSession'] = thisSession
 
         context['final_assessments'] = final_assessments
         return context   

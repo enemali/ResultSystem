@@ -4649,7 +4649,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=11 rowspan=2 class=xl18310370 width=819 style='border-right:.5pt solid black;
   width:614pt'> 
   {%for comment in student.comment_set.all %}
+  {% if comment.term == thisTerm  and comment.session == thisSession %}
 		{{ comment.examcomment }} 
+	{% endif %}	
   {% endfor %}
 
 </td>
