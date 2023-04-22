@@ -570,11 +570,15 @@ class examResult(TemplateView):
         context['subjectAverage'] = allsubject.objects.filter(id__in=termly_assessment).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
         context['setting'] = setting.objects.all()
         
-        # context['allScores'] = assessment.objects.filter(className=self.kwargs['pk']).annotate(
-        #     Subjectexamtotal= F('firstCa') + F('secondCa') + F('exam'),
-        #     position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('Subjectexamtotal').desc()),
+        context['allScores'] = assessment.objects.filter(
+                                                    className=self.kwargs['pk'],
+                                                    term = thisTerm,
+                                                    session = thisSession,
+                                                    ).annotate(
+            Subjectexamtotal= F('firstCa') + F('secondCa') + F('exam'),
+            position = Window(expression=Rank(), partition_by=[F('subjectName_id')], order_by=F('Subjectexamtotal').desc()),
 
-        #     )
+            )
 
         context["all_students"] = student_ids.annotate(
                 # examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
@@ -614,7 +618,11 @@ class examResult(TemplateView):
         # return context
 
 
-        class_main_assessment = assessment.objects.filter(className=self.kwargs['pk'],subjectName__is_childSubject=False
+        class_main_assessment = assessment.objects.filter(
+                                                        className=self.kwargs['pk'],
+                                                        subjectName__is_childSubject=False,
+                                                        term = thisTerm,
+                                                        session = thisSession,
         ).annotate(total= F('firstCa') + F('secondCa') + F('exam')).values('subjectName__subjectName', 'total'
         ).annotate(Average= Avg(F('total')))
                     # ordianl_position = p.ordinal(56))
@@ -714,11 +722,15 @@ class examResult(TemplateView):
 
             if failed_subjects:
                 if student_average >= 60:
-                    remark += f" but you failed in: {failed_subjects_list}"
+                    # remark += f" but you failed in: {failed_subjects_list}"
+                    remark += f", try to improve in the subject(s) you failed"
                 elif student_average >= 50:
-                    remark += f" and try to improve in {failed_subjects_list}"
+                    # remark += f" and try to improve in {failed_subjects_list}"
+                    remark += f", try to improve in the subject(s) you failed"
                 else:
-                    remark += f" You need to work harder in {failed_subjects_list}"
+                    # remark += f" You need to work harder in {failed_subjects_list}"
+                    remark += f", try to improve in the subject(s) you failed"
+
 
             final_assessments.append({
                                         'student': student, 
