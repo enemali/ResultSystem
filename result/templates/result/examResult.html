@@ -3864,11 +3864,10 @@ xmlns="http://www.w3.org/TR/REC-html40">
 
 
 
-{{termly_assessment.count}}
+
 
 
 {% for student in all_students %}
-
 <div class="pagebreak"> </div>
 
 	<div id="examResult_10370" align=center x:publishsource="Excel">
@@ -4052,14 +4051,14 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</td>
 	<td class=xl13410370 style='border-left:none'>
 		{% for score in highestexamTotal %}
-			{% if score.id == studentAssessment.subjectName_id %}
+			{% if score.subjectName_id == studentAssessment.subjectName_id %}
 				{{score.highest}}
 			{% endif %}
 		{% endfor %}
 	</td>
 	<td class=xl13510370 style='border-left:none'>
 		{% for score in lowestexamTotal %}
-			{% if score.id == studentAssessment.subjectName_id %}
+			{% if score.subjectName_id == studentAssessment.subjectName_id %}
 				{{score.lowest}}
 			{% endif %}
 		{% endfor %}
@@ -4067,7 +4066,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td class=xl13610370 style='border-left:none'>
 		
 		{% for score in subjectAverage %}
-			{% if score.id == studentAssessment.subjectName_id %}
+			{% if score.subjectName_id == studentAssessment.subjectName_id %}
 				{{score.average}}
 			{% endif %}
 		{% endfor %}

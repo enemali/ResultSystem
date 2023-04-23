@@ -564,10 +564,14 @@ class examResult(TemplateView):
                                                         )
         
         student_ids = students.objects.filter(id__in=termly_assessment.values('student_id'))
-        
-        context['highestexamTotal'] = allsubject.objects.filter(id__in=termly_assessment).annotate(highest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('-highest')
-        context['lowestexamTotal'] = allsubject.objects.filter(id__in=termly_assessment).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
-        context['subjectAverage'] = allsubject.objects.filter(id__in=termly_assessment).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
+        context['thisTermSubjects'] = termly_assessment.values('subjectName_id').distinct()
+       
+        context['highestexamTotal'] = context['thisTermSubjects'].annotate(highest = Max(F('firstCa') + F('secondCa') + F('exam'))).order_by('-highest')
+        # context['lowestexamTotal'] = allsubject.objects.filter(id__in=termly_assessment).annotate(lowest = Min(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'))).order_by('lowest')
+        context['lowestexamTotal'] = context['thisTermSubjects'].annotate(lowest = Min(F('firstCa') + F('secondCa') + F('exam'))).order_by('lowest')
+        # context['subjectAverage'] = allsubject.objects.filter(id__in=termly_assessment).annotate(average = Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2))
+        context['subjectAverage'] = context['thisTermSubjects'].annotate(average = Round(Avg(F('firstCa') + F('secondCa') + F('exam'), output_field=FloatField()), 2))
+
         context['setting'] = setting.objects.all()
         
         context['allScores'] = assessment.objects.filter(
