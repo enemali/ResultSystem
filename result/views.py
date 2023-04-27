@@ -689,8 +689,11 @@ class examResult(TemplateView):
             else:
                 student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
                 student_subjects_count = student_main_assessments.count()
-
-            student_average = round(student_total / student_subjects_count, 2) 
+            # if student_total is not None and student_subjects_count != 0:
+            if student_total is not None and student_subjects_count != 0:
+                student_average = round(student_total / student_subjects_count, 2) 
+            # else:
+            #     student_average = 0
             examObtainable = int(student_subjects_count) * 100
             failed_subjects = student_main_assessments.filter(total__lt=40).count() + student_parent_assessments.filter(TOTAL__lt=40).count()
             passed_subjects = student_subjects_count - failed_subjects
