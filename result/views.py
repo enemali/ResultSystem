@@ -657,8 +657,8 @@ class examResult(TemplateView):
         
 
         for student in ALLstudents:
-            student_main_assessments = class_main_assessment.filter(student=student)
-            student_parent_assessments = class_parent_assessment.filter(student=student
+            student_main_assessments = class_main_assessment.filter(student=student ,term = thisTerm, session = thisSession)
+            student_parent_assessments = class_parent_assessment.filter(student=student, term = thisTerm, session = thisSession
                 ).annotate(
                         TOTAL = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
@@ -666,12 +666,13 @@ class examResult(TemplateView):
                                     default= int(0),
                                     output_field=FloatField()),
                         firstCa = Case(
-                                    When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', 
+                                    When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
                                     then=Sum('firstCa')/4),
                                     When(subjectName__parentSubject__parentSubjectName='National Values',
                                     then=Sum('firstCa')/2),
                                     default= int(0),
                                     output_field=FloatField()),
+                                    
                         secondCa = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
                                     then=Sum('secondCa')/4),
@@ -679,6 +680,7 @@ class examResult(TemplateView):
                                     then=Sum('secondCa')/2),
                                     default= int(0),
                                     output_field=FloatField()),
+
                         exam = Sum('exam'),                        
                         )
         #     # add student_main_assessments dict to student_parent_assessments dict
