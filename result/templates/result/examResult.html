@@ -4015,7 +4015,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssessment.firstCa }}</td>
 	<td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssessment.secondCa}}</td>
 	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
-	<td class=xl13310370 style='border-left:none'> {{ studentAssessment.examTotal }}</td>
+	<td  class=xl13310370 style='border-left:none'> {{ studentAssessment.examTotal }}</td>
 	<td class=xl13310370 style='border-top:none;border-left:none'>
 		{% comment %} student.studentclass {% endcomment %}
 
@@ -4140,7 +4140,13 @@ xmlns="http://www.w3.org/TR/REC-html40">
 		<td class=xl13010370 style='border-top:none;border-left:none'>{{subject.firstCa }}</td>
 		<td class=xl13110370 style='border-top:none;border-left:none'>{{subject.secondCa}}</td>
 		<td class=xl13210370 style='border-left:none'>{{subject.exam}}</td>
-		<td class=xl13310370 style='border-left:none'> {{ subject.TOTAL }}</td>
+
+		{% if subject.subjectName__parentSubject__parentSubjectName == 'Basic Science & Technology' %}
+		<td id = "BtechScore" class=xl13310370 style='border-left:none'> {{ subject.TOTAL }}</td>
+		{% else %}
+		<td id = "Nationalcore" class=xl13310370 style='border-left:none'> {{ subject.TOTAL }}</td>
+		{% endif %}
+
 		<td class=xl13310370 style='border-top:none;border-left:none'>
 			{% comment %} student.studentclass {% endcomment %}
 	
@@ -4168,19 +4174,23 @@ xmlns="http://www.w3.org/TR/REC-html40">
 		{% endwith %}
 		</td>
 		<td class=xl13310370 style='border-top:none;border-left:none'>
-
 	
 			{% for Psubject in final_assessments.parent_assessment %} <!-- loop through parent_assessment context -->
 			
 			{% if Psubject.subjectName__parentSubject__parentSubjectName == subject.subjectName__parentSubject__parentSubjectName and Psubject.student_id == student.id %}
 					{{Psubject.parentSubjectPOSITION}}
 		</td>
-		
-		<td class=xl13410370 style='border-left:none'>
-					{{Psubject.parentSubjectMAX}}
+
+
+		{% if subject.subjectName__parentSubject__parentSubjectName == 'Basic Science & Technology' %}
+		<td  id = "BtechMax" class=xl13410370 style='border-left:none'> 99
+		{% else %}
+		<td  id = "NationalMax" class=xl13410370 style='border-left:none'> 87
+		{% endif %}
+
 		</td>
 		<td class=xl13510370 style='border-left:none'>
-					{{Psubject.parentSubjectMIN}}
+					10
 	</td>
 		<td class=xl13610370 style='border-left:none'>
 					{{Psubject.parentSubjectAVERAGE}}
@@ -4779,15 +4789,63 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	function myFunction() {
 		var divs = document.querySelectorAll('#stdAvg');
 		var highestdivs = document.querySelectorAll('#higheststdAvg');
-
+		
 		var highestValue = 0;
+
 		for (var i = 0; i < divs.length; i++) {
-			
 			var value = parseFloat (divs[i].innerHTML);
 			if (value > highestValue) {
 				highestValue = value;
-			}
-		}
+				//alert("The highest value is: " + highestValue);
+			} }
+
+
+var btechScoreElements = document.querySelectorAll('#BtechScore');
+var  highestValue = 0;
+btechScoreElements.forEach(element => {
+  var  score = parseFloat(element.textContent);
+  if (score > highestValue) {
+    highestValue = score;
+  }
+});
+
+const btechMaxElements = document.querySelectorAll('#BtechMax');
+btechMaxElements.forEach(element => {
+  element.textContent = highestValue.toString();
+});
+
+
+
+var btechScoreElements = document.querySelectorAll('#Nationalcore');
+var  highestValue = 0;
+btechScoreElements.forEach(element => {
+  var  score = parseFloat(element.textContent);
+  if (score > highestValue) {
+    highestValue = score;
+  }
+});
+
+const btechMaxElements = document.querySelectorAll('#NationalMax');
+btechMaxElements.forEach(element => {
+  element.textContent = highestValue.toString();
+});
+
+
+
+
+
+			const trElements = document.querySelectorAll('tr');
+
+			trElements.forEach(tr => {
+			  const firstTd = tr.querySelector('td:first-child');
+			  if (firstTd && firstTd.textContent.trim() === 'Basic Science & Technology') {
+				const btechScoreDiv = tr.querySelector('#BtechScore');
+				if (btechScoreDiv) {
+				  alert(btechScoreDiv.textContent);
+				}
+			  }
+			});
+			
 		
 
 	}

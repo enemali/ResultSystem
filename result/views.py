@@ -632,7 +632,10 @@ class examResult(TemplateView):
                     # ordianl_position = p.ordinal(56))
        
         class_parent_assessment = assessment.objects.filter(
-            className=self.kwargs['pk'],subjectName__is_childSubject=True
+            className=self.kwargs['pk'],
+            subjectName__is_childSubject=True,
+            term = thisTerm,
+            session = thisSession,
             ).values('subjectName__parentSubject__parentSubjectName', 'student_id'
                 ).annotate(
                     parentSubjectTOTAL=Sum(F('firstCa') + F('secondCa') + F('exam')),
@@ -680,9 +683,23 @@ class examResult(TemplateView):
                                     then=Sum('secondCa')/2),
                                     default= int(0),
                                     output_field=FloatField()),
+                        exam = Sum('exam'),
 
-                        exam = Sum('exam'),                        
-                        )
+                        # highestParaentScore = Case(
+                        #                             When (subjectName__parentSubject__parentSubjectName='Basic Science & Technology', 
+                        #                                 then=Max((F('firstCa')/4) + (F('secondCa') /4)+ F('exam'))),
+                        #                             When(subjectName__parentSubject__parentSubjectName='National Values',
+                        #                                 then=Max((F('firstCa')/2) + (F('secondCa') /2)+ F('exam'))),
+                        #                             )
+                                                )
+        # highestParaentScore = student_parent_assessments.annotate(
+            #                 highestParaentTotal = Max(F('TOTAL')),
+            #                 LowestParaentTotal = Min(F('TOTAL')),
+            #                 ) 
+        
+            # for highestParaentScore in student_parent_assessments:
+
+                            
         #     # add student_main_assessments dict to student_parent_assessments dict
             if len(student_parent_assessments) > 0:
                 student_total =student_parent_assessments.aggregate(Sum('TOTAL'))['TOTAL__sum'] + student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
