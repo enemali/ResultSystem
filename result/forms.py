@@ -94,9 +94,24 @@ class ImageForm(forms.ModelForm):
 class settingForm(forms.ModelForm):
     class Meta:
         model = setting
-        fields = 'current_Term','current_Session','date_Term_Begin','date_Term_End','number_of_days_school_open','next_term_begins'
-        # fields = ['announcement','announcement_date','news']
-        widgets = {'announcement_date' : DatePickerInput(), 'next_term_begins' : DatePickerInput(), 'date_Term_Begin' : DatePickerInput(), 'date_Term_End' : DatePickerInput()}
+        fields = ['current_Term', 
+                    'setting_value',
+                    'current_Session', 
+                    'date_Term_Begin', 
+                    'date_Term_End', 
+                    'number_of_days_school_open', 
+                    'next_term_begins'
+                ]
+        labels = {
+            'setting_value': 'Term_Number',
+        }
+        widgets = {
+            'announcement_date': DatePickerInput(),
+            'next_term_begins': DatePickerInput(),
+            'date_Term_Begin': DatePickerInput(),
+            'date_Term_End': DatePickerInput(),
+        }
+
         
 class SubjectstudentForm(forms.ModelForm):
     class Meta:
