@@ -275,7 +275,7 @@ class subjectDetails(CreateView):
 class assessmentEntry(UpdateView):
     model = assessment
     context_object_name = 'assessment'
-    fields = 'firstCa','secondCa','exam'
+    fields = 'firstCa','secondCa','exam','absentfirstCa','absentsecondCa','absentexam'
     Form_class = AssessmentForm
     template_name = 'result/assessmentScore.html'
 
@@ -557,6 +557,17 @@ class examResult(TemplateView):
         context = super(examResult, self).get_context_data(**kwargs)
         thisTerm = setting.objects.get(setting_type = 'term').setting_value
         thisSession = setting.objects.get(setting_type = 'session').setting_value
+            
+        assessment_to_delete = assessment.objects.filter(
+                                                        className=self.kwargs['pk'],
+                                                        term = thisTerm,
+                                                        session = thisSession,
+                                                        firstCa=0,
+                                                        secondCa=0,
+                                                        exam=0,
+                                                        )
+        assessment_to_delete.delete()
+
         termly_assessment = assessment.objects.filter(
                                                         className=self.kwargs['pk'],
                                                         term = thisTerm,
