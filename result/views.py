@@ -25,11 +25,10 @@ from .filters import studentFilter
 from .models import User
 from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Value,Window, ExpressionWrapper, IntegerField, Case, When, Value, CharField
 # import Round from math 
-from django.db.models.functions import Round,Coalesce,Rank
+from django.db.models.functions import Round,Coalesce,Rank,Concat
 import random
 import inflect
 p=inflect.engine()
-
 
 
 # class index(TemplateView):
@@ -221,7 +220,20 @@ class classDetails(DetailView):
                                     assessment__term = context['current_term'],
                                     assessment__session = context['current_session'] 
                                     )),
-                    student_Count =Count('assessment__student__id', distinct=True,filter=Q(assessment__term = context['current_term'],assessment__session = context['current_session']))
+                    student_Count =Count('assessment__student__id', distinct=True,filter=Q(assessment__term = context['current_term'],assessment__session = context['current_session'])),
+                    subjecthighest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), filter=Q(assessment__term = context['current_term'],assessment__session = context['current_session'])),
+
+studentWithhighestMax = Subquery(
+    assessment.objects
+    .filter(subjectName=OuterRef('id'), term=context['current_term'], session=context['current_session'])
+    .values('student__id')
+    .annotate(highest=F('firstCa') + F('secondCa') + F('exam'))
+    .order_by('-highest')
+    .values('student__first_name', 'student__middle_name', 'student__last_name')
+    .annotate(full_name=Concat('student__first_name', Value(' '), 'student__middle_name', Value(' '), 'student__last_name', output_field=CharField()))
+    .values('full_name')[:1]
+)
+
                                     )
         return context
 
