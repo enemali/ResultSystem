@@ -566,8 +566,10 @@ class examResult(TemplateView):
                                                         secondCa=0,
                                                         exam=0,
                                                         )
-        assessment_to_delete.delete()
-
+        if assessment_to_delete.exists():
+            assessment_to_delete.delete()
+        # else:
+        #     raise Http404("No records found to delete.")
         termly_assessment = assessment.objects.filter(
                                                         className=self.kwargs['pk'],
                                                         term = thisTerm,
