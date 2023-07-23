@@ -685,7 +685,7 @@ class examResult(TemplateView):
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
                                     then=Sum('firstCa')/4),
                                     When(subjectName__parentSubject__parentSubjectName='National Values',
-                                    then=Sum('firstCa')/2),
+                                    then=Sum('firstCa')),
                                     default= int(0),
                                     output_field=FloatField()),
                                     
