@@ -40,4 +40,5 @@ urlpatterns = [
     path('editClassArm/<int:pk>/', editClassArm.as_view(), name='editClassArm'),
     path('editSettings/<int:pk>/', editSettings.as_view(), name='editSettings'),
     path('assesment_delete/<int:pk>/', assesment_delete.as_view(), name='assesment_delete'),
+    path('crosstab_view/', CrosstabView.as_view(), name='crosstab_view'),
 ]

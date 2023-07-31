@@ -221,7 +221,7 @@ class classDetails(DetailView):
                                     assessment__session = context['current_session'] 
                                     )),
                     student_Count =Count('assessment__student__id', distinct=True,filter=Q(assessment__term = context['current_term'],assessment__session = context['current_session'])),
-                    subjecthighest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), filter=Q(assessment__term = context['current_term'],assessment__session = context['current_session'])),
+                    Session_subjecthighest = Max(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), filter=Q(assessment__session = context['current_session'])),
 
 studentWithhighestMax = Subquery(
     assessment.objects
@@ -688,18 +688,19 @@ class examResult(TemplateView):
             student_main_assessments = class_main_assessment.filter(student=student ,term = thisTerm, session = thisSession)
             student_parent_assessments = class_parent_assessment.filter(student=student, term = thisTerm, session = thisSession
                 ).annotate(
-                        TOTAL = Case(
+                        TOTAL = Round(Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
                                     When(subjectName__parentSubject__parentSubjectName='National Values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
                                     default= int(0),
-                                    output_field=FloatField()),
-                        firstCa = Case(
+                                    output_field=FloatField()), 2),
+                    
+                        firstCa = Round(Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
                                     then=Sum('firstCa')/4),
                                     When(subjectName__parentSubject__parentSubjectName='National Values',
-                                    then=Sum('firstCa')),
+                                    then=Sum('firstCa')/2),
                                     default= int(0),
-                                    output_field=FloatField()),
+                                    output_field=FloatField()), 2),
                                     
                         secondCa = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
@@ -823,3 +824,48 @@ class assesment_delete(DeleteView):
     
     def get_success_url(self):
         return reverse_lazy('result:examResult', kwargs={'pk': self.object.className.id})
+
+
+
+class CrosstabView(View):
+    def get(self, request):
+        # Get all unique students and subjects
+        students_list = students.objects.all()
+        subjects_list = allsubject.objects.all()
+
+        thisTerm = setting.objects.get(setting_type = 'term').setting_value
+        thisSession = setting.objects.get(setting_type = 'session').setting_value
+
+        # Initialize a dictionary to store the crosstab data
+        crosstab_data = {}
+
+        # Loop through students and subjects to calculate the sum of firstCa, secondCa, and exam
+        for student in students_list:
+            crosstab_data[student] = {}
+            for subject in subjects_list:
+                # Get all assessments for the current student and subject
+                assessments = assessment.objects.filter(
+                    student=student, 
+                    subjectName=subject,
+                    term = thisTerm,
+                    session = thisSession
+                    )
+
+                # Calculate the sum of firstCa, secondCa, and exam for each student and subject
+                ca_sum = sum([assess.firstCa + assess.secondCa for assess in assessments])
+                exam_sum = sum([assess.exam for assess in assessments])
+
+                # Store the calculated sums in the dictionary
+                crosstab_data[student][subject] = {
+                    'ca_sum': ca_sum,
+                    'exam_sum': exam_sum,
+                    'total_sum': ca_sum + exam_sum
+                }
+
+        context = {
+            'crosstab_data': crosstab_data,
+            'students_list': students_list,
+            'subjects_list': subjects_list,
+        }
+
+        return render(request, 'crosstab_template.html', context)

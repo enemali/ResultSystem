@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+  
+{% block content %}
+
+<table>
+  <thead>
+    <tr>
+      <th>Student</th>
+      {% for subject in subjects_list %}
+        <th>{{ subject }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for student, subjects_data in crosstab_data.items %}
+      <tr>
+        <td>{{ student }}</td>
+        {% for subject, data in subjects_data.items %}
+          <td>{{ data.total_sum }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock %}
