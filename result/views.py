@@ -728,7 +728,15 @@ class examResult(TemplateView):
                             
         #     # add student_main_assessments dict to student_parent_assessments dict
             if len(student_parent_assessments) > 0:
-                student_total =student_parent_assessments.aggregate(Sum('TOTAL'))['TOTAL__sum'] + student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
+                studentParentTotal = student_parent_assessments.aggregate(Sum('TOTAL'))['TOTAL__sum']
+                studentMainTotal = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
+                if studentParentTotal is None:
+                    studentParentTotal = 0
+                if studentMainTotal is None:
+                    studentMainTotal = 0
+                    
+                student_total = studentParentTotal + studentMainTotal
+                # student_total =student_parent_assessments.aggregate(Sum('TOTAL'))['TOTAL__sum'] + student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
                 # student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL'] + student_parent_assessments[0]['TOTAL']
                 student_subjects_count = student_main_assessments.count() + student_parent_assessments.count()
             else:

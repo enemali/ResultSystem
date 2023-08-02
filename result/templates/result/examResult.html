@@ -4012,9 +4012,33 @@ xmlns="http://www.w3.org/TR/REC-html40">
 			<a style="color:white;" {% if request.user.is_staff %} href="{% url 'result:assesment_delete' studentAssessment.id %}" {% endif %}>Delete</a>
 		</button>
 </td>
+{% if studentAssessment.firstCa < 1 %}
+	<td class=xl13010370 style='border-top:none;border-left:none;'>
+		<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
+			<a style="color:white;" > {{studentAssessment.firstCa}} </a>
+		</button>
+	</td>
+{% else %}
 	<td class=xl13010370 style='border-top:none;border-left:none'>{{studentAssessment.firstCa }}</td>
+{% endif %}
+{% if studentAssessment.secondCa < 1 %}
+	<td class=xl13110370 style='border-top:none;border-left:none'>
+		<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
+			<a style="color:white;" > {{studentAssessment.secondCa}} </a>
+		</button>
+	</td>
+{% else %}
 	<td class=xl13110370 style='border-top:none;border-left:none'>{{studentAssessment.secondCa}}</td>
+{% endif %}
+{% if studentAssessment.exam < 1 %}
+	<td class=xl13210370 style='border-top:none;border-left:none'>
+		<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
+			<a style="color:white;" > {{studentAssessment.exam}} </a>
+		</button>
+	</td>
+{% else %}
 	<td class=xl13210370 style='border-left:none'>{{studentAssessment.exam}}</td>
+{% endif %}
 	<td  class=xl13310370 style='border-left:none'> {{ studentAssessment.examTotal }}</td>
 	<td class=xl13310370 style='border-top:none;border-left:none'>
 		{% comment %} student.studentclass {% endcomment %}
@@ -4108,7 +4132,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  {% endfor %}
 
 
- {% comment %} thi is where merged subjects starts from  {% endcomment %}
+ {% comment %} thi is where merged subjects starts from ( subject with parent subject) {% endcomment %}
  
  {% for final_assessments in final_assessments %}
  {% if final_assessments.student.id == student.id %}
@@ -4137,9 +4161,33 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% endif %}
 	{% endfor %}
 	</td>
+	    {% if subject.firstCa < 1 %}
+		<td class=xl13010370 style='border-top:none;border-left:none'>
+			<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
+				<a style="color:white;" > {{subject.firstCa }}</a>
+			</button>
+		</td>
+		{% else %}
 		<td class=xl13010370 style='border-top:none;border-left:none'>{{subject.firstCa }}</td>
+		{% endif %}
+		{% if subject.secondCa < 1 %}
+		<td class=xl13110370 style='border-top:none;border-left:none'>
+			<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
+				<a style="color:white;" > {{subject.secondCa }}</a>
+			</button>
+		</td>
+		{% else %}
 		<td class=xl13110370 style='border-top:none;border-left:none'>{{subject.secondCa}}</td>
+		{% endif %}
+		{% if subject.exam < 1 %}
+		<td class=xl13210370 style='border-top:none;border-left:none'>
+			<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
+				<a style="color:white;" > {{subject.exam }}</a>
+			</button>
+		</td>
+		{% else %}
 		<td class=xl13210370 style='border-left:none'>{{subject.exam}}</td>
+		{% endif %}
 
 		{% if subject.subjectName__parentSubject__parentSubjectName == 'Basic Science & Technology' %}
 		<td id = "BtechScore" class=xl13310370 style='border-left:none'> {{ subject.TOTAL }}</td>
