@@ -692,7 +692,7 @@ class examResult(TemplateView):
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology', then=(Sum('firstCa')/4) + (Sum('secondCa') /4)+ Sum('exam')),
                                     When(subjectName__parentSubject__parentSubjectName='National Values', then=(Sum('firstCa')/2) + (Sum('secondCa') /2)+ Sum('exam')),
                                     default= int(0),
-                                    output_field=FloatField()), 2),
+                                    output_field=IntegerField()), 2),
                     
                         firstCa = Round(Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
@@ -700,7 +700,7 @@ class examResult(TemplateView):
                                     When(subjectName__parentSubject__parentSubjectName='National Values',
                                     then=Sum('firstCa')/2),
                                     default= int(0),
-                                    output_field=FloatField()), 2),
+                                    output_field=IntegerField()), 2),
                                     
                         secondCa = Case(
                                     When(subjectName__parentSubject__parentSubjectName='Basic Science & Technology',
@@ -708,7 +708,7 @@ class examResult(TemplateView):
                                     When(subjectName__parentSubject__parentSubjectName='National Values',
                                     then=Sum('secondCa')/2),
                                     default= int(0),
-                                    output_field=FloatField()),
+                                    output_field=IntegerField()),
                         exam = Sum('exam'),
 
                         # highestParaentScore = Case(
@@ -734,6 +734,7 @@ class examResult(TemplateView):
             else:
                 student_total = student_main_assessments.aggregate(TOTAL=Sum(F('total')))['TOTAL']
                 student_subjects_count = student_main_assessments.count()
+                
             # if student_total is not None and student_subjects_count != 0:
             if student_total is not None and student_subjects_count != 0:
                 student_average = round(student_total / student_subjects_count, 2) 
