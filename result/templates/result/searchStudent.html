@@ -25,6 +25,7 @@
         
       <tr>
         <th>Full Name</th>
+        <th>Current Student</th>
         <th>Class</th>
         <th>Delete</th>
         <th>Edit</th>
@@ -33,9 +34,16 @@
     <tbody id="myTable">
     {% for student in allStudents %}
       <tr>
-        <td> {{ student.last_name.upper }}  {{ student.first_name.upper }} {{ student.middle_name.upper }}</td>
+        <!-- if isCurrent == 0 then and red background -->
+        {% if student.isCurrent == 0 %}
+            <td style="background-color: rgb(225, 245, 111);"> {{ student.last_name.upper }}  {{ student.first_name.upper }} {{ student.middle_name.upper }}</td>
+        {% else %}
+            <td> {{ student.last_name.upper }}  {{ student.first_name.upper }} {{ student.middle_name.upper }}</td>
+        {% endif %}
+        <td>{{ student.isCurrent }}</td>
         <td>{{ student.className }} {{ student.classArm }}</td>
-        <td><a href="{% url 'result:studentDelete' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td>
+        <!-- <td><a href="{% url 'result:studentDelete' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td> -->
+        <td><a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td>
         <td><a href="{% url 'result:editStudent' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td>
     </tr>
     {% endfor %}

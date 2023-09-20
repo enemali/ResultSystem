@@ -85,6 +85,7 @@
                 {% if user.is_staff or user.role == 'ADMIN' %}
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href=" {% url 'result:settings' %} ">   GOTO SETTINGS <span class="sr-only">(current)</span></a>
+                    <a class="nav-link page-scroll" href=" {% url 'result:searchStudents' %} ">Chnage Student Class <span class="sr-only">(current)</span></a>
                 </li>
                 {% endif %}
 

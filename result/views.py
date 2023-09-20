@@ -24,6 +24,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .filters import studentFilter
 from .models import User
 from django.db.models import Count, Sum, Avg, Max, Min , F, Q , Subquery, OuterRef,FloatField , Value,Window, ExpressionWrapper, IntegerField, Case, When, Value, CharField
+from django.db import models
 # import Round from math 
 from django.db.models.functions import Round,Coalesce,Rank,Concat
 import random
@@ -325,7 +326,7 @@ class EditClass(UpdateView):
 class EditStudent(UpdateView):
     model = students
     form_class = StudentForm
-    success_url = reverse_lazy('result:registerStudent')
+    success_url = reverse_lazy('result:searchStudents')
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -516,8 +517,28 @@ class searchStudent(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(searchStudent, self).get_context_data(**kwargs)
-        context["allStudents"] = students.objects.all()
+        thisTerm = setting.objects.get(setting_type = 'term').setting_value
+        thisSession = setting.objects.get(setting_type = 'session').setting_value
+        user = self.request.user
+        context["current_student"] = students.objects.filter(
+                                                        current_term = thisTerm,
+                                                        current_session = thisSession,
+                                                        )
+        context["studentNotCurrent"] = students.objects.exclude(
+                                                        current_term = thisTerm,
+                                                        current_session = thisSession,
+                                                        )
+        # context["allStudents"] = students.objects.all()
+    # create context["allStudents"] and an extra field in the query  to check if student is current or not
+        context["allStudents"] = students.objects.annotate(
+            isCurrent=Case(
+            When(current_term=thisTerm, current_session=thisSession, then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        )).order_by('className')
+
         return context
+
 
 class addComment(CreateView):
     model = comment
@@ -878,3 +899,14 @@ class CrosstabView(View):
         }
 
         return render(request, 'crosstab_template.html', context)
+
+
+from django.views.generic import ListView
+from django.db.models import F
+
+class MasterSheetView(ListView):
+    model = assessment
+    template_name = 'result/master_sheet.html'
+    context_object_name = 'assessments'
+
+

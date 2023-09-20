@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Master Sheet</title>
+</head>
+<body>
+    <h1>Master Sheet</h1>
+    <table>
+        <tr>
+            <th>Class Name</th>
+            <th>Student</th>
+            <th>Subject Name</th>
+            <th>First CA</th>
+            <th>Second CA</th>
+            <th>Exam</th>
+            <th>Section</th>
+            <th>Term</th>
+            <th>Session</th>
+            <th>Date</th>
+            <th>Absent First CA</th>
+            <th>Absent Second CA</th>
+            <th>Absent Exam</th>
+            <th>Recorded By</th>
+            <th>CA Total</th>
+            <th>Exam Total</th>
+        </tr>
+        {% for assessment in assessments %}
+        <tr>
+            <td>{{ assessment.className }}</td>
+            <td>{{ assessment.student }}</td>
+            <td>{{ assessment.subjectName }}</td>
+            <td>{{ assessment.firstCa }}</td>
+            <td>{{ assessment.secondCa }}</td>
+            <td>{{ assessment.exam }}</td>
+            <td>{{ assessment.section }}</td>
+            <td>{{ assessment.term }}</td>
+            <td>{{ assessment.session }}</td>
+            <td>{{ assessment.date }}</td>
+            <td>{{ assessment.absentfirstCa }}</td>
+            <td>{{ assessment.absentsecondCa }}</td>
+            <td>{{ assessment.absentexam }}</td>
+            <td>{{ assessment.recordedBy }}</td>
+            <td>{{ assessment.caTotal }}</td>
+            <td>{{ assessment.examTotal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

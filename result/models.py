@@ -37,6 +37,15 @@ term_choices = (
                     ('2', '2nd-Term'),
                     ('3', '3rd-Term'),
                    )
+
+session_choices = (
+                    ('2022/2023','2022/2023'),
+                    ('2023/2024','2023/2024'),
+                    ('2024/2025','2024/2025'),
+                    ('2025/2026','2025/2026'),
+                    ('2026/2027','2026/2027'),
+                    )
+
 gender_choise = ( ('Male', 'male') , ('Female', 'female'))
 comment_choise = ( ('A', 'A') , ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'))
 
@@ -139,6 +148,9 @@ class students(models.Model):
     admission_number = models.CharField(max_length=100, unique=True , null=True , blank=True,default="")
     house = models.CharField(max_length=100, blank = True)
     date = models.DateField(auto_now_add=True)
+    current_term = models.CharField(max_length=100,choices=term_choices,null=True)
+    current_session = models.CharField(max_length=100,choices=session_choices,null=True)
+    is_current_student = models.BooleanField(default=True)
     def __str__(self):
         return self.last_name + ' ' + self.first_name + ' ' + self.middle_name
     
@@ -169,28 +181,6 @@ class assessment(models.Model):
     @property
     def examTotal(self):
         return self.firstCa + self.secondCa + self.exam
-
-    # @property
-    # def is_childSubject(self):
-    #     return self.subjectName.is_childSubject
-
-    # @property
-    # def parentSubject(self):
-    #     return self.subjectName.parentSubject
-
-    # @property
-    # def ranking(self):
-    #     total  = self.firstCa + self.secondCa + self.exam
-    #     count = assessment.objects.filter(
-    #         className=self.className, 
-    #         subjectName=self.subjectName, 
-    #         section=self.section, 
-    #         term=self.term, 
-    #         session=self.session
-    #     ).filter(examTotal__gt=total
-    #     ).count()
-    #     return count + 1
-
 
     def __str__(self):
         return str(self.className)+ ' ' + str(self.student) + ' ' + str(self.subjectName)
