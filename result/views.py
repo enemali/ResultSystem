@@ -520,6 +520,7 @@ class searchStudent(TemplateView):
         thisTerm = setting.objects.get(setting_type = 'term').setting_value
         thisSession = setting.objects.get(setting_type = 'session').setting_value
         user = self.request.user
+
         context["current_student"] = students.objects.filter(
                                                         current_term = thisTerm,
                                                         current_session = thisSession,
@@ -528,14 +529,23 @@ class searchStudent(TemplateView):
                                                         current_term = thisTerm,
                                                         current_session = thisSession,
                                                         )
-        # context["allStudents"] = students.objects.all()
+      
     # create context["allStudents"] and an extra field in the query  to check if student is current or not
         context["allStudents"] = students.objects.annotate(
             isCurrent=Case(
-            When(current_term=thisTerm, current_session=thisSession, then=Value(1)),
-            default=Value(0),
-            output_field=IntegerField(),
-        )).order_by('className')
+                When(current_term=thisTerm, current_session=thisSession, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()),
+            classTeaccher = Subquery( 
+                classArmTeacher.objects.filter(classArm=OuterRef('classArm'),className =OuterRef('className')
+                ).values('classTeacher__username')[:1]),
+        ).order_by('className')
+        # filter context["allStudents"]  by classTeacher
+        if user.is_staff:
+            context["allStudents"] = context["allStudents"]
+        else:
+            context["allStudents"] = context["allStudents"].filter(classTeaccher=user.username)
+
 
         return context
 
