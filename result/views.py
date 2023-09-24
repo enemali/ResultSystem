@@ -529,7 +529,8 @@ class searchStudent(TemplateView):
                                                         current_term = thisTerm,
                                                         current_session = thisSession,
                                                         )
-      
+        context["current_term"] = thisTerm
+        context["current_session"] = thisSession
     # create context["allStudents"] and an extra field in the query  to check if student is current or not
         context["allStudents"] = students.objects.annotate(
             isCurrent=Case(

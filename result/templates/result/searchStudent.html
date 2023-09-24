@@ -12,7 +12,7 @@
 <body>
 
 <div class="container">
-  <h2>Search Student</h2>
+  <h2>Search Student  - {{ allStudents|length }} -- {{ current_term }} Term {{current_session}}</h2>
   <p>Type something in the search field to search </p>  
   
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
@@ -25,11 +25,11 @@
         
       <tr>
         <th>Full Name</th>
+        <th>Edit</th>
         <th>Enrollment Status</th>
         <th>Class</th>
         <th>Class Teacher</th>
         <th>Delete</th>
-        <th>Edit</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -41,12 +41,18 @@
         {% else %}
             <td> {{ student.last_name.upper }}  {{ student.first_name.upper }} {{ student.middle_name.upper }}</td>
         {% endif %}
+        <!-- Edit only students whos current term and session are NOT same with current_term and session -->
+        {% if student.current_term != current_term or student.current_session != current_session %}
+            <td><a href="{% url 'result:editStudent' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td>
+        {% else %}
+            <td></td>
+        {% endif %}
+        <!-- <td><a href="{% url 'result:editStudent' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td> -->
         <td>{{ student.isCurrent }}</td>
         <td>{{ student.className }} {{ student.classArm }}</td>
         <td>{{ student.classTeaccher }}</td>
         <!-- <td><a href="{% url 'result:studentDelete' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td> -->
-        <td><a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td>
-        <td><a href="{% url 'result:editStudent' student.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td>
+        <!-- <td><a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a></td> -->
     </tr>
     {% endfor %}
 
