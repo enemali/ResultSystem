@@ -201,7 +201,10 @@ class classDetails(DetailView):
         context['assessment'] = assessment.objects.filter(className_id = self.kwargs['pk'], term = context['current_term'],session = context['current_session'])
         context['subjects'] = allsubject.objects.filter(className_id = self.kwargs['pk'])
         context['subject_in_assessment'] = context['subjects'].filter(id__in = context['assessment'].values_list('subjectName_id', flat=True))
-        context['students'] = students.objects.filter(classArm = self.get_object().classArm,className = self.get_object().className)
+        context['students'] = students.objects.filter(classArm = self.get_object().classArm,
+                                                       className = self.get_object().className,
+                                                       is_current_student = True
+                                                        )
         context['assessmentEntry']= context['subjects'].annotate(
                      firstCa_Count = Count('id',
                                     id__in=context['assessment'].values_list('subjectName_id', flat=True),
