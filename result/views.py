@@ -554,7 +554,9 @@ class searchStudent(TemplateView):
                 ).values('classTeacher__username')[:1]),
         ).order_by('className')
         # filter context["allStudents"]  by classTeacher
-        if user.is_staff:
+        if user.username == 'admin':
+            context["allStudents"] = context["allStudents"]
+        elif user.is_staff:
             context["allStudents"] = context["allStudents"].filter(className__section__sectionName__startswith=str(user.section)[:4])
         else:
             context["allStudents"] = context["allStudents"].filter(classTeaccher=user.username)
