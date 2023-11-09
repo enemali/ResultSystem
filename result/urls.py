@@ -42,4 +42,5 @@ urlpatterns = [
     path('assesment_delete/<int:pk>/', assesment_delete.as_view(), name='assesment_delete'),
     path('crosstab_view/', CrosstabView.as_view(), name='crosstab_view'),
     path('MasterSheetView/', MasterSheetView.as_view(), name='MasterSheetView'),
+    path('bulkupdateStudent/<int:pk>/', bulkupdateStudent.as_view(), name='bulkupdateStudent'),
 ]

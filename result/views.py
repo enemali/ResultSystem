@@ -245,13 +245,17 @@ class subjectDetails(CreateView):
     model = assessment
     template_name = 'result/subjectDetails.html'
     success_url = reverse_lazy('result:subjectDetails')
+
+    current_term = setting.objects.get(setting_type = 'term').setting_value
+    current_session = setting.objects.get(setting_type = 'session').setting_value
+
     
     def get(self, request,pk, *args, **kwargs):
         singleSubject = allsubject.objects.get(id=pk)
         assessment_query = assessment.objects.filter(
                                                     subjectName=singleSubject.id,
-                                                    term = setting.objects.get(setting_type = 'term').setting_value,
-                                                    session = setting.objects.get(setting_type = 'session').setting_value
+                                                    term = self.current_term,
+                                                    session = self.current_session,
                                                     )
         # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
         # student_query not in assessment_query
@@ -265,8 +269,8 @@ class subjectDetails(CreateView):
                                       student=student, 
                                       subjectName=singleSubject,
                                       className = singleSubject.className,
-                                      term = setting.objects.get(setting_type = 'term').setting_value,
-                                      session = setting.objects.get(setting_type = 'session').setting_value
+                                      term = self.current_term,
+                                      session = self.current_session,
                                       ))
             assessment.objects.bulk_create(assessmentBulk)
 
@@ -275,7 +279,12 @@ class subjectDetails(CreateView):
         Form.fields['className'].choices = [(singleSubject.className.id, singleSubject.className)]
         Form.fields['student'].choices = [(student.id, student.last_name + ' ' + student.first_name + ' ' + student.middle_name) for student in students_query]
         
-        context = {'form': Form,'singleSubject': singleSubject ,'assessment': assessment_query}
+        context = {'form': Form,
+                    'singleSubject': singleSubject ,
+                    'assessment': assessment_query,
+                    'term': self.current_term,
+                    'session': self.current_session,
+                    }
         return render(request, 'result/subjectDetails.html', context)
     
     def post(self, request,pk, *args, **kwargs):
@@ -546,14 +555,28 @@ class searchStudent(TemplateView):
         ).order_by('className')
         # filter context["allStudents"]  by classTeacher
         if user.is_staff:
-            context["allStudents"] = context["allStudents"]
+            context["allStudents"] = context["allStudents"].filter(className__section__sectionName__startswith=str(user.section)[:4])
         else:
             context["allStudents"] = context["allStudents"].filter(classTeaccher=user.username)
-
-
         return context
 
+class bulkupdateStudent(UpdateView):
+    model = students
+    template_name = 'result/bulkupdateStudent.html'
+    success_url = reverse_lazy('result:searchStudents')
 
+    def get_context_data(self, **kwargs):
+        context = super(bulkupdateStudent, self).get_context_data(**kwargs)
+        current_term = setting.objects.get(setting_type = 'term').setting_value
+        current_session = setting.objects.get(setting_type = 'session').setting_value
+
+        context['student'] = students.objects.all().filter(
+            classTeaccher=self.request.user.username).Update(
+            current_term = current_term,
+            current_session = current_session,
+            classname = self.kwargs['pk'],
+            )
+                
 class addComment(CreateView):
     model = comment
     template_name = 'result/addComment.html'
@@ -869,8 +892,6 @@ class assesment_delete(DeleteView):
     def get_success_url(self):
         return reverse_lazy('result:examResult', kwargs={'pk': self.object.className.id})
 
-
-
 class CrosstabView(View):
     def get(self, request):
         # Get all unique students and subjects
@@ -913,7 +934,6 @@ class CrosstabView(View):
         }
 
         return render(request, 'crosstab_template.html', context)
-
 
 from django.views.generic import ListView
 from django.db.models import F
