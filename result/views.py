@@ -557,10 +557,16 @@ class searchStudent(TemplateView):
         if user.username == 'admin':
             context["allStudents"] = context["allStudents"]
         elif user.is_staff:
-            context["allStudents"] = context["allStudents"].filter(className__section__sectionName__startswith=str(user.section)[:4])
+            if str(user.section).startswith('Primary'):
+                # exclude students with section starting with 'college'
+                context["allStudents"] = context["allStudents"].exclude(className__section__sectionName__startswith='college')
+            else:
+                context["allStudents"] = context["allStudents"].filter(className__section__sectionName__startswith=str(user.section)[:4])
         else:
-            context["allStudents"] = context["allStudents"].filter(classTeaccher=user.username)
+            context["allStudents"] = context["allStudents"].filter(classTeacher=user.username)
+
         return context
+
 
 class bulkupdateStudent(UpdateView):
     model = students
