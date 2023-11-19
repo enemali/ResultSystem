@@ -236,9 +236,7 @@ studentWithhighestMax = Subquery(
     .values('student__first_name', 'student__middle_name', 'student__last_name')
     .annotate(full_name=Concat('student__first_name', Value(' '), 'student__middle_name', Value(' '), 'student__last_name', output_field=CharField()))
     .values('full_name')[:1]
-)
-
-                                    )
+))
         return context
 
 class subjectDetails(CreateView):
@@ -307,6 +305,8 @@ class assessmentEntry(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(assessmentEntry, self).get_context_data(**kwargs)
         context['entryFormset'] = modelformset_factory(assessment, fields='__all__', extra=0)
+        context['current_term'] = setting.objects.get(setting_type = 'term').setting_value
+        context['current_session'] = setting.objects.get(setting_type = 'session').setting_value
         return context
     def get_success_url(self):
         return reverse_lazy('result:subjectDetails', kwargs={'pk': self.object.subjectName.id})
@@ -503,6 +503,8 @@ def entry(request, pk):
         form.fields['secondCa'].widget.attrs['class'] = 'form-control'
         form.fields['exam'].widget.attrs['class'] = 'form-control'
     
+    thisTerm = setting.objects.get(setting_type = 'term').setting_value
+    thisSession = setting.objects.get(setting_type = 'session').setting_value
     subject = allsubject.objects.get(id=pk)
     singleSubject = allsubject.objects.get(id=pk)
     assessment_query = assessment.objects.filter(subjectName=singleSubject.id)
@@ -522,7 +524,12 @@ def entry(request, pk):
         if entry_formset.is_valid():
             entry_formset.save()
             return redirect('result:classDetails', pk=singleSubject.className.id)
-    return render(request, 'result/entry.html', {'formset': entry_formset, 'helper': helper, 'subject': subject})
+    return render(request, 'result/entry.html', {'formset': entry_formset, 
+                                                 'helper': helper, 
+                                                 'subject': subject,
+                                                'thisTerm': thisTerm,
+                                                'thisSession': thisSession,
+                                                 })
     
 class searchStudent(TemplateView):
     template_name = 'result/searchStudent.html'
