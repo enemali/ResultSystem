@@ -388,6 +388,8 @@ class studentList(ListView):
                                                             'studentFilters': studentFilters,
                                                             'classname': classname,
                                                             'classarm': arm,
+                                                            'current_term': current_term,
+                                                            'current_session': current_session,
                                                             })
 
 class subjectCreate(TemplateView):
