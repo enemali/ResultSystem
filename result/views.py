@@ -366,7 +366,13 @@ class studentList(ListView):
     template_name = 'result/studentList.html'
 
     def get(self, request, *args, **kwargs):
-        student = students.objects.all()
+        current_term = setting.objects.get(setting_type = 'term').setting_value
+        current_session = setting.objects.get(setting_type = 'session').setting_value
+        student = students.objects.filter(
+                                        current_term = current_term,
+                                        current_session = current_session,
+                                        is_current_student = True,
+                                        )
 
         studentFilters = studentFilter(request.GET, queryset=student)
         student = studentFilters.qs
