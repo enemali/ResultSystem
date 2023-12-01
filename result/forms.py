@@ -170,7 +170,12 @@ class entryformsetHelper(FormHelper):
 class subjectForm(forms.ModelForm):
     class Meta:
         model = allsubject
-        fields = '__all__'
+        # all fields except subjectTeacher
+        fields = ['subjectTeacher', 
+                'className',
+                'subjectName'
+                    ]
+        
 
 class parentsubjectForm(forms.ModelForm):
     class Meta:
