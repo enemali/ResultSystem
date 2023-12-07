@@ -81,12 +81,17 @@
        <table class="table-auto w-auto text-left whitespace-no-wrap">
          <thead>
            <tr  >
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tl rounded-bl">S/N</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tl rounded-bl">Students</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Student<p>Term</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Student<p>Session</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">class</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">1st CA</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">2nd CA</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Exam</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Term</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Session</th>
+             
              <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tr rounded-br">Single Entry</th>
            </tr>
          </thead>
@@ -96,6 +101,7 @@
            {% for StudentAssessment in assessment %}
           
            <tr>
+              <td class="px-4 py-3 border-2 border-yellow-300"> {{ forloop.counter }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }}
               <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
                 <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
@@ -104,6 +110,8 @@
                 </button>
               </a>
             </td>
+              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }}  Term </td>
+                <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.session }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.className }} </td>
              {% if StudentAssessment.absentfirstCa %}
               <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
@@ -122,7 +130,8 @@
               {% else %}
                 <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
               {% endif %}
-             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }} </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }}  Term </td>
+              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.session }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300">
                <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
                   <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
