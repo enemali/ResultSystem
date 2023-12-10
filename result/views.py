@@ -699,6 +699,7 @@ class examResult(TemplateView):
         context["all_students"] = student_ids.annotate(
                 # examtotal=Sum(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()),
                 examaverage=Round(Avg(F('assessment__firstCa') + F('assessment__secondCa') + F('assessment__exam'), output_field=FloatField()), 2),
+                #  IF none returns zero
                 assessmentCount=Count(termly_assessment.values('id')),
                 examObtainable=Count(termly_assessment.values('id')) * 100,
                 # position = context['allScores'].filter(student_id=OuterRef('id')).values('position'),
@@ -707,7 +708,11 @@ class examResult(TemplateView):
                 # failedAssessment = context['allScores'].filter(student_id=OuterRef('id'), examtotal__lt=40).values('subjectName__subjectName'),
                 )
                 # studentclass = classArmTeacher.objects.filter(className=OuterRef('className_id')).values('className__className'),
-        context["highestAverage"] = context["all_students"].order_by('-examaverage').first().examaverage
+        if context["all_students"].exists():
+            context["highestAverage"] = context["all_students"].order_by('-examaverage').first().examaverage
+        else:
+             context["highestAverage"] = None
+
         context["lowestAverage"] = context["all_students"].order_by('examaverage')[:1]
         context["classAverage"] = context["all_students"].aggregate(classAvg=Round(Avg('examaverage'), 2))
         context["allComments"] = comment.objects.filter(
@@ -833,8 +838,8 @@ class examResult(TemplateView):
             # if student_total is not None and student_subjects_count != 0:
             if student_total is not None and student_subjects_count != 0:
                 student_average = round(student_total / student_subjects_count, 2) 
-            # else:
-            #     student_average = 0
+            else:
+                student_average = 0
             examObtainable = int(student_subjects_count) * 100
             failed_subjects = student_main_assessments.filter(total__lt=40).count() + student_parent_assessments.filter(TOTAL__lt=40).count()
             passed_subjects = student_subjects_count - failed_subjects

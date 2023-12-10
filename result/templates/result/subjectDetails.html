@@ -81,8 +81,8 @@
        <table class="table-auto w-auto text-left whitespace-no-wrap">
          <thead>
            <tr  >
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tl rounded-bl">S/N</th>
-             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tl rounded-bl">Students</th>
+             <th class="sticky left-0 h-fit  px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tl rounded-bl">S/N</th>
+             <th class="sticky left-0 h-fit  px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tl rounded-bl">Students</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Student<p>Term</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Student<p>Session</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">class</th>
@@ -101,8 +101,8 @@
            {% for StudentAssessment in assessment %}
           
            <tr>
-              <td class="px-4 py-3 border-2 border-yellow-300"> {{ forloop.counter }} </td>
-             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }}
+              <td class="sticky left-0 h-fit bg-opacity-0 bg-white px-4 py-3 border-2 border-yellow-300"> {{ forloop.counter }} </td>
+             <td class="sticky left-0 h-fit bg-opacity-0 bg-white px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }}
               <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
                 <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
