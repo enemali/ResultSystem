@@ -4008,7 +4008,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	{% if not studentAssessment.subjectName.is_childSubject %}
 <tr height=26 style='height:19.5pt'>
 <td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt ; font-weight:bold'>
+	<div id="printPageButton" style="font-size: 12px; color: red;">
+		{{studentAssessment.term}}Term {{studentAssessment.session}} {{studentAssessment.className}}
+	</div> 
 	 {{studentAssessment.subjectName}} 
+	
 		<button  id="printPageButton" style="float:right;  background-color: #f44336; ">
 			<a style="color:white;" {% if request.user.is_staff %} href="{% url 'result:assesment_delete' studentAssessment.id %}" {% endif %}>Delete</a>
 		</button>
@@ -4331,7 +4335,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl8710370 colspan=2 style='border-right:1.5pt solid #C00000'>Punctuality</td>
   <td class=xl6810370>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Punctuality}} 
 	{% endif %}
   {% endfor %}
@@ -4375,7 +4379,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Attendance</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Attendance_in_Class}} 
 	{% endif %}
  	 {% endfor %}
@@ -4410,7 +4414,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Neatness}} 
 	{% endif %}
  	 {% endfor %}
@@ -4439,7 +4443,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Obedience}} 
 	{% endif %}
  	 {% endfor %}
@@ -4466,7 +4470,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7110370 style='border-top:none'>&nbsp;</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Honesty}} 
 	{% endif %}
  	 {% endfor %}
@@ -4493,7 +4497,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   Control</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Self_Control}} 
 	{% endif %}
  	 {% endfor %}
@@ -4534,7 +4538,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Responsibility</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Sense_of_Responsibility}} 
 	{% endif %}
  	 {% endfor %}
@@ -4554,7 +4558,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   with others</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Sociability}} 
 	{% endif %}
  	 {% endfor %}
@@ -4571,7 +4575,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Leadership</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Leadership_Role}} 
 	{% endif %}
  	 {% endfor %}
@@ -4586,7 +4590,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   Day(s) Present:</td>
   <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'> 
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Number_of_Times_Present}} 
 	{% endif %}
  	 {% endfor %}
@@ -4596,7 +4600,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   Confidence</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Fluency}} 
 	{% endif %}
  	 {% endfor %}
@@ -4612,7 +4616,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 class=xl17810370 style='border-right:.5pt solid black'>
 	{% if setting %}
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 	{{ comment.daysAbsent }}
 	{% endif %}
 	{% endfor %}
@@ -4622,7 +4626,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl7010370 colspan=2 style='border-right:1.5pt solid #C00000'>Perseverance</td>
   <td class=xl7210370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Self_Control}} 
 	{% endif %}
  	 {% endfor %}
@@ -4641,7 +4645,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 class=xl9310370 style='border-right:1.5pt solid #C00000'>Creativity</td>
   <td class=xl8310370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Creativity}} 
 	{% endif %}
  	 {% endfor %}
@@ -4699,7 +4703,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td class=xl8810370 style='border-top:none'>&nbsp;</td>
   <td class=xl6810370>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Sports}} 
 	{% endif %}
  	 {% endfor %}
@@ -4718,7 +4722,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <td colspan=2 class=xl22810370 style='border-right:1.5pt solid #C00000'>Fluency</td>
   <td class=xl23010370 style='border-top:none'>
 	{%for comment in student.comment_set.all %}
-	{% if comment.term == thisTerm %}
+	{% if comment.term == thisTerm and comment.session == thisSession%}
 		{{ comment.Fluency}} 
 	{% endif %}
  	 {% endfor %}
