@@ -163,7 +163,9 @@ class classList(ListView):
             context["btn"] = "Edit Termlly Settings"
             context['all_class'] = context['all_class'].annotate(
                 # commentCount = Count('comment__student__id', distinct=True),
-                student_in_assessment = Count('assessment__student__id', distinct=True),
+                student_in_assessment=Count('assessment__student__id', distinct=True,
+                 filter=Q(assessment__term=context['current_term']) & Q(assessment__session=context['current_session'])
+        ),
                 latestCommentdate = Max('comment__date'),
                 latestAssessmentdate = Max('assessment__date')
                 )
@@ -172,7 +174,8 @@ class classList(ListView):
                 className__section__sectionName__startswith=str(self.request.user.section)[:4]
                 ).annotate(
                             # commentCount = Count('comment__id', distinct=True),
-                            student_in_assessment = Count(context['assessment'].values_list('student__id', flat=True), distinct=True),
+                            student_in_assessment=Count('assessment__student__id', distinct=True,
+                             filter=Q(assessment__term=context['current_term']) & Q(assessment__session=context['current_session'])),
                             latestCommentdate = Max('comment__date'),
                             latestAssessmentdate = Max(context['assessment'].values_list('date', flat=True))
             )
@@ -724,8 +727,8 @@ class examResult(TemplateView):
     
         ALLstudents = students.objects.filter(id__in=assessment.objects.filter(
                                                     className=self.kwargs['pk'],
-                                                    # term = setting.objects.get(setting_type = 'term').setting_value, 
-                                                    #  session = setting.objects.get(setting_type = 'session').setting_value,
+                                                    term = setting.objects.get(setting_type = 'term').setting_value, 
+                                                     session = setting.objects.get(setting_type = 'session').setting_value,
                                                     ).values('student_id'))
         final_assessments = []
         
@@ -972,9 +975,27 @@ class CrosstabView(View):
 from django.views.generic import ListView
 from django.db.models import F
 
-class MasterSheetView(ListView):
-    model = assessment
+class MasterSheetView(TemplateView):
     template_name = 'result/master_sheet.html'
     context_object_name = 'assessments'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['thisTerm'] = setting.objects.get(setting_type = 'term').setting_value
+        context['thisSession'] = setting.objects.get(setting_type = 'session').setting_value
+        context['assessments'] = assessment.objects.filter(term = context['thisTerm'], 
+                                                            session = context['thisSession'], 
+                                                            className = self.kwargs['pk']
+                                                            ).order_by('subjectName')
+        context['recordCount'] = context['assessments'].count()
+        context['studentCount'] = context['assessments'].values('student').distinct().count()
+        context['subjectCount'] = context['assessments'].values('subjectName').distinct().count()
+        context['className'] = context['assessments'][0].className
+        context['class_subjects'] = context['assessments'].values('subjectName').distinct()
+        context['class_subjects_count'] = context['assessments'].values('subjectName').distinct().count()
+
+
+
+        return context
 
 
