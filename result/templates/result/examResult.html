@@ -3946,7 +3946,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 	<tr height=25 style='height:18.75pt'>
 	<td height=25 class=xl10210370 style='height:18.75pt'>Class:</td>
-	<td colspan=4 class=xl10610370>{{student.assessment_set.all.5.className}}</td>
+	<td colspan=4 class=xl10610370>{{student.className}} {{student.classArm}} </td>
 	<td class=xl6410370></td>
 	<td colspan=3 class=xl10710370>Admission Number:</td>
 	<td class=xl10810370>&nbsp;  {% if student.admission_number == None %}-{%else%}{{student.admission_number}}{%endif%}</td>
@@ -3969,6 +3969,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td colspan=12 height=26 class=xl9810370 style='height:19.5pt'>ACADEMIC
 	PROGRESS REPORT ({{student.studentsection}}) 
 	<button style=" font-weight:bold; font-size: 20px; background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;" onclick="window.print()">Print</button>
+
 </td>
 	</tr>
 	<tr height=27 style='height:20.25pt'>
@@ -4003,7 +4004,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	</tr>
 
 	{% for studentAssessment in student.assessment_set.all %}
-	{% if studentAssessment.term == thisTerm %}
+	{% if studentAssessment.term == thisTerm and  studentAssessment.session == thisSession %} <!-- filtre for term and session -->
 	{% if not studentAssessment.subjectName.is_childSubject %}
 <tr height=26 style='height:19.5pt'>
 <td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt ; font-weight:bold'>

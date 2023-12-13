@@ -983,18 +983,13 @@ class MasterSheetView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['thisTerm'] = setting.objects.get(setting_type = 'term').setting_value
         context['thisSession'] = setting.objects.get(setting_type = 'session').setting_value
-        context['assessments'] = assessment.objects.filter(term = context['thisTerm'], 
-                                                            session = context['thisSession'], 
-                                                            className = self.kwargs['pk']
-                                                            ).order_by('subjectName')
+        context['assessments'] = assessment.objects.filter(term = context['thisTerm'], session = context['thisSession'],className = self.kwargs['pk'] ).order_by('subjectName')
         context['recordCount'] = context['assessments'].count()
         context['studentCount'] = context['assessments'].values('student').distinct().count()
         context['subjectCount'] = context['assessments'].values('subjectName').distinct().count()
         context['className'] = context['assessments'][0].className
         context['class_subjects'] = context['assessments'].values('subjectName').distinct()
         context['class_subjects_count'] = context['assessments'].values('subjectName').distinct().count()
-
-
 
         return context
 
