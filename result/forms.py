@@ -173,7 +173,9 @@ class subjectForm(forms.ModelForm):
         # all fields except subjectTeacher
         fields = ['subjectTeacher', 
                 'className',
-                'subjectName'
+                'subjectName',
+                'parentSubject',
+                'is_childSubject'
                     ]
         
 

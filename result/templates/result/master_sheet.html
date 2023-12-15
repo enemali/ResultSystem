@@ -4,9 +4,32 @@
     <title>Master Sheet</title>
 </head>
 <body>
+
+  {% regroup assessments by subjectName as subject_list %}
+
+<ul>
+{% for subjectgroup in subject_list %}
+    <li>{{ subjectgroup.grouper }}
+    <ol>
+        {% for records in subjectgroup.list %}
+          <li>{{ records.student }}:
+               {{ records.session }} 
+               {{ records.term }} 
+               {{ records.firstCa }}
+               {{ records.secondCa }}
+               {{ records.exam }}
+               {{ records.examTotal }}
+          </li>
+        {% endfor %}
+    </ol>
+    </li>
+{% endfor %}
+</ul>
+
+
+
+  
     <h1>{{className}} Class score Sheet ,{{studentCount}} Students ,{{class_subjects_count}} subjects</h1>
-    
-    
     {% comment %} <table>
         <tr>
             <th>Class Name</th>
