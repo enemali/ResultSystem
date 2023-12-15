@@ -4159,9 +4159,18 @@ xmlns="http://www.w3.org/TR/REC-html40">
 	<td colspan=2 height=26 class=xl8710370 style='border-right:1.5pt solid #C00000; height:19.5pt; font-weight:bold'>
 		{{ subject.subjectName__parentSubject__parentSubjectName }}<br>
 	{% for mainAssessment in student.assessment_set.all %}
-	{% if mainAssessment.term == thisTerm %}
+	{% if mainAssessment.term == thisTerm  and  mainAssessment.session == thisSession %}
 	{% if mainAssessment.subjectName.parentSubject.parentSubjectName == subject.subjectName__parentSubject__parentSubjectName %}
-	<div style='font-size:11.5px; font-weight:normal'>{{ mainAssessment.subjectName.subjectName }}--({{ mainAssessment.firstCa }}) ({{ mainAssessment.secondCa }}) ({{ mainAssessment.exam }})</div>
+	
+
+	<div style='font-size:11.5px; font-weight:normal'>
+		{{ mainAssessment.subjectName.subjectName }}--({{ mainAssessment.firstCa }}) ({{ mainAssessment.secondCa }}) ({{ mainAssessment.exam }})
+		<div id="printPageButton" style="font-size: 12px; color: red;">
+			{{mainAssessment.term}}Term {{mainAssessment.session}} {{mainAssessment.className}}
+		</div> 
+	</div>
+
+
 	{% endif %}
 	{% endif %}
 	{% endfor %}
