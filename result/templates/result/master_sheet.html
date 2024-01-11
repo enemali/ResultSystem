@@ -5,115 +5,78 @@
 </head>
 <body>
 
-  {% regroup assessments by subjectName as subject_list %}
 
-<ul>
-{% for subjectgroup in subject_list %}
-    <li>{{ subjectgroup.grouper }}
-    <ol>
-        {% for records in subjectgroup.list %}
-          <li>{{ records.student }}:
-               {{ records.session }} 
-               {{ records.term }} 
-               {{ records.firstCa }}
-               {{ records.secondCa }}
-               {{ records.exam }}
-               {{ records.examTotal }}
-          </li>
+  <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:12px;
+      overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:12px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-cly1{text-align:left;vertical-align:middle}
+    .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
+    .tg .tg-0lax{text-align:left;vertical-align:top; white-space: nowrap}
+    .tg .tg-CAheader{text-align:left;vertical-align:top;}
+    </style>
+
+    
+    <table class="tg">
+    <thead>
+      <tr>
+        <th class="tg-wa1i"><span style="font-weight:bold">Student</span></th>
+ 
+                {% comment %} {% for subject in assessments_subjects %}
+                  <th class="tg-wa1i" colspan="4"><span style="font-weight:bold">
+                    {{ subject.subjectName }}<br>
+                  </span></th>
+                {% endfor %} {% endcomment %}
+
+        {% for item in crosstab|slice:":1" %}
+                {% for subject in item.subjects %}
+                  <th class="tg-wa1i" colspan="4"><span style="font-weight:bold">{{ subject.subject_name }}<br> {{ subject.subject_name.id }}</span></th>
+                {% endfor %}
+        {% endfor %} 
+
+
+        <th class="tg-wa1i">Final-Total</th>
+        <th class="tg-wa1i">Average</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-cly1"></td>
+
+        {% comment %} {% for subject in assessments_subjects %}
+                    <td class="tg-CAheader">1st CA</td>
+                    <td class="tg-CAheader">2nd CA</td>
+                    <td class="tg-CAheader">Exam</td>
+                    <td class="tg-CAheader">Exam Total</td>
+        {% endfor %} {% endcomment %}
+        
+        {% for item in crosstab|slice:":1" %}
+            {% for subject in item.subjects %}
+                  <td class="tg-CAheader">1st CA</td>
+                  <td class="tg-CAheader">2nd CA</td>
+                  <td class="tg-CAheader">Exam</td>
+                  <td class="tg-CAheader">Exam Total</td>
+            {% endfor %}
+          {% endfor %} 
+
+      </tr>
+      {% for item in crosstab %}
+      <tr>
+        <td class="tg-0lax">{{ item.student_id }}</td>
+        {% for subject in item.subjects %}
+            <td class="tg-0lax">{{ subject.firstCa }}</td>
+            <td class="tg-0lax">{{ subject.secondCa }}</td>
+            <td class="tg-0lax">{{ subject.exam }}</td>
+            <td class="tg-0lax">{{ subject.examTotal }}</td>
+         {% endfor %}
+         <td class="tg-0lax">{{ item.overall_exam_total }}</td>
+         <td class="tg-0lax">{{ item.overall_exam_total_avg }}</td>
         {% endfor %}
-    </ol>
-    </li>
-{% endfor %}
-</ul>
-
-
-
-  
-    <h1>{{className}} Class score Sheet ,{{studentCount}} Students ,{{class_subjects_count}} subjects</h1>
-    {% comment %} <table>
-        <tr>
-            <th>Class Name</th>
-            <th>Student</th>
-            <th>Subject Name</th>
-            <th>First CA</th>
-            <th>Second CA</th>
-            <th>Exam</th>
-            <th>Section</th>
-            <th>Term</th>
-            <th>Session</th>
-            <th>Date</th>
-            <th>Absent First CA</th>
-            <th>Absent Second CA</th>
-            <th>Absent Exam</th>
-            <th>Recorded By</th>
-            <th>CA Total</th>
-            <th>Exam Total</th>
-        </tr>
-        {% for assessment in assessments %}
-        <tr>
-            <td>{{ assessment.className }}</td>
-            <td>{{ assessment.student }}</td>
-            <td>{{ assessment.subjectName }}</td>
-            <td>{{ assessment.firstCa }}</td>
-            <td>{{ assessment.secondCa }}</td>
-            <td>{{ assessment.exam }}</td>
-            <td>{{ assessment.section }}</td>
-            <td>{{ assessment.term }}</td>
-            <td>{{ assessment.session }}</td>
-            <td>{{ assessment.date }}</td>
-            <td>{{ assessment.absentfirstCa }}</td>
-            <td>{{ assessment.absentsecondCa }}</td>
-            <td>{{ assessment.absentexam }}</td>
-            <td>{{ assessment.recordedBy }}</td>
-            <td>{{ assessment.caTotal }}</td>
-            <td>{{ assessment.examTotal }}</td>
-        </tr>
-        {% endfor %}
-    </table> {% endcomment %}
-
-    <style type="text/css">
-        .tg  {border-collapse:collapse;border-spacing:0;}
-        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-          overflow:hidden;padding:10px 10px;word-break:normal;}
-        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-          font-weight:normal;overflow:hidden;padding:10px 10px;word-break:normal;}
-        .tg .tg-lboi{border-color:inherit;text-align:left;vertical-align:middle}
-        .tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle}
-        .tg .tg-7btt{border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
-        .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-        </style>
-        <table class="tg">
-        <thead>
-          <tr>
-            <th class="tg-uzvj">Class Name</th>
-            <th class="tg-uzvj">Student</th>
-            <th class="tg-uzvj">Subject Name</th>
-            <th class="tg-uzvj">First CA</th>
-            <th class="tg-uzvj">Second CA</th>
-            <th class="tg-uzvj">Exam</th>
-            <th class="tg-7btt">Exam Total</th>
-            <th class="tg-uzvj">Term</th>
-            <th class="tg-uzvj">Session</th>
-            <th class="tg-uzvj">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for assessment in assessments %}
-          <tr>
-            <td class="tg-lboi">{{ assessment.className }}</td>
-            <td class="tg-lboi">{{ assessment.student }}</td>
-            <td class="tg-lboi">{{ assessment.subjectName }}</td>
-            <td class="tg-lboi">{{ assessment.firstCa }}</td>
-            <td class="tg-lboi">{{ assessment.secondCa }}</td>
-            <td class="tg-lboi">{{ assessment.exam}}</td>
-            <td class="tg-0pky">{{ assessment.examTotal }}</td>
-            <td class="tg-lboi">{{ assessment.term }}</td>
-            <td class="tg-lboi">{{ assessment.session }}</td>
-            <td class="tg-lboi">{{ assessment.date }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-        </table>
-
+      </tr>
+    </tbody>
+    </table>
+    {{assessments_subjects}}
 </body>
 </html>

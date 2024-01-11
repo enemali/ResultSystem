@@ -30,6 +30,8 @@ from django.db.models.functions import Round,Coalesce,Rank,Concat
 import random
 import inflect
 p=inflect.engine()
+from collections import defaultdict  # Import defaultdict
+
 
 
 # class index(TemplateView):
@@ -975,22 +977,63 @@ class CrosstabView(View):
 from django.views.generic import ListView
 from django.db.models import F
 
+from django.views.generic import TemplateView
+from django.shortcuts import render
+from collections import defaultdict
+
 class MasterSheetView(TemplateView):
     template_name = 'result/master_sheet.html'
-    context_object_name = 'assessments'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['thisTerm'] = setting.objects.get(setting_type = 'term').setting_value
-        context['thisSession'] = setting.objects.get(setting_type = 'session').setting_value
-        context['assessments'] = assessment.objects.filter(term = context['thisTerm'], session = context['thisSession'],className = self.kwargs['pk'] ).order_by('subjectName')
-        context['recordCount'] = context['assessments'].count()
-        context['studentCount'] = context['assessments'].values('student').distinct().count()
-        context['subjectCount'] = context['assessments'].values('subjectName').distinct().count()
-        context['className'] = context['assessments'][0].className
-        context['class_subjects'] = context['assessments'].values('subjectName').distinct()
-        context['class_subjects_count'] = context['assessments'].values('subjectName').distinct().count()
+    def get(self, request, *args, **kwargs):
+        thisTerm = setting.objects.get(setting_type='term').setting_value
+        thisSession = setting.objects.get(setting_type='session').setting_value
 
-        return context
+        assessments = assessment.objects.filter(
+            term=thisTerm, session=thisSession, className=self.kwargs['pk']
+        ).order_by('className')
+
+        crosstab_list = []
+        student_subjects = defaultdict(list)
+        assessments_subjects = allsubject.objects.filter(className=self.kwargs['pk'])
+        # assessments_subjects = assessments.values('subjectName').distinct()
+
+        for assess in assessments:
+            student_id = assess.student
+            subject_name = assess.subjectName
+
+            # Check if the student-subject combination already exists in the list
+            for entry in student_subjects[student_id]:
+                if entry['subject_name'] == subject_name:
+                    entry.update({
+                        'firstCa': assess.firstCa,
+                        'secondCa': assess.secondCa,
+                        'exam': assess.exam,
+                        'examTotal': assess.examTotal,
+                    })
+                    break
+            else:
+                # If the combination doesn't exist, add a new entry to the list
+                student_subjects[student_id].append({
+                    'subject_name': subject_name,
+                    'firstCa': assess.firstCa,
+                    'secondCa': assess.secondCa,
+                    'exam': assess.exam,
+                    'examTotal': assess.examTotal,
+                })
+        # Flatten the student_subjects dictionary to create a list of dictionaries
+        for student_id, subjects in student_subjects.items():
+            crosstab_list.append({
+                'student_id': student_id,
+                'subjects': subjects,
+                'overall_exam_total': sum(subject['examTotal'] for subject in subjects),
+                'overall_exam_total_avg': sum(subject['examTotal'] for subject in subjects) / len(subjects),
+
+            })
+        return render(request, self.template_name, {
+            'crosstab': crosstab_list,
+            'pk': self.kwargs['pk'],
+            'assessments_subjects':assessments_subjects,
+            })
+
 
 
