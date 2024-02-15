@@ -16,16 +16,32 @@
         <h1 class="sm:text-2xl text-2xl font-medium title-font text-gray-900">{{assessmentError}}</h1>
         {% if setting.count > 0 %}
               <h4 class="font-bold pl-2"> 
-                  Current Term-----{{setting.0.current_Term}}<br>
-                  Current Session-----{{setting.0.current_Session}}<br>
+                  {% comment %} Current Term-----{{setting.0.current_Term}}<br> {% endcomment %}
+                  {% comment %} Current Session-----{{setting.0.current_Session}}<br> {% endcomment %}
+
+                  {% for setting_item in setting %}
+                    {{ setting_item.setting_type }} -- {{ setting_item.setting_value }}<br>
+                  {% endfor %}
+
                   Date Term Begins-----{{setting.0.date_Term_Begin}}<br>
                   Date Term Ends-----{{setting.0.date_Term_End}}<br>
                   Number of Days School Open-----{{setting.0.number_of_days_school_open}}<br>
                   Next Term Begins-----{{setting.0.next_term_begins}}<br>
                     {% if request.user.is_staff %}
-                      <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
-                        <a href="{% url 'result:editSettings' setting.0.id %}"> Edit Termly Settings </a>
+                      {% comment %} <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
+                        <a href="{% url 'result:editSettings' setting.0.id %}"> Termly Settings </a>
                       </button>
+
+                      <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
+                        <a href="{% url 'result:editSettings' setting.1.id %}"> Session Settings </a>
+                      </button>
+                      <br> {% endcomment %}
+                {% for setting_item in setting %}
+
+                <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
+                   <a href="{% url 'result:editSettings' setting_item.id %}"> {{ setting_item.setting_type }} setting</a>
+              </button>
+                {% endfor %}
                     {% endif %}
               </h4>
         {% endif %}

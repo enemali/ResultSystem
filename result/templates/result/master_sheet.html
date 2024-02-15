@@ -24,17 +24,17 @@
       <tr>
         <th class="tg-wa1i"><span style="font-weight:bold">Student</span></th>
  
-                {% comment %} {% for subject in assessments_subjects %}
+                {% for class_subject in assessments_subjects %}
                   <th class="tg-wa1i" colspan="4"><span style="font-weight:bold">
-                    {{ subject.subjectName }}<br>
+                    {{ class_subject.subjectName }}<br>
                   </span></th>
-                {% endfor %} {% endcomment %}
+                {% endfor %} 
 
-        {% for item in crosstab|slice:":1" %}
+        {% comment %} {% for item in crosstab|slice:":1" %}
                 {% for subject in item.subjects %}
                   <th class="tg-wa1i" colspan="4"><span style="font-weight:bold">{{ subject.subject_name }}<br> {{ subject.subject_name.id }}</span></th>
                 {% endfor %}
-        {% endfor %} 
+        {% endfor %}  {% endcomment %}
 
 
         <th class="tg-wa1i">Final-Total</th>
@@ -45,32 +45,49 @@
       <tr>
         <td class="tg-cly1"></td>
 
-        {% comment %} {% for subject in assessments_subjects %}
+        {% for class_subject in assessments_subjects %}
                     <td class="tg-CAheader">1st CA</td>
                     <td class="tg-CAheader">2nd CA</td>
                     <td class="tg-CAheader">Exam</td>
                     <td class="tg-CAheader">Exam Total</td>
-        {% endfor %} {% endcomment %}
+        {% endfor %} 
         
-        {% for item in crosstab|slice:":1" %}
+        {% comment %} {% for item in crosstab|slice:":1" %}
             {% for subject in item.subjects %}
                   <td class="tg-CAheader">1st CA</td>
                   <td class="tg-CAheader">2nd CA</td>
                   <td class="tg-CAheader">Exam</td>
                   <td class="tg-CAheader">Exam Total</td>
             {% endfor %}
-          {% endfor %} 
+          {% endfor %}  {% endcomment %}
 
       </tr>
       {% for item in crosstab %}
       <tr>
-        <td class="tg-0lax">{{ item.student_id }}</td>
-        {% for subject in item.subjects %}
-            <td class="tg-0lax">{{ subject.firstCa }}</td>
-            <td class="tg-0lax">{{ subject.secondCa }}</td>
-            <td class="tg-0lax">{{ subject.exam }}</td>
-            <td class="tg-0lax">{{ subject.examTotal }}</td>
-         {% endfor %}
+        <td class="tg-0lax"> ({{ item.student_subject_count }}) - {{ item.student_id }}  </td>
+        {% for class_subject in assessments_subjects %}
+            <td class="tg-0lax " colspan="4"> 
+            {% for itemSubject in item.subjects %}
+                {% if itemSubject.subject_name.id == class_subject.id %}
+                    <td class="tg-0lax">{{ itemSubject.firstCa }}</td>
+                    <td class="tg-0lax">{{ itemSubject.secondCa }}</td>
+                    <td class="tg-0lax">{{ itemSubject.exam }}</td>
+                    <td class="tg-0lax">{{ itemSubject.examTotal }}</td>
+                {% endif %}
+             {% endfor %}
+
+            </td>
+
+            {% comment %} {% for itemSubject in item.subjects %}
+                <td class="tg-0lax">{{ itemSubject.firstCa }}</td>
+                <td class="tg-0lax">{{ itemSubject.secondCa }}</td>
+                <td class="tg-0lax">{{ itemSubject.exam }}</td>
+                <td class="tg-0lax">{{ itemSubject.examTotal }}</td>
+            {% endfor %} {% endcomment %}
+        {% endfor %}
+          
+
+
          <td class="tg-0lax">{{ item.overall_exam_total }}</td>
          <td class="tg-0lax">{{ item.overall_exam_total_avg }}</td>
         {% endfor %}

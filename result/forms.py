@@ -94,22 +94,34 @@ class ImageForm(forms.ModelForm):
 class settingForm(forms.ModelForm):
     class Meta:
         model = setting
-        fields = ['current_Term', 
+        fields = [
+                    # 'current_Term', ----------
                     'setting_value',
-                    'current_Session', 
-                    'date_Term_Begin', 
-                    'date_Term_End', 
-                    'number_of_days_school_open', 
-                    'next_term_begins'
+                    # 'current_Session', -----------
+                    # 'date_Term_Begin', 
+                    # 'date_Term_End', 
+                    # 'number_of_days_school_open', 
+                    # 'next_term_begins'
                 ]
         labels = {
-            'setting_value': 'Term_Number',
+            'setting_value': '',
         }
         widgets = {
             'announcement_date': DatePickerInput(),
             'next_term_begins': DatePickerInput(),
             'date_Term_Begin': DatePickerInput(),
             'date_Term_End': DatePickerInput(),
+            # 'setting_value': forms.Select(choices=[(1,'1st Term'),(2,'2nd Term'),(3,'3rd Term')]),
+            # 'current_Session': forms.Select(choices=[('2021/2022', '2021/2022'),
+            #                                             ('2022/2023', '2022/2023'),
+            #                                             ('2023/2024', '2023/2024'),
+            #                                             ('2024/2025', '2024/2025'),
+            #                                             ('2025/2026', '2025/2026'),
+            #                                             ('2026/2027', '2026/2027'),
+            #                                             ('2027/2028', '2027/2028'),
+            #                                             ('2028/2029', '2028/2029'),
+            #                                             ('2029/2030', '2029/2030')
+            #                                             ])
         }
 
         

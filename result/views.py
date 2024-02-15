@@ -1027,7 +1027,7 @@ class MasterSheetView(TemplateView):
                 'subjects': subjects,
                 'overall_exam_total': sum(subject['examTotal'] for subject in subjects),
                 'overall_exam_total_avg': sum(subject['examTotal'] for subject in subjects) / len(subjects),
-
+                'student_subject_count': len(subjects),
             })
         return render(request, self.template_name, {
             'crosstab': crosstab_list,
