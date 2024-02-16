@@ -196,10 +196,12 @@ class comment(models.Model):
     # firstCacomment = models.CharField(max_length=1000, blank=True, null=True)
     # secondCacomment = models.CharField(max_length=1000, blank=True, null=True)
     examcomment = models.CharField(max_length=1000, blank=True, null=True)
+    
     date_Term_Begin = models.DateField(auto_now_add=False,null=True)
     date_Term_End = models.DateField(auto_now_add=False,null=True)
     number_of_days_school_open = models.IntegerField(null=True)
     next_term_begins = models.DateField(auto_now_add=False,null=True)
+    
     # Aesthetic_Appreciation = models.CharField(max_length=100 , choices=comment_choise, blank=True)
     Attendance_in_Class =models.CharField(max_length=100 , choices=comment_choise, blank=True)
     Creativity = models.CharField(max_length=100 , choices=comment_choise, blank=True)

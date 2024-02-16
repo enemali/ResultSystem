@@ -23,10 +23,12 @@
                     {{ setting_item.setting_type }} -- {{ setting_item.setting_value }}<br>
                   {% endfor %}
 
-                  Date Term Begins-----{{setting.0.date_Term_Begin}}<br>
+                  {% comment %} Date Term Begins-----{{setting.0.date_Term_Begin}}<br>
                   Date Term Ends-----{{setting.0.date_Term_End}}<br>
                   Number of Days School Open-----{{setting.0.number_of_days_school_open}}<br>
-                  Next Term Begins-----{{setting.0.next_term_begins}}<br>
+                  Next Term Begins-----{{setting.0.next_term_begins}}<br> {% endcomment %}
+
+
                     {% if request.user.is_staff %}
                       {% comment %} <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
                         <a href="{% url 'result:editSettings' setting.0.id %}"> Termly Settings </a>
