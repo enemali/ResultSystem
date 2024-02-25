@@ -264,7 +264,7 @@ class subjectDetails(CreateView):
         # student_query not in assessment_query
         students_query = students.objects.filter(className=singleSubject.className.className,
                                                 classArm=singleSubject.className.classArm,
-                                                current_term = self.current_term,
+                                                # current_term = self.current_term,
                                                 current_session = self.current_session,
                                                 is_current_student = True,
                                                 ).exclude(id__in=assessment_query.values('student_id'))
