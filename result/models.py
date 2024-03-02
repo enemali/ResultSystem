@@ -50,27 +50,10 @@ gender_choise = ( ('Male', 'male') , ('Female', 'female'))
 comment_choise = ( ('A', 'A') , ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'))
 
 class setting(models.Model):
-    announcement = models.CharField(max_length=100,null=True)
-    announcement_date = models.DateField(auto_now_add=False,null=True)
-    news = models.CharField(max_length=100,null=True)
-    current_Term = models.CharField(max_length=100,choices=term_choices,null=True)
-    current_Session = models.CharField(max_length=100,null=True)
-    date_Term_Begin = models.DateField(auto_now_add=False,null=True)
-    date_Term_End = models.DateField(auto_now_add=False,null=True)
-    number_of_days_school_open = models.IntegerField(null=True)
-    next_term_begins = models.DateField(auto_now_add=False,null=True)
+
     setting_type = models.CharField(max_length=100,null=True)
     setting_value = models.CharField(max_length=100,null=True)
-    is_current_setting = models.BooleanField(default=False)
 
-    class Meta:
-        constraints = [ 
-                        models.UniqueConstraint(
-                        fields=['is_current_setting'], 
-                        condition=Q(is_current_setting=True), 
-                        name='unique_is_current_setting'
-                        ) 
-                        ]
  
 class Images(models.Model):
     image = models.ImageField(null=True,blank=True)
@@ -201,6 +184,7 @@ class comment(models.Model):
     date_Term_End = models.DateField(auto_now_add=False,null=True)
     number_of_days_school_open = models.IntegerField(null=True)
     next_term_begins = models.DateField(auto_now_add=False,null=True)
+    Number_of_Times_Present = models.IntegerField(default=0)
     
     # Aesthetic_Appreciation = models.CharField(max_length=100 , choices=comment_choise, blank=True)
     Attendance_in_Class =models.CharField(max_length=100 , choices=comment_choise, blank=True)
@@ -222,11 +206,16 @@ class comment(models.Model):
     # Painting_and_Drawing =  models.CharField(max_length=1000, choices=comment_choise, blank=True)
     # Musical_Skills = models.CharField(max_length=1000, choices=comment_choise, blank=True)
     # Crafts = models.CharField(max_length=1000, choices=comment_choise, blank=True)
-    Number_of_Times_Present = models.IntegerField(default=0)
+    
     
     @property
     def daysAbsent(self):
-        return setting.objects.first().number_of_days_school_open - self.Number_of_Times_Present
+        # return self.number_of_days_school_open - self.Number_of_Times_Present
+        #  return zero if null
+        if self.number_of_days_school_open == None:
+            return 0
+        else:
+            return self.number_of_days_school_open - self.Number_of_Times_Present
     
     
     
