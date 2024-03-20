@@ -180,10 +180,10 @@ class comment(models.Model):
     # secondCacomment = models.CharField(max_length=1000, blank=True, null=True)
     examcomment = models.CharField(max_length=1000, blank=True, null=True)
     
-    date_Term_Begin = models.DateField(auto_now_add=False,null=True)
-    date_Term_End = models.DateField(auto_now_add=False,null=True)
-    number_of_days_school_open = models.IntegerField(null=True)
-    next_term_begins = models.DateField(auto_now_add=False,null=True)
+    date_Term_Begin = models.CharField(max_length=1000,null=True)
+    date_Term_End = models.CharField(max_length=1000,null=True)
+    number_of_days_school_open = models.IntegerField(default=0)
+    next_term_begins = models.CharField(max_length=1000,null=True)
     Number_of_Times_Present = models.IntegerField(default=0)
     
     # Aesthetic_Appreciation = models.CharField(max_length=100 , choices=comment_choise, blank=True)
@@ -210,8 +210,6 @@ class comment(models.Model):
     
     @property
     def daysAbsent(self):
-        # return self.number_of_days_school_open - self.Number_of_Times_Present
-        #  return zero if null
         if self.number_of_days_school_open == None:
             return 0
         else:
