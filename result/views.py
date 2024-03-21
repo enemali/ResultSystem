@@ -620,6 +620,8 @@ class addComment(CreateView):
         form.fields['className'].queryset = classArmTeacher.objects.filter(pk = pk )
         term = setting.objects.get(setting_type = 'term').setting_value
         session = setting.objects.get(setting_type = 'session').setting_value
+        form.fields['term'].queryset = term
+        form.fields['session'].queryset = session
         # form.fields['date_Term_Begin'].queryset = setting.objects.get(setting_type = 'Term_Begin').setting_value
         # form.fields['date_Term_End'].queryset = setting.objects.get(setting_type = 'Term_End').setting_value
         # form.fields['number_of_days_school_open'].queryset = setting.objects.get(setting_type = 'Days_school_open').setting_value

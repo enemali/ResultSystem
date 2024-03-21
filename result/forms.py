@@ -215,10 +215,13 @@ class commentForm(forms.ModelForm):
             'secondCacomment': forms.Textarea(attrs={'rows': 3, 'cols': 40 , 'placeholder': 'Enter Second CA Comment'}),
             'examcomment': forms.Textarea(attrs={'rows': 3, 'cols': 40 , 'placeholder': 'Enter Exam Comment'}),
             # date_Term_Begin is a select field with the value setting.objects.get(setting_type = 'Term_Begin').setting_value
-            'date_Term_Begin': forms.Select(choices=[(setting.objects.get(setting_type = 'Term_Begin').setting_value, setting.objects.get(setting_type = 'Term_Begin').setting_value)]),
-            'date_Term_End': forms.Select(choices=[(setting.objects.get(setting_type = 'Term_End').setting_value, setting.objects.get(setting_type = 'Term_End').setting_value)]),
+           
+           
+            'date_Term_Begin': forms.DateInput(attrs={'type': 'date'}),
+            'date_Term_End': forms.DateInput(attrs={'type': 'date'}),
             'number_of_days_school_open': forms.Select(choices=[(setting.objects.get(setting_type = 'Days_school_open').setting_value, setting.objects.get(setting_type = 'Days_school_open').setting_value)]),
-            'next_term_begins': forms.Select(choices=[(setting.objects.get(setting_type = 'Next_term_begins').setting_value, setting.objects.get(setting_type = 'Next_term_begins').setting_value)]),
+            'next_term_begins': forms.DateInput(attrs={'type': 'date'}),
+            'session': forms.Select(choices=[(setting.objects.get(setting_type = 'session').setting_value, setting.objects.get(setting_type = 'session').setting_value)]),
         }
     
 commentformset = modelformset_factory(comment , fields= '__all__' , extra=0)
