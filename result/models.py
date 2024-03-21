@@ -173,7 +173,7 @@ class assessment(models.Model):
 class comment(models.Model):
     className = models.ForeignKey(classArmTeacher, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(students, on_delete=models.CASCADE, null=True)
-    term = models.CharField(max_length=100 , choices=term_choices)
+    term = models.CharField(max_length=100 )
     session = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
     # firstCacomment = models.CharField(max_length=1000, blank=True, null=True)

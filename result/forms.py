@@ -222,6 +222,7 @@ class commentForm(forms.ModelForm):
             'number_of_days_school_open': forms.Select(choices=[(setting.objects.get(setting_type = 'Days_school_open').setting_value, setting.objects.get(setting_type = 'Days_school_open').setting_value)]),
             'next_term_begins': forms.DateInput(attrs={'type': 'date'}),
             'session': forms.Select(choices=[(setting.objects.get(setting_type = 'session').setting_value, setting.objects.get(setting_type = 'session').setting_value)]),
+            'term': forms.Select(choices=[(setting.objects.get(setting_type = 'term').setting_value, setting.objects.get(setting_type = 'term').setting_value)]),
         }
     
 commentformset = modelformset_factory(comment , fields= '__all__' , extra=0)
