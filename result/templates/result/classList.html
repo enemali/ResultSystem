@@ -41,7 +41,7 @@
                 {% for setting_item in setting %}
 
                 <button class="bg-yellow-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
-                   <a href="{% url 'result:editSettings' setting_item.id %}"> {{ setting_item.setting_type }} setting</a>
+                   <a href="{% url 'result:editSettings' setting_item.id %}?{{ setting_item.setting_type }}"> {{ setting_item.setting_type }} setting</a>
               </button>
                 {% endfor %}
                     {% endif %}

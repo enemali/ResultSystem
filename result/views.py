@@ -618,13 +618,12 @@ class addComment(CreateView):
     def get (self, request, pk ,*args, **kwargs):
         form = commentForm()
         form.fields['className'].queryset = classArmTeacher.objects.filter(pk = pk )
+
         term = setting.objects.get(setting_type = 'term').setting_value
         session = setting.objects.get(setting_type = 'session').setting_value
-        form.fields['term'].queryset = term
-        form.fields['session'].queryset = session
-        # form.fields['date_Term_Begin'].queryset = setting.objects.get(setting_type = 'Term_Begin').setting_value
-        # form.fields['date_Term_End'].queryset = setting.objects.get(setting_type = 'Term_End').setting_value
-        # form.fields['number_of_days_school_open'].queryset = setting.objects.get(setting_type = 'Days_school_open').setting_value
+        form.fields['date_Term_Begin'].queryset = setting.objects.get(setting_type = 'Term_Begin').setting_value
+        form.fields['date_Term_End'].queryset = setting.objects.get(setting_type = 'Term_End').setting_value
+        form.fields['number_of_days_school_open'].queryset = setting.objects.get(setting_type = 'Days_school_open').setting_value
         # form.fields['next_term_begins'].queryset = setting.objects.get(setting_type = 'Next_term_begins').setting_value
         
         assessments = assessment.objects.all().filter(
@@ -927,6 +926,21 @@ class editSettings(UpdateView):
     model = setting
     template_name = 'result/editTermsetting.html'
     form_class = settingForm
+    # if url parameter contain 'Term_Begi"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Check if URL parameters contain any of the specified terms
+        terms_to_check = ['Term_Begin', 'Term_End', 'Next_term_begins']
+        DATE_INPUT_FORMATS = ['%d-%m-%Y']
+        for term in terms_to_check:
+            if term in self.request.GET:
+                form.fields['setting_value'].widget = forms.DateInput(attrs={'type': 'date'})
+                break 
+        return form
+
+        
+        
     
     def get_success_url(self):
         return reverse_lazy('result:classList')
