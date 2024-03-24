@@ -49,30 +49,31 @@
                 {{ classSubject.student_Count}} 
               </td>
               {% endif %}
-          <!--- first CA count  --> 
+              <!--- first CA count  --> 
               {% if classSubject.firstCa_Count > 0 and classSubject.firstCa_Count < students.count %}
-                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.firstCa_Count }} </td>
+              <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.firstCa_Count }} </td>
               {% elif classSubject.firstCa_Count == 0 %}
-                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.firstCa_Count }} </td>
+              <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.firstCa_Count }} </td>
               {% else %}
-                  <td class="px-4 border-2 border-green-300">{{ classSubject.firstCa_Count }} </td>
+              <td class="px-4 border-2 border-green-300">{{ classSubject.firstCa_Count }} </td>
               {% endif %}
-          <!--- second CA count  -->
+              <!--- second CA count  -->
               {% if classSubject.secondCa_Count > 0 and classSubject.secondCa_Count < students.count %}
-                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.secondCa_Count }} </td>
+              <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.secondCa_Count }} </td>
               {% elif classSubject.secondCa_Count == 0 %}
-                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.secondCa_Count }} </td>
+              <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.secondCa_Count }} </td>
               {% else %}
-                  <td class="px-4 border-2 border-green-300">{{ classSubject.secondCa_Count }} </td>
+              <td class="px-4 border-2 border-green-300">{{ classSubject.secondCa_Count }} </td>
               {% endif %}
-          <!--- exam count  -->
+              <!--- exam count  -->
               {% if classSubject.exam_Count > 0 and classSubject.exam_Count < students.count %}
-                  <td class="px-4 border-2 border-green-300 bg-purple-300">{{ subject.exam_Count }} </td>
+              <td class="px-4 border-2 border-green-300 bg-purple-300">{{ classSubject.exam_Count }} </td>
               {% elif classSubject.exam_Count == 0 %}
-                  <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.exam_Count }} </td>
+              <td class="px-4 border-2 border-green-300 bg-red-300">{{ classSubject.exam_Count }} </td>
               {% else %}
-                  <td class="px-4 border-2 border-green-300">{{ classSubject.exam_Count }} </td>
+              <td class="px-4 border-2 border-green-300">{{ classSubject.exam_Count }} </td>
               {% endif %}
+
             
               <td class="px-4 border-2 border-green-300"> {{ classSubject.subjectTeacher }} </td>
               <td class="px-0 border-2 border-green-300 ">
