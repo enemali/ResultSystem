@@ -20,15 +20,26 @@
 
      </div>
      <div>
-      <!-- class Entry button -->
-      <a href="{% url 'result:entry' singleSubject.id %}"> 
-        <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          {{singleSubject.subjectName}} Class Entry
-        </button>
-      </a>  
        <!-- class Entry button -->
-     </div>
+       <a href="{% url 'result:entry' singleSubject.id %}"> 
+         <button class="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+           {{singleSubject.subjectName}} {{singleSubject.className}} Class Entry
+         </button>
+       </a>  
+        <!-- class Entry button -->
+    </div>
 
+
+     <div>
+       <!-- class Entry button -->
+       
+       <a href="{% url 'result:classDetails' singleSubject.className.id %}">
+         <button class="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+           Back to  {{singleSubject.className}} All Subjects
+         </button>
+       </a>  
+        <!-- class Entry button -->
+    </div>
       <!-- student Form -->
       {% comment %} <form action="" method="POST">
         {% csrf_token %}
@@ -115,18 +126,24 @@
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.className }} </td>
              {% if StudentAssessment.absentfirstCa %}
               <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
+              {% elif StudentAssessment.firstCa  == 0 %}
+                <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> {{ StudentAssessment.firstCa }} </td>
               {% else %}
-                <td class="px-4 py-3 border-2 border-yellow-300 "> {{ StudentAssessment.firstCa }} </td>
+                <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.firstCa }} </td>
               {% endif %}
 
               {% if StudentAssessment.absentsecondCa %}
               <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
+              {% elif StudentAssessment.secondCa  == 0 %}
+                <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> {{ StudentAssessment.secondCa }} </td>
               {% else %}
                 <td class="px-4 py-3 border-2 border-yellow-300">{{ StudentAssessment.secondCa }}  </td>
               {% endif %}
 
               {% if StudentAssessment.absentexam %}
               <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> ABS</td>
+              {% elif StudentAssessment.exam  == 0 %}
+                <td class="px-4 py-3 border-2 border-yellow-300 bg-red-300"> {{ StudentAssessment.exam }} </td>
               {% else %}
                 <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
               {% endif %}
