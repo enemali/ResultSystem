@@ -79,11 +79,13 @@
                 </a>
               </button>
 
+              {% if class.classTeacher == request.user  or request.user.is_staff %}
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded">
                 <a href="{% url 'result:MasterSheetView' class.id %}">
-                  List
+                  Master Sheet
                 </a>
               </button>
+              {% endif %}
               
             </td>
             <td class="border-4 border-blue-300    text-center">{{ class.classTeacher }}</td>
