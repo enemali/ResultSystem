@@ -995,12 +995,10 @@ class CrosstabView(View):
 
         return render(request, 'crosstab_template.html', context)
 
-from django.views.generic import ListView
-from django.db.models import F
-
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from collections import defaultdict
+from operator import itemgetter
 
 class MasterSheetView(TemplateView):
     template_name = 'result/master_sheet.html'
@@ -1010,19 +1008,22 @@ class MasterSheetView(TemplateView):
         thisSession = setting.objects.get(setting_type='session').setting_value
 
         assessments = assessment.objects.filter(
-            term=thisTerm, session=thisSession, className=self.kwargs['pk']
+            term=thisTerm, 
+            session=thisSession, 
+            className=self.kwargs['pk']
         ).order_by('className')
 
         crosstab_list = []
         student_subjects = defaultdict(list)
         assessments_subjects = allsubject.objects.filter(className=self.kwargs['pk'])
-        # assessments_subjects = assessments.values('subjectName').distinct()
+        class_name = assessments.first().className
 
         for assess in assessments:
-            student_id = assess.student
-            subject_name = assess.subjectName
+            student_id = assess.student_id
+            student_name = assess.student
+            subject_name = assess.subjectName.subjectName
 
-            # Check if the student-subject combination already exists in the list
+            # Update existing student-subject combination or add a new one
             for entry in student_subjects[student_id]:
                 if entry['subject_name'] == subject_name:
                     entry.update({
@@ -1030,32 +1031,55 @@ class MasterSheetView(TemplateView):
                         'secondCa': assess.secondCa,
                         'exam': assess.exam,
                         'examTotal': assess.examTotal,
+                        'student_subject_count': len(student_subjects[student_id]),
+                        'student_name': assess.student
                     })
                     break
             else:
-                # If the combination doesn't exist, add a new entry to the list
                 student_subjects[student_id].append({
                     'subject_name': subject_name,
                     'firstCa': assess.firstCa,
                     'secondCa': assess.secondCa,
                     'exam': assess.exam,
                     'examTotal': assess.examTotal,
+                    'student_subject_count': len(student_subjects[student_id]),
+                    'student_name': assess.student
                 })
+
         # Flatten the student_subjects dictionary to create a list of dictionaries
         for student_id, subjects in student_subjects.items():
             crosstab_list.append({
                 'student_id': student_id,
+                'student_name': subjects[0]['student_name'],
                 'subjects': subjects,
                 'overall_exam_total': sum(subject['examTotal'] for subject in subjects),
                 'overall_exam_total_avg': sum(subject['examTotal'] for subject in subjects) / len(subjects),
                 'student_subject_count': len(subjects),
             })
+
+        # Calculate top 3 for each subject
+        top_3_by_subject = defaultdict(list)
+        for subject in assessments_subjects:
+            subject_scores = [(student['student_name'], next((s['examTotal'] for s in student['subjects'] if s['subject_name'] == subject.subjectName), 0)) 
+                              for student in crosstab_list]
+            top_3 = sorted(subject_scores, key=itemgetter(1), reverse=True)[:3]
+            top_3_by_subject[subject.subjectName] = top_3
+
+        # Calculate top 3 overall
+        top_3_overall = sorted(crosstab_list, key=lambda x: x['overall_exam_total'], reverse=True)[:3]
+
+        # Strip assessments_subjects to only include the subjects that are in the student_subjects
+        assessments_subjects = assessments_subjects.filter(subjectName__in=[student_subject['subject_name'] for student_subject in crosstab_list[0]['subjects']])
+
         return render(request, self.template_name, {
             'crosstab': crosstab_list,
             'pk': self.kwargs['pk'],
-            'assessments_subjects':assessments_subjects,
-            })
-
+            'class_name': class_name,
+            'assessments_subjects': assessments_subjects,
+            'student_subject': student_subjects,
+            'top_3_by_subject': dict(top_3_by_subject),
+            'top_3_overall': top_3_overall
+        })
 
 
 

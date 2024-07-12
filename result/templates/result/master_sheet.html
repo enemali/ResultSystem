@@ -1,99 +1,93 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Master Sheet</title>
-</head>
-<body>
-
-
-  <style type="text/css">
-    .tg  {border-collapse:collapse;border-spacing:0;}
-    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:12px;
-      overflow:hidden;padding:0px 5px;word-break:normal;}
-    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:12px;
-      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-    .tg .tg-cly1{text-align:left;vertical-align:middle}
-    .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
-    .tg .tg-0lax{text-align:left;vertical-align:top; white-space: nowrap}
-    .tg .tg-CAheader{text-align:left;vertical-align:top;}
-    </style>
+{% block content %}
+<div class="container mt-4">
+  <h2>Master Sheet for Class {{ class_name }} {{ pk }}</h2>
+  <style>
+    .table-bordered {
+      border-collapse: collapse;
+    }
+    .table-bordered td, .table-bordered th {
+      border: 1px solid black;
+      text-align: center;
+    }
+    thead {
+      background-color: #d9d9d9;
+    }
+    .thead-style {
+      background-color: #d9d9d9;
+    }
+    .table-data-left {
+      text-align: left;
+    }
 
     
-    <table class="tg">
+  </style>
+  <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th class="tg-wa1i"><span style="font-weight:bold">Student</span></th>
- 
-                {% for class_subject in assessments_subjects %}
-                  <th class="tg-wa1i" colspan="4"><span style="font-weight:bold">
-                    {{ class_subject.subjectName }}<br>
-                  </span></th>
-                {% endfor %} 
-
-        {% comment %} {% for item in crosstab|slice:":1" %}
-                {% for subject in item.subjects %}
-                  <th class="tg-wa1i" colspan="4"><span style="font-weight:bold">{{ subject.subject_name }}<br> {{ subject.subject_name.id }}</span></th>
-                {% endfor %}
-        {% endfor %}  {% endcomment %}
-
-
-        <th class="tg-wa1i">Final-Total</th>
-        <th class="tg-wa1i">Average</th>
+        <th>Student ID</th>
+        {% for subject in assessments_subjects %}
+          <th colspan="4">{{ subject.subjectName }}
+            <br>
+            {{ subject.subjectTeacher }}
+          </th>
+        {% endfor %}
+        <th>Overall Total</th>
+        <th>Overall Average</th>
+      </tr>
+      <tr>
+        <th></th>
+        {% for subject in assessments_subjects %}
+          <th>1st CA</th>
+          <th>2nd CA</th>
+          <th>Exam</th>
+          <th>Total</th>
+        {% endfor %}
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
+      {% for student in crosstab %}
       <tr>
-        <td class="tg-cly1"></td>
-
-        {% for class_subject in assessments_subjects %}
-                    <td class="tg-CAheader">1st CA</td>
-                    <td class="tg-CAheader">2nd CA</td>
-                    <td class="tg-CAheader">Exam</td>
-                    <td class="tg-CAheader">Exam Total</td>
-        {% endfor %} 
-        
-        {% comment %} {% for item in crosstab|slice:":1" %}
-            {% for subject in item.subjects %}
-                  <td class="tg-CAheader">1st CA</td>
-                  <td class="tg-CAheader">2nd CA</td>
-                  <td class="tg-CAheader">Exam</td>
-                  <td class="tg-CAheader">Exam Total</td>
+        <td NOWRAP >{{ student.student_name }}</td>
+        {% for subject in assessments_subjects %}
+          {% with student_subject=student.subjects %}
+            {% for sub in student_subject %}
+              {% if sub.subject_name == subject.subjectName %}
+                <td>{{ sub.firstCa }}</td>
+                <td>{{ sub.secondCa }}</td>
+                <td>{{ sub.exam }}</td>
+                <td class="thead-style">{{ sub.examTotal }}</td>
+              {% endif %}
             {% endfor %}
-          {% endfor %}  {% endcomment %}
-
-      </tr>
-      {% for item in crosstab %}
-      <tr>
-        <td class="tg-0lax"> ({{ item.student_subject_count }}) - {{ item.student_id }}  </td>
-        {% for class_subject in assessments_subjects %}
-            <td class="tg-0lax " colspan="4"> 
-            {% for itemSubject in item.subjects %}
-                {% if itemSubject.subject_name.id == class_subject.id %}
-                    <td class="tg-0lax">{{ itemSubject.firstCa }}</td>
-                    <td class="tg-0lax">{{ itemSubject.secondCa }}</td>
-                    <td class="tg-0lax">{{ itemSubject.exam }}</td>
-                    <td class="tg-0lax">{{ itemSubject.examTotal }}</td>
-                {% endif %}
-             {% endfor %}
-
-            </td>
-
-            {% comment %} {% for itemSubject in item.subjects %}
-                <td class="tg-0lax">{{ itemSubject.firstCa }}</td>
-                <td class="tg-0lax">{{ itemSubject.secondCa }}</td>
-                <td class="tg-0lax">{{ itemSubject.exam }}</td>
-                <td class="tg-0lax">{{ itemSubject.examTotal }}</td>
-            {% endfor %} {% endcomment %}
+            {% if not student_subject %}  <td colspan="4">--</td>  {% endif %}
+          {% endwith %}
         {% endfor %}
-          
-
-
-         <td class="tg-0lax">{{ item.overall_exam_total }}</td>
-         <td class="tg-0lax">{{ item.overall_exam_total_avg }}</td>
-        {% endfor %}
+        <td>{{ student.overall_exam_total }}</td>
+        <td>{{ student.overall_exam_total_avg }}</td>
       </tr>
+      {% endfor %}
     </tbody>
-    </table>
-    {{assessments_subjects}}
-</body>
-</html>
+  </table>
+</div>
+
+    <!--  -->
+
+    <h2>Top 3 Students by Subject</h2>
+    {% for subject, top_3 in top_3_by_subject.items %}
+        <h3>{{ subject }}</h3>
+        <ol>
+            {% for student_id, score in top_3 %}
+                <li>{{ student_id }} - Score: {{ score }}</li>
+            {% endfor %}
+        </ol>
+    {% endfor %}
+
+    <h2>Top 3 Students Overall</h2>
+    <ol>
+        {% for student in top_3_overall %}
+            <li>{{ student.student_name }} - Total Score: {{ student.overall_exam_total }}</li>
+        {% endfor %}
+    </ol>
+
+{% endblock %}
