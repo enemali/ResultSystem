@@ -112,7 +112,7 @@
 
            {% for StudentAssessment in assessment %}
           
-           {% if StudentAssessment.term == '1' or StudentAssessment.term == '2' or StudentAssessment.term == '3' %}
+           {% comment %} {% if StudentAssessment.term == '1' or StudentAssessment.term == '2' or StudentAssessment.term == '3' %} {% endcomment %}
            <tr>
               <td class="sticky left-0 h-fit bg-opacity-0 bg-white px-4 py-3 border-2 border-yellow-300"> {{ forloop.counter }} </td>
              <td class="sticky left-0 h-fit bg-opacity-0 bg-white px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }}
@@ -167,7 +167,7 @@
                 </a> {% endcomment %}
            </tr>
 
-           {% endif %}
+           {% comment %} {% endif %} {% endcomment %}
 
            {% endfor %}
              
