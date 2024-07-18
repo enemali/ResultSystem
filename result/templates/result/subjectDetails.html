@@ -13,7 +13,6 @@
        <h3 class="sm:text-2xl text-3xl font-small title-font text-gray-900">
        {{term}}Term {{session}} Continuous Assessment and Exam Computation
         </h1>
-        {{assessment_aggregation}}
         <h4 class="sm:text-4xl text-3xl font-medium title-font text-gray-900"> {{subject.subjectName}} </h1>
        <p class="lg:w-2/3 mx-auto leading-relaxed text-base"> {{subject.className}} </p>
        If ALL students in Class offers your subject use the GREEN CLASS ENTRY button, else use BLUE SINGLE ENTRY button if only few students offers your subject
@@ -113,15 +112,21 @@
 
            {% for StudentAssessment in assessment %}
           
+           {% if StudentAssessment.term == '1' or StudentAssessment.term == '2' or StudentAssessment.term == '3' %}
            <tr>
               <td class="sticky left-0 h-fit bg-opacity-0 bg-white px-4 py-3 border-2 border-yellow-300"> {{ forloop.counter }} </td>
              <td class="sticky left-0 h-fit bg-opacity-0 bg-white px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.student.last_name }} {{ StudentAssessment.student.first_name }} {{ StudentAssessment.student.middle_name }}
+              
+              {% if StudentAssessment.term == term and StudentAssessment.session == session %}
               <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
                 <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </button>
               </a>
+              {% endif %}
+
+
             </td>
               <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }}  Term </td>
                 <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.session }} </td>
@@ -153,13 +158,17 @@
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.examTotal }}  </td>
               <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.session }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300">
-               <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
+              
+              {% comment %} <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
                   <button class="px-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </button>
-                </a>
+                </a> {% endcomment %}
            </tr>
+
+           {% endif %}
+
            {% endfor %}
              
          </tbody>
