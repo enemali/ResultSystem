@@ -257,9 +257,11 @@ class subjectDetails(CreateView):
         singleSubject = allsubject.objects.get(id=pk)
         assessment_query = assessment.objects.filter(
                                                     subjectName=singleSubject.id,
-                                                    term = self.current_term,
+                                                    # term = self.current_term,
                                                     session = self.current_session,
-                                                    )
+                                                    ).order_by('student__id')
+        
+    
         # students_in_assessment = students.objects.filter(id__in=assessment_query.values('student_id'))
         # student_query not in assessment_query
         students_query = students.objects.filter(className=singleSubject.className.className,
@@ -267,7 +269,7 @@ class subjectDetails(CreateView):
                                                 # current_term = self.current_term,
                                                 current_session = self.current_session,
                                                 is_current_student = True,
-                                                ).exclude(id__in=assessment_query.values('student_id'))
+                                                )
         if students_query.count() > 0:
             assessmentBulk = []
             for student in students_query:
@@ -275,7 +277,7 @@ class subjectDetails(CreateView):
                                       student=student, 
                                       subjectName=singleSubject,
                                       className = singleSubject.className,
-                                      term = self.current_term,
+                                    #   term = self.current_term,
                                       session = self.current_session,
                                       ))
             assessment.objects.bulk_create(assessmentBulk)
@@ -1004,7 +1006,8 @@ class MasterSheetView(TemplateView):
     template_name = 'result/master_sheet.html'
 
     def get(self, request, *args, **kwargs):
-        thisTerm = setting.objects.get(setting_type='term').setting_value
+        thisTerm = 3
+        # thisTerm = setting.objects.get(setting_type='term').setting_value
         thisSession = setting.objects.get(setting_type='session').setting_value
 
         assessments = assessment.objects.filter(
@@ -1068,7 +1071,8 @@ class MasterSheetView(TemplateView):
         # Calculate top 3 overall
         top_3_overall = sorted(crosstab_list, key=lambda x: x['overall_exam_total'], reverse=True)[:3]
 
-        # Strip assessments_subjects to only include the subjects that are in the student_subjects
+        # Strip assessments_subjects to only include the subjects that are in the student_subjects and annotate with top_3_by_subject
+        # assessments_subjects = assessments_subjects.annotate(top_3=Subquery(top_3_by_subject[subject.subjectName] for subject in assessments_subjects))
         assessments_subjects = assessments_subjects.filter(subjectName__in=[student_subject['subject_name'] for student_subject in crosstab_list[0]['subjects']])
 
         return render(request, self.template_name, {

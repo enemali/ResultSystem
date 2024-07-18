@@ -13,6 +13,7 @@
        <h3 class="sm:text-2xl text-3xl font-small title-font text-gray-900">
        {{term}}Term {{session}} Continuous Assessment and Exam Computation
         </h1>
+        {{assessment_aggregation}}
         <h4 class="sm:text-4xl text-3xl font-medium title-font text-gray-900"> {{subject.subjectName}} </h1>
        <p class="lg:w-2/3 mx-auto leading-relaxed text-base"> {{subject.className}} </p>
        If ALL students in Class offers your subject use the GREEN CLASS ENTRY button, else use BLUE SINGLE ENTRY button if only few students offers your subject
@@ -101,6 +102,7 @@
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">2nd CA</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Exam</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Term</th>
+             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">TOTAL</th>
              <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300">Session</th>
              
              <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-300 rounded-tr rounded-br">Single Entry</th>
@@ -148,6 +150,7 @@
                 <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.exam }} </td>
               {% endif %}
              <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.term }}  Term </td>
+             <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.examTotal }}  </td>
               <td class="px-4 py-3 border-2 border-yellow-300"> {{ StudentAssessment.session }} </td>
              <td class="px-4 py-3 border-2 border-yellow-300">
                <a href="{% url 'result:assessmentScores' StudentAssessment.id %}"> 
