@@ -257,7 +257,7 @@ class subjectDetails(CreateView):
         singleSubject = allsubject.objects.get(id=pk)
         assessment_query = assessment.objects.filter(
                                                     subjectName=singleSubject.id,
-                                                    # term = self.current_term,
+                                                    term = self.current_term,
                                                     session = self.current_session,
                                                     ).order_by('student__id')
         
@@ -266,7 +266,7 @@ class subjectDetails(CreateView):
         # student_query not in assessment_query
         students_query = students.objects.filter(className=singleSubject.className.className,
                                                 classArm=singleSubject.className.classArm,
-                                                # current_term = self.current_term,
+                                                current_term = self.current_term,
                                                 current_session = self.current_session,
                                                 is_current_student = True,
                                                 )
@@ -277,7 +277,7 @@ class subjectDetails(CreateView):
                                       student=student, 
                                       subjectName=singleSubject,
                                       className = singleSubject.className,
-                                    #   term = self.current_term,
+                                      term = self.current_term,
                                       session = self.current_session,
                                       ))
             assessment.objects.bulk_create(assessmentBulk)
